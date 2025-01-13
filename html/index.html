@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Guía HTML5">
+    <meta name="description" content="Guía completa para aprender HTML">
+    <meta name="keywords" content="HTML, aprendizaje, guía, web, multimedia, formularios">
+    <title>Guía Completa de HTML</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Guía Completa de HTML</h1>
+        <p>Explora la estructura, etiquetas, multimedia y más de HTML5</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#estructura">Estructura</a></li>
+            <li><a href="#historia">Historia</a></li>
+            <li><a href="#etiquetas">Etiquetas</a></li>
+            <li><a href="#multimedia">Multimedia</a></li>
+            <li><a href="#tablas">Tablas</a></li>
+            <li><a href="#formularios">Formularios</a></li>
+            <li><a href="#notas">Notas</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="estructura">
+            <h2>Estructura Básica</h2>
+            <p>Una página HTML comienza con una estructura básica que incluye:</p>
+            <pre class="highlight">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;Título de la Página&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Contenido de la página.
+    &lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+        </section>
+        <section id="historia">
+            <h2>Historia del HTML</h2>
+            <p>HTML ha evolucionado desde su creación para adaptarse a las necesidades modernas. Aquí un resumen:</p>
+            <ul>
+                <li><strong>1990:</strong> Creación de HTML por Tim Berners-Lee.</li>
+                <li><strong>1995:</strong> Publicación de HTML 2.0.</li>
+                <li><strong>1997:</strong> HTML 4.0 introduce mejoras importantes.</li>
+                <li><strong>2000:</strong> XHTML combina HTML con XML.</li>
+                <li><strong>2011:</strong> HTML5 añade soporte para multimedia y APIs avanzadas.</li>
+                <li><strong>2017:</strong> HTML 5.2 establece la base moderna del lenguaje.</li>
+            </ul>
+        </section>
+        <section id="etiquetas">
+            <h2>Etiquetas Comunes</h2>
+            <ul>
+                <li><code>&lt;p&gt;</code>: Define un párrafo.</li>
+                <li><code>&lt;h1&gt; a &lt;h6&gt;</code>: Define encabezados de diferentes niveles.</li>
+                <li><code>&lt;a&gt;</code>: Crea enlaces.</li>
+                <li><code>&lt;img&gt;</code>: Inserta imágenes.</li>
+                <li><code>&lt;ul&gt;</code> y <code>&lt;ol&gt;</code>: Crea listas no ordenadas y ordenadas.</li>
+            </ul>
+        </section>
+        <section id="multimedia">
+            <h2>Elementos Multimedia</h2>
+            <p>HTML5 soporta audio y video de forma nativa:</p>
+            <h3>Video</h3>
+            <pre class="highlight">
+&lt;video src="video.mp4" controls&gt;&lt;/video&gt;
+            </pre>
+            <h3>Audio</h3>
+            <pre class="highlight">
+&lt;audio src="audio.mp3" controls&gt;&lt;/audio&gt;
+            </pre>
+        </section>
+        <section id="tablas">
+            <h2>Tablas</h2>
+            <p>Las tablas se utilizan para organizar datos:</p>
+            <pre class="highlight">
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Encabezado 1&lt;/th&gt;
+        &lt;th&gt;Encabezado 2&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Dato 1&lt;/td&gt;
+        &lt;td&gt;Dato 2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+            </pre>
+        </section>
+        <section id="formularios">
+            <h2>Formularios</h2>
+            <p>Los formularios recogen datos del usuario:</p>
+            <pre class="highlight">
+&lt;form action="/submit" method="post"&gt;
+    &lt;label for="name"&gt;Nombre:&lt;/label&gt;
+    &lt;input type="text" id="name" name="name" required&gt;
+    &lt;input type="submit" value="Enviar"&gt;
+&lt;/form&gt;
+            </pre>
+        </section>
+        <section id="notas">
+            <h2>Notas y Consejos</h2>
+            <ul>
+                <li>Utiliza <code>&lt;meta charset="UTF-8"&gt;</code> para garantizar compatibilidad de caracteres.</li>
+                <li>Valida tus páginas con herramientas como <a href="http://validator.w3.org/" target="_blank">W3C Validator</a>.</li>
+                <li>Consulta compatibilidad de navegadores en <a href="http://caniuse.com/" target="_blank">Can I Use</a>.</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Edu Olivares</p>
+    </footer>
+</body>
+</html>
