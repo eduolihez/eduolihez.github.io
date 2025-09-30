@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FollowGuard Orion - Análisis Completo de Instagram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h1>FollowGuard <span class="Orion-badge">Orion</span></h1>
+                </div>
+                <p>Análisis avanzado de datos de Instagram</p>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="main-nav" id="mainNav">
+                    <a href="#" class="nav-link active"><i class="fas fa-home"></i> Inicio</a>
+                    <a href="#analysis" class="nav-link"><i class="fas fa-chart-pie"></i> Análisis</a>
+                    <a href="guide.html" class="nav-link"><i class="fas fa-book"></i> Guía</a>
+                    <a href="#advanced-analysis" class="nav-link"><i class="fas fa-chart-line"></i> Estadísticas</a>
+                    <a href="#profile-visitors" class="nav-link"><i class="fas fa-eye"></i> Visitantes</a>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Análisis completo de tus datos de Instagram</h2>
+                <p>Descubre información valiosa sobre tus seguidores, interacciones y patrones de uso de Instagram con nuestro análisis avanzado.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showAnalysisSection()">
+                        <i class="fas fa-chart-line"></i> Comenzar Análisis
+                    </button>
+                    <a href="guide.html" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> Ver Guía Completa
+                    </a>
+                </div>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-user-check"></i>
+                        <span>Análisis de seguidores</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-comments"></i>
+                        <span>Interacciones y mensajes</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Estadísticas detalladas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="analytics-dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="metric">
+                            <span class="value">1,247</span>
+                            <span class="label">Seguidores</span>
+                        </div>
+                        <div class="metric">
+                            <span class="value">893</span>
+                            <span class="label">Siguiendo</span>
+                        </div>
+                        <div class="metric">
+                            <span class="value">354</span>
+                            <span class="label">No te siguen</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="previewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="analysis-section">
+            <h2><i class="fas fa-chart-pie"></i> Análisis de Datos de Instagram</h2>
+            <p class="section-description">Sube tus datos de Instagram para obtener un análisis completo de tu actividad.</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-step completed" id="step1">
+                    <span>1</span>
+                    <label>Información</label>
+                </div>
+                <div class="progress-step" id="step2">
+                    <span>2</span>
+                    <label>Archivos</label>
+                </div>
+                <div class="progress-step" id="step3">
+                    <span>3</span>
+                    <label>Resultados</label>
+                </div>
+            </div>
+            
+            <div class="step-content active" id="step1Content">
+                <div class="step-header">
+                    <span class="step-number">Paso 1</span>
+                    <h3>Ingresa tu información</h3>
+                </div>
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Nombre de usuario de Instagram
+                    </label>
+                    <input type="text" id="username" placeholder="Ej: tu_usuario" autocomplete="off">
+                    <div class="input-note">No compartimos esta información con terceros</div>
+                </div>
+                <button class="btn btn-next" onclick="nextStep(2)">
+                    Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="step-content" id="step2Content">
+                <div class="step-header">
+                    <span class="step-number">Paso 2</span>
+                    <h3>Sube tus archivos de Instagram</h3>
+                </div>
+                <p>Para un análisis completo, sube todos los archivos JSON de tu carpeta de datos de Instagram.</p>
+                
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-file-upload"></i> Selecciona la carpeta con tus archivos JSON
+                    </label>
+                    <input type="file" id="folderInput" webkitdirectory directory multiple class="folder-input">
+                    <div id="connectionsUpload" class="upload-area">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p>Haz clic para seleccionar una carpeta o arrástrala aquí</p>
+                        <small>Se analizarán todos los archivos JSON dentro de la carpeta y sus subcarpetas</small>
+                    </div>
+                    <div id="selectedFiles" class="selected-files"></div>
+                </div>
+                
+                <div class="file-categories">
+                    <div class="file-category">
+                        <i class="fas fa-users"></i>
+                        <h4>Seguidores</h4>
+                        <p id="followersCountPreview">0</p>
+                    </div>
+                    <div class="file-category">
+                        <i class="fas fa-comment"></i>
+                        <h4>Comentarios</h4>
+                        <p id="commentsCountPreview">0</p>
+                    </div>
+                    <div class="file-category">
+                        <i class="fas fa-envelope"></i>
+                        <h4>Mensajes</h4>
+                        <p id="messagesCountPreview">0</p>
+                    </div>
+                    <div class="file-category">
+                        <i class="fas fa-heart"></i>
+                        <h4>Likes</h4>
+                        <p id="likesCountPreview">0</p>
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="prevStep(1)">
+                        <i class="fas fa-arrow-left"></i> Atrás
+                    </button>
+                    <button class="btn btn-primary" id="analyzeBtn" onclick="nextStep(3)" disabled>
+                        <i class="fas fa-cogs"></i> Analizar datos
+                    </button>
+                </div>
+            </div>
+            
+            <div class="step-content" id="step3Content">
+                <div class="step-header">
+                    <span class="step-number">Paso 3</span>
+                    <h3>Resultados del análisis</h3>
+                </div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Analizando datos...</p>
+                    <div class="progress-text" id="progressText">Cargando 0%</div>
+                </div>
+                
+                <div class="results" id="resultsSection">
+                    <div class="results-grid">
+                        <div class="result-card summary-card">
+                            <h3><i class="fas fa-user-circle"></i> Resumen de tu cuenta</h3>
+                            <div class="stats-grid">
+                                <div class="stat">
+                                    <div class="stat-value" id="resultUsername">-</div>
+                                    <div class="stat-label">Usuario</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="followingCount">0</div>
+                                    <div class="stat-label">Siguiendo</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="followersCount">0</div>
+                                    <div class="stat-label">Seguidores</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="nonFollowersCount">0</div>
+                                    <div class="stat-label">No te siguen</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="fansCount">0</div>
+                                    <div class="stat-label">Fans (no sigues)</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="pendingRequestsCount">0</div>
+                                    <div class="stat-label">Solicitudes pendientes</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-card" style="min-height: 600px;">
+                            <div class="tabs" id="relationshipTabs">
+                                <div class="tab active" data-tab="nonFollowers">No te siguen</div>
+                                <div class="tab" data-tab="fans">Fans (no sigues)</div>
+                                <div class="tab" data-tab="pendingRequests">Solicitudes pendientes</div>
+                            </div>
+                            
+                            <div class="tab-content active" data-tab="nonFollowers">
+                                <h3><i class="fas fa-users-slash"></i> Usuarios que no te siguen de vuelta</h3>
+                                <div class="non-follower-list" id="nonFollowersList"></div>
+                                <button id="exportNonFollowersBtn" class="btn btn-outline">
+                                    <i class="fas fa-download"></i> Exportar lista a CSV
+                                </button>
+                            </div>
+                            
+                            <div class="tab-content" data-tab="fans">
+                                <h3><i class="fas fa-user-plus"></i> Fans: Te siguen pero tú no los sigues</h3>
+                                <div class="non-follower-list" id="fansList"></div>
+                                <button id="exportFansBtn" class="btn btn-outline">
+                                    <i class="fas fa-download"></i> Exportar lista a CSV
+                                </button>
+                            </div>
+                            
+                            <div class="tab-content" data-tab="pendingRequests">
+                                <h3><i class="fas fa-user-clock"></i> Solicitudes pendientes</h3>
+                                <div class="non-follower-list" id="pendingRequestsList"></div>
+                                <button id="exportPendingRequestsBtn" class="btn btn-outline">
+                                    <i class="fas fa-download"></i> Exportar lista a CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advanced-analysis" class="advanced-analysis-section">
+            <h2><i class="fas fa-chart-line"></i> Análisis Avanzado</h2>
+            <p class="section-description">Estadísticas detalladas de tu actividad en Instagram</p>
+            
+            <div class="results">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3><i class="fas fa-comments"></i> Resumen de Interacciones</h3>
+                        <div class="category-stats">
+                            <div class="category-stat">
+                                <i class="fas fa-heart"></i>
+                                <h4>Likes</h4>
+                                <p id="totalLikes">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-comment"></i>
+                                <h4>Comentarios</h4>
+                                <p id="totalComments">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-share"></i>
+                                <h4>Compartidos</h4>
+                                <p id="totalShares">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-eye"></i>
+                                <h4>Visualizaciones</h4>
+                                <p id="totalViews">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3><i class="fas fa-envelope"></i> Actividad de Mensajes</h3>
+                        <div class="category-stats">
+                            <div class="category-stat">
+                                <i class="fas fa-comments"></i>
+                                <h4>Conversaciones</h4>
+                                <p id="totalConversations">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-user-friends"></i>
+                                <h4>Contactos</h4>
+                                <p id="totalContacts">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-paper-plane"></i>
+                                <h4>Mensajes Enviados</h4>
+                                <p id="totalMessagesSent">0</p>
+                            </div>
+                            <div class="category-stat">
+                                <i class="fas fa-inbox"></i>
+                                <h4>Mensajes Recibidos</h4>
+                                <p id="totalMessagesReceived">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3><i class="fas fa-history"></i> Tiempo de Uso</h3>
+                        <div class="chart-container">
+                            <canvas id="timeUsageChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3><i class="fas fa-calendar"></i> Actividad por Día</h3>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile-visitors" class="profile-visitors-section">
+            <h2><i class="fas fa-eye"></i> Análisis de Visitantes del Perfil</h2>
+            <p class="section-description">Estimación basada en tus patrones de interacción en Instagram</p>
+            
+            <div class="disclaimer">
+                <div class="disclaimer-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <p><strong>Nota importante:</strong> Este análisis es una estimación basada en tus interacciones y patrones de actividad. Instagram no proporciona datos específicos sobre visitantes al perfil, por lo que estos resultados son orientativos y pueden no reflejar la realidad exacta.</p>
+            </div>
+            
+            <div class="results" id="visitorsResultsSection">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3><i class="fas fa-user-clock"></i> Posibles visitantes frecuentes</h3>
+                        <p>Basado en tus interacciones, estos usuarios podrían estar visitando tu perfil con más frecuencia:</p>
+                        <div class="visitors-list" id="visitorsList"></div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3><i class="fas fa-chart-bar"></i> Estadísticas de interacciones</h3>
+                        <div class="chart-container">
+                            <canvas id="interactionsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3><i class="fas fa-wave-square"></i> Patrones de actividad</h3>
+                        <div class="activity-patterns" id="activityPatterns"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-shield-alt"></i> FollowGuard Orion • Build by <a href="https://www.instagram.com/eduolihez/" target="_blank">Edu Olivares</a>
+                </div>
+                <p>Herramienta de análisis avanzado para Instagram</p>
+                <p class="footer-note">⚠️ Los resultados de visitantes al perfil son estimaciones basadas en interacciones y pueden no ser exactos.</p>
+                <p class="footer-note">🔒 Tus datos se procesan localmente y nunca se envían a nuestros servidores.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
