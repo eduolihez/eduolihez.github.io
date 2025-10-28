@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Sorteo iPhone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ibai-red: #E30613;
+            --ibai-dark: #1A1A1A;
+            --ibai-light: #F5F5F5;
+            --ibai-gold: #FFB800;
+            --ibai-orange: #FF6B35;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--ibai-dark) 0%, #2A2A2A 100%);
+            color: var(--ibai-light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .admin-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--ibai-gold);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .controls h2 {
+            color: var(--ibai-gold);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ibai-red), var(--ibai-orange));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27AE60, #2ECC71);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #E74C3C, #C0392B);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box h2 {
+            color: var(--ibai-gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ibai-gold);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .participants-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .participants-table h2 {
+            color: var(--ibai-gold);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--ibai-gold);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .participant-details {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--ibai-gold);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .pagination-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: var(--border-radius);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .back-to-sorteo {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-link {
+            color: var(--ibai-gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--ibai-orange);
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 15px;
+            }
+
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+
+            .table-container {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--ibai-orange);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>🎯 Panel de Administración</h1>
+            <p>Sorteo iPhone 17 Pro Max Naranja Cósmico - Patrocinado por Ibai Llanos</p>
+        </header>
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalParticipants">0</div>
+                <div class="stat-label">Total Participantes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayParticipants">0</div>
+                <div class="stat-label">Hoy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="weekParticipants">0</div>
+                <div class="stat-label">Esta Semana</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lastUpdate">-</div>
+                <div class="stat-label">Última Actualización</div>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <h2>Acciones Rápidas</h2>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="exportToJSON()">
+                    📥 Exportar JSON
+                </button>
+                <button class="btn btn-success" onclick="exportToCSV()">
+                    📊 Exportar CSV
+                </button>
+                <button class="btn btn-secondary" onclick="importData()">
+                    📤 Importar Datos
+                </button>
+                <button class="btn btn-danger" onclick="clearAllData()">
+                    🗑️ Limpiar Todo
+                </button>
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    🔄 Actualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="search-box">
+            <h2>Buscar Participantes</h2>
+            <input type="text" 
+                   class="search-input" 
+                   placeholder="Buscar por nombre, email, ciudad..."
+                   onkeyup="filterParticipants(this.value)"
+                   id="searchInput">
+        </div>
+
+        <!-- Tabla de participantes -->
+        <div class="participants-table">
+            <h2>Lista de Participantes <span class="badge" id="filteredCount">0</span></h2>
+            <div class="table-container">
+                <table id="participantsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Ubicación</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantsBody">
+                        <!-- Los participantes se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Estado vacío -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h3>No hay participantes registrados</h3>
+                <p>Los participantes aparecerán aquí una vez que se registren en el sorteo.</p>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="pagination-btn" onclick="changePage(-1)" id="prevBtn">← Anterior</button>
+                <span class="page-info" id="pageInfo">Página 1 de 1</span>
+                <button class="pagination-btn" onclick="changePage(1)" id="nextBtn">Siguiente →</button>
+            </div>
+        </div>
+
+        <!-- Volver al sorteo -->
+        <div class="back-to-sorteo">
+            <a href="index.html" class="back-link">← Volver a la página del sorteo</a>
+        </div>
+    </div>
+
+    <!-- Input oculto para importar datos -->
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+
+    <script>
+        // Configuración
+        const DB_KEY = 'sorteo_iphone_participantes';
+        const ITEMS_PER_PAGE = 10;
+        let currentPage = 1;
+        let filteredParticipants = [];
+        let allParticipants = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            loadParticipants();
+            updateStats();
+        });
+
+        // Cargar participantes desde localStorage
+        function loadParticipants() {
+            const db = getDatabase();
+            allParticipants = db?.participantes || [];
+            filteredParticipants = [...allParticipants];
+            renderTable();
+            updateStats();
+        }
+
+        // Obtener base de datos
+        function getDatabase() {
+            const data = localStorage.getItem(DB_KEY);
+            return data ? JSON.parse(data) : null;
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const db = getDatabase();
+            const participants = db?.participantes || [];
+            
+            // Total
+            document.getElementById('totalParticipants').textContent = participants.length;
+            
+            // Hoy
+            const today = new Date().toDateString();
+            const todayCount = participants.filter(p => 
+                new Date(p.fecha_registro).toDateString() === today
+            ).length;
+            document.getElementById('todayParticipants').textContent = todayCount;
+            
+            // Esta semana
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const weekCount = participants.filter(p => 
+                new Date(p.fecha_registro) >= weekAgo
+            ).length;
+            document.getElementById('weekParticipants').textContent = weekCount;
+            
+            // Última actualización
+            const lastUpdate = db?.metadata?.ultima_actualizacion;
+            document.getElementById('lastUpdate').textContent = lastUpdate ? 
+                new Date(lastUpdate).toLocaleTimeString() : '-';
+        }
+
+        // Filtrar participantes
+        function filterParticipants(searchTerm) {
+            if (!searchTerm) {
+                filteredParticipants = [...allParticipants];
+            } else {
+                const term = searchTerm.toLowerCase();
+                filteredParticipants = allParticipants.filter(participant => 
+                    participant.participante.nombre.toLowerCase().includes(term) ||
+                    participant.participante.email.toLowerCase().includes(term) ||
+                    participant.participante.telefono.toLowerCase().includes(term) ||
+                    participant.direccion.ciudad.toLowerCase().includes(term) ||
+                    participant.direccion.provincia.toLowerCase().includes(term)
+                );
+            }
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Renderizar tabla
+        function renderTable() {
+            const tbody = document.getElementById('participantsBody');
+            const emptyState = document.getElementById('emptyState');
+            const pagination = document.getElementById('pagination');
+            
+            document.getElementById('filteredCount').textContent = filteredParticipants.length;
+
+            if (filteredParticipants.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                pagination.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            pagination.style.display = 'flex';
+
+            // Calcular paginación
+            const totalPages = Math.ceil(filteredParticipants.length / ITEMS_PER_PAGE);
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const pageParticipants = filteredParticipants.slice(startIndex, endIndex);
+
+            // Renderizar filas
+            tbody.innerHTML = '';
+            pageParticipants.forEach((participant, index) => {
+                const globalIndex = startIndex + index + 1;
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${globalIndex}</td>
+                    <td>
+                        <strong>${participant.participante.nombre}</strong>
+                        <div style="font-size: 0.8rem; opacity: 0.7;">ID: ${participant.id}</div>
+                    </td>
+                    <td>${participant.participante.email}</td>
+                    <td>${participant.participante.telefono}</td>
+                    <td>
+                        <div class="participant-details">
+                            <div>${participant.direccion.ciudad}, ${participant.direccion.provincia}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">${participant.direccion.codigoPostal}</div>
+                        </div>
+                    </td>
+                    <td>
+                        ${new Date(participant.fecha_registro).toLocaleDateString()}
+                        <div style="font-size: 0.8rem; opacity: 0.7;">
+                            ${new Date(participant.fecha_registro).toLocaleTimeString()}
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8rem;" 
+                                onclick="viewParticipant('${participant.id}')">
+                            👁️ Ver
+                        </button>
+                        <button class="btn btn-danger" style="padding: 8px 12px; font-size: 0.8rem;" 
+                                onclick="deleteParticipant('${participant.id}')">
+                            🗑️
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Actualizar paginación
+            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        // Cambiar página
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredParticipants.length / ITEMS_PER_PAGE);
+            currentPage += direction;
+            
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            
+            renderTable();
+        }
+
+        // Ver detalles del participante
+        function viewParticipant(participantId) {
+            const participant = allParticipants.find(p => p.id === participantId);
+            if (!participant) return;
+
+            const details = `
+Nombre: ${participant.participante.nombre}
+Email: ${participant.participante.email}
+Teléfono: ${participant.participante.telefono}
+
+Dirección:
+${participant.direccion.direccion}
+${participant.direccion.ciudad}, ${participant.direccion.provincia}
+${participant.direccion.codigoPostal}, ${participant.direccion.pais}
+
+Fecha de registro: ${new Date(participant.fecha_registro).toLocaleString()}
+ID: ${participant.id}
+            `.trim();
+
+            alert(details);
+        }
+
+        // Eliminar participante
+        function deleteParticipant(participantId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este participante?')) {
+                return;
+            }
+
+            const db = getDatabase();
+            if (!db) return;
+
+            // Filtrar el participante a eliminar
+            db.participantes = db.participantes.filter(p => p.id !== participantId);
+            db.metadata.total_participantes = db.participantes.length;
+            db.metadata.ultima_actualizacion = new Date().toISOString();
+
+            // Guardar cambios
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            
+            // Recargar datos
+            loadParticipants();
+            
+            alert('Participante eliminado correctamente');
+        }
+
+        // Exportar a JSON
+        function exportToJSON() {
+            const db = getDatabase();
+            if (!db || db.participantes.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            const dataStr = JSON.stringify(db, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `sorteo_participantes_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert(`Datos exportados: ${db.participantes.length} participantes`);
+        }
+
+        // Exportar a CSV
+        function exportToCSV() {
+            const db = getDatabase();
+            if (!db || db.participantes.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            const headers = ['Nombre', 'Email', 'Teléfono', 'Dirección', 'Ciudad', 'Provincia', 'Código Postal', 'País', 'Fecha Registro', 'ID'];
+            const csvRows = [
+                headers.join(','),
+                ...db.participantes.map(p => [
+                    `"${p.participante.nombre}"`,
+                    p.participante.email,
+                    p.participante.telefono,
+                    `"${p.direccion.direccion}"`,
+                    p.direccion.ciudad,
+                    p.direccion.provincia,
+                    p.direccion.codigoPostal,
+                    p.direccion.pais,
+                    p.fecha_registro,
+                    p.id
+                ].join(','))
+            ];
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `sorteo_participantes_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            alert(`CSV exportado: ${db.participantes.length} participantes`);
+        }
+
+        // Importar datos
+        function importData() {
+            document.getElementById('importFile').click();
+        }
+
+        // Manejar importación de archivo
+        document.getElementById('importFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.participantes || !Array.isArray(importedData.participantes)) {
+                        throw new Error('Formato de archivo inválido');
+                    }
+
+                    if (confirm(`¿Importar ${importedData.participantes.length} participantes?`)) {
+                        localStorage.setItem(DB_KEY, JSON.stringify(importedData));
+                        loadParticipants();
+                        alert('Datos importados correctamente');
+                    }
+                } catch (error) {
+                    alert('Error al importar: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset input
+            event.target.value = '';
+        });
+
+        // Limpiar todos los datos
+        function clearAllData() {
+            if (!confirm('¿ESTÁS SEGURO? Esto eliminará TODOS los participantes permanentemente.')) {
+                return;
+            }
+
+            if (!confirm('¿REALMENTE ESTÁS SEGURO? Esta acción NO se puede deshacer.')) {
+                return;
+            }
+
+            localStorage.removeItem(DB_KEY);
+            loadParticipants();
+            alert('Todos los datos han sido eliminados');
+        }
+
+        // Refrescar datos
+        function refreshData() {
+            loadParticipants();
+            document.getElementById('searchInput').value = '';
+        }
+
+        // Auto-refresh cada 30 segundos
+        setInterval(loadParticipants, 30000);
+    </script>
+</body>
+</html>

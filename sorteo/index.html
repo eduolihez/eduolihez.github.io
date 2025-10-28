@@ -1,1 +1,140 @@
-<h1>SORTEO IBAI</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo iPhone 17 Pro Naranja - Patrocinado por Ibai Llanos</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="hero-image-container">
+                <img src="https://collection.bancomontepio.pt/fotos/produtos/M_11/iphone_17_pro_max_iphone_17_pro_cosmic_orange_combo_screen_usen_163745344468c2fb309b77b.png" 
+                     alt="iPhone 17 Pro Max Naranja Cósmico" 
+                     class="iphone-hero-image">
+                <div class="product-badge">EDICIÓN CÓSMIC ORANGE</div>
+            </div>
+            
+            <h1>SORTEO EXCLUSIVO</h1>
+            <h2>iPhone 17 Pro Max Naranja Cósmico</h2>
+            <p class="subtitle">Patrocinado por Ibai Llanos</p>
+        </header>
+
+        <!-- Resto de tu HTML se mantiene igual -->
+        <div class="form-container">
+            <!-- Página 1: Información personal -->
+            <div class="form-page active" id="page1">
+                <div class="form-header">
+                    <h3>Información Personal</h3>
+                    <p>Completa tus datos para participar en el sorteo</p>
+                </div>
+                
+                <form id="sorteoForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nombre" class="required">Nombre completo</label>
+                            <input type="text" id="nombre" name="nombre" required placeholder="Ej: María García López">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="required">Correo electrónico</label>
+                            <input type="email" id="email" name="email" required placeholder="Ej: ejemplo@correo.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefono" class="required">Número de teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" required placeholder="Ej: +34 612 345 678">
+                        </div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-primary" id="nextBtn">Continuar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Página 2: Dirección de envío -->
+            <div class="form-page" id="page2">
+                <div class="form-header">
+                    <h3>Dirección de Envío</h3>
+                    <p>En caso de ser el ganador, te enviaremos el premio a esta dirección</p>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group form-grid-full">
+                        <label for="direccion" class="required">Dirección completa</label>
+                        <textarea id="direccion" name="direccion" required placeholder="Calle, número, piso, puerta..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ciudad" class="required">Ciudad</label>
+                        <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Madrid">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="provincia" class="required">Provincia</label>
+                        <input type="text" id="provincia" name="provincia" required placeholder="Ej: Madrid">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="codigoPostal" class="required">Código Postal</label>
+                        <input type="text" id="codigoPostal" name="codigoPostal" required placeholder="Ej: 28001">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pais" class="required">País</label>
+                        <input type="text" id="pais" name="pais" required placeholder="Ej: España">
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" id="backBtn">Atrás</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Participar en el Sorteo</button>
+                </div>
+            </div>
+            
+            <!-- Página 3: Confirmación -->
+            <div class="form-page" id="page3">
+                <div class="success-message">
+                    <div class="success-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 4L12 14.01L9 11.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>¡Participación Confirmada!</h3>
+                    <p>Tu inscripción al sorteo del iPhone 17 Pro Naranja ha sido registrada correctamente.</p>
+                    <p>Recibirás un correo de confirmación en <span id="confirmEmail"></span>.</p>
+                    <p>¡Mucha suerte!</p>
+                    <button type="button" class="btn btn-primary" id="restartBtn">Participar de nuevo</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-steps">
+                <span class="step active">1</span>
+                <span class="step">2</span>
+                <span class="step">3</span>
+            </div>
+            <div class="progress-labels">
+                <span>Datos Personales</span>
+                <span>Dirección</span>
+                <span>Confirmación</span>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Este sorteo es patrocinado por Ibai Llanos. No está afiliado con Apple Inc.</p>
+            <p>iPhone es una marca registrada de Apple Inc.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
