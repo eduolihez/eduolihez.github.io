@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureVault | Archivos Privados</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>SecureVault</h1>
+                <p class="subtitle">Plataforma segura de archivos privados</p>
+            </div>
+            <div class="header-badge">
+                <span>🔒 ENCRIPTADO</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="content-section">
+                <div class="warning-box">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <h2>Contenido de Alto Nivel de Seguridad</h2>
+                        <p>Acceso restringido a usuarios verificados. Se requiere autenticación para descargar archivos.</p>
+                    </div>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">Archivos</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">2.1</span>
+                        <span class="stat-label">GB Total</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Privado</span>
+                        <span class="stat-label">Nivel</span>
+                    </div>
+                </div>
+
+                <div class="files-grid" id="files-grid">
+                    <!-- Archivos cargados por JavaScript -->
+                </div>
+
+                <div class="auth-section">
+                    <h3>Acceso Verificado</h3>
+                    <p>Autentícate para desbloquear las descargas</p>
+                    <div class="auth-buttons">
+                        <button id="login-btn" class="btn btn-secondary">
+                            <span>🔐 Iniciar Sesión</span>
+                        </button>
+                        <button id="register-btn" class="btn btn-primary">
+                            <span>📝 Crear Cuenta</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Cuenta Verificada</h2>
+                <p>Acceso completo a todos los archivos</p>
+            </div>
+            <form id="register-form">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Nombre de usuario" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Correo electrónico" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Contraseña" required>
+                </div>
+                <div class="input-group">
+                    <input type="tel" name="phone" placeholder="Número de teléfono" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span class="btn-text">Crear Cuenta</span>
+                    <span class="btn-loading" style="display: none;">Verificando...</span>
+                </button>
+            </form>
+            <button class="btn btn-link" onclick="closeModal('register-modal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a tu cuenta verificada</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Usuario o email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span class="btn-text">Acceder</span>
+                    <span class="btn-loading" style="display: none;">Verificando...</span>
+                </button>
+            </form>
+            <button class="btn btn-link" onclick="closeModal('login-modal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Verificando identidad</h3>
+            <p>Estamos confirmando tus credenciales de acceso</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
