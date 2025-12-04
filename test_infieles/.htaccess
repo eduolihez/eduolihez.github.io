@@ -1,0 +1,26 @@
+# .htaccess
+# Redirigir acceso directo a archivos PHP
+RewriteEngine On
+
+# Bloquear acceso a config
+RewriteRule ^config/ - [F,L]
+
+# Proteger archivos sensibles
+<FilesMatch "^(config\.php|database\.php|\.htaccess)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Protección contra XSS
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header always append X-Frame-Options SAMEORIGIN
+    Header set X-Content-Type-Options nosniff
+</IfModule>
+
+# Redirección HTTPS (si usas SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]

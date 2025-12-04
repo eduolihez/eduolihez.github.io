@@ -1,0 +1,20 @@
+{
+  "infieles": [
+    {
+      "id": 1,
+      "nombre": "Nombre",
+      "apellidos": "Apellidos",
+      "edad": 18,
+      "provincia": "Barcelona",
+      "redesSociales": [
+        { "tipo": "instagram", "usuario": "@usuario", "principal": true },
+        { "tipo": "twitter", "usuario": "@usuario", "principal": false }
+      ],
+      "tienePruebas": true,
+      "pruebasDescripcion": "Capturas de conversaciones de WhatsApp donde confiesa múltiples infidelidades a su pareja actual",
+      "fechaRegistro": "2025-10-04",
+      "fechaActualizacion": "2025-10-04",
+      "verificado": true
+    }
+  ]
+}
