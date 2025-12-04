@@ -72,7 +72,7 @@ function throttle(func, limit) {
 async function loadDatabase() {
     try {
         const response = await fetch('api/get_infieles.php');
-        if (!response.ok) throw new Error('Error al cargar la base de datos');
+        if (!response.ok) throw new Error('Error al cargar la base de datos infielesdb');
         const data = await response.json();
         
         // Añadir aviso ficticio a todos los registros
@@ -81,13 +81,13 @@ async function loadDatabase() {
         });
         
         database = data;
-        console.log('Base de datos cargada:', database.infieles.length, 'registros ficticios');
+        console.log('Base de datos infielesdb cargada:', database.infieles.length, 'registros ficticios');
         initApp();
     } catch (error) {
         console.error('Error:', error);
         database.infieles = getSampleData();
         initApp();
-        showNotification('Error cargando la base de datos. Se están usando datos de ejemplo ficticios.', 'error');
+        showNotification('Error cargando la base de datos infielesdb. Se están usando datos de ejemplo ficticios.', 'error');
     }
 }
 
@@ -567,7 +567,7 @@ async function handleFormSubmit(e) {
         const result = await response.json();
         
         if (response.ok && result.success) {
-            showNotification('✅ Datos ficticios registrados correctamente', 'success');
+            showNotification('✅ Datos ficticios registrados correctamente en infielesdb', 'success');
             
             // Resetear formulario
             document.getElementById('reportForm').reset();
@@ -617,13 +617,13 @@ async function handleFormSubmit(e) {
             }, 1000);
             
         } else {
-            showNotification(result.error || 'Error al enviar los datos ficticios', 'error');
+            showNotification(result.error || 'Error al enviar los datos ficticios a infielesdb', 'error');
         }
         
     } catch (error) {
         console.error('Error:', error);
         if (error.message !== 'Envío cancelado por el usuario') {
-            showNotification('Error de conexión con el servidor', 'error');
+            showNotification('Error de conexión con el servidor o con infielesdb', 'error');
         }
         
     } finally {
@@ -775,7 +775,7 @@ function renderDatabase() {
             <tr>
                 <td colspan="6" style="text-align: center; padding: 40px;">
                     <i class="fas fa-search" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 10px;"></i>
-                    <p>No se encontraron registros ficticios</p>
+                    <p>No se encontraron registros ficticios en infielesdb</p>
                     <button id="clearFiltersFromTable" class="btn small primary" style="margin-top: 10px;">
                         <i class="fas fa-times"></i> Limpiar filtros
                     </button>
@@ -1150,7 +1150,7 @@ function resizeCharts() {
 }
 
 function copyTemplate() {
-    const template = `**REPORTE DE INFIEL - BASE DE DATOS FICTICIA**
+    const template = `**REPORTE DE INFIEL - BASE DE DATOS FICTICIA (infielesdb)**
 
 **AVISO IMPORTANTE:** Todos los datos deben ser COMPLETAMENTE FICTICIOS
 
@@ -1219,7 +1219,7 @@ function showDetailsModal(persona) {
             <div class="legal-notice" style="background: #fff3cd; color: #856404; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px; border-left: 4px solid #ffc107;">
                 <i class="fas fa-exclamation-triangle"></i>
                 <div>
-                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica.</p>
+                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica en la base de datos infielesdb.</p>
                 </div>
             </div>
             
@@ -1281,11 +1281,11 @@ function showLegalModal(type) {
         case 'lopd':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Protección de Datos Personales (LOPD/GDPR)</h2>
-                <p>Esta base de datos es un proyecto demostrativo que cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
+                <p>Esta base de datos (infielesdb) es un proyecto demostrativo que cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
                 <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>IMPORTANTE:</strong> Todos los datos almacenados son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica y educativa.</p>
+                        <p><strong>IMPORTANTE:</strong> Todos los datos almacenados en infielesdb son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica y educativa.</p>
                     </div>
                 </div>
                 <h3 style="margin-top: 20px; color: var(--secondary-color);">Bases legales para el tratamiento:</h3>
@@ -1304,17 +1304,17 @@ function showLegalModal(type) {
                 <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>AVISO IMPORTANTE:</strong> Esta plataforma es UNICAMENTE para fines educativos y demostrativos. Todos los datos son FICTICIOS.</p>
+                        <p><strong>AVISO IMPORTANTE:</strong> Esta plataforma es UNICAMENTE para fines educativos y demostrativos. Todos los datos en infielesdb son FICTICIOS.</p>
                     </div>
                 </div>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Aceptación de términos</h3>
-                <p>Al utilizar esta plataforma, aceptas que es un proyecto educativo con datos completamente ficticios.</p>
+                <p>Al utilizar esta plataforma, aceptas que es un proyecto educativo con datos completamente ficticios almacenados en la base de datos infielesdb.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Uso permitido</h3>
-                <p>Esta base de datos solo puede ser consultada para fines educativos y de demostración técnica. No está permitido el uso comercial, la reventa de datos o la difamación.</p>
+                <p>Esta base de datos (infielesdb) solo puede ser consultada para fines educativos y de demostración técnica. No está permitido el uso comercial, la reventa de datos o la difamación.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Responsabilidad del usuario</h3>
-                <p>El usuario se compromete a NO introducir datos reales de personas. Todos los datos deben ser completamente inventados.</p>
+                <p>El usuario se compromete a NO introducir datos reales de personas en infielesdb. Todos los datos deben ser completamente inventados.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Limitación de responsabilidad</h3>
-                <p>Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros. Esta es una plataforma demostrativa.</p>
+                <p>Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros. Esta es una plataforma demostrativa con base de datos infielesdb.</p>
             `;
             break;
         case 'delete':
@@ -1323,11 +1323,11 @@ function showLegalModal(type) {
                 <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>RECUERDA:</strong> Todos los datos son FICTICIOS. Si encuentras datos que parezcan reales, es coincidencia.</p>
+                        <p><strong>RECUERDA:</strong> Todos los datos en infielesdb son FICTICIOS. Si encuentras datos que parezcan reales, es coincidencia.</p>
                     </div>
                 </div>
                 <p>Si deseas solicitar la eliminación de datos ficticios que puedan coincidir casualmente con información real, puedes contactar a: <strong>demo@proyectoeducativo.es</strong></p>
-                <p>Debido a que todos los datos son generados aleatoriamente, cualquier coincidencia con la realidad es puramente casual.</p>
+                <p>Debido a que todos los datos en infielesdb son generados aleatoriamente, cualquier coincidencia con la realidad es puramente casual.</p>
                 <p>Procesaremos tu solicitud en un plazo máximo de 30 días hábiles, aunque al ser datos ficticios, la eliminación es inmediata.</p>
             `;
             break;
@@ -1337,13 +1337,13 @@ function showLegalModal(type) {
                 <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS</strong></p>
+                        <p><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS EN INFIELESDB</strong></p>
                     </div>
                 </div>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Responsabilidad</h3>
-                <p>Esta plataforma es una base de datos de carácter educativo y demostrativo. Todos los datos mostrados son completamente inventados.</p>
+                <p>Esta plataforma es una base de datos de carácter educativo y demostrativo. Todos los datos mostrados en infielesdb son completamente inventados.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Propiedad intelectual</h3>
-                <p>Todos los derechos de propiedad intelectual sobre la base de datos y el código pertenecen a sus creadores como proyecto educativo.</p>
+                <p>Todos los derechos de propiedad intelectual sobre la base de datos infielesdb y el código pertenecen a sus creadores como proyecto educativo.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Enlaces externos</h3>
                 <p>No nos responsabilizamos del contenido de enlaces externos a redes sociales u otras páginas web.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Jurisdicción</h3>
