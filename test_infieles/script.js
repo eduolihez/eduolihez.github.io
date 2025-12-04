@@ -721,9 +721,9 @@ function applyFilters() {
 
     // Filtrar por estado de verificación
     if (appState.filters.hasProof === 'true') {
-        filtered = filtered.filter(persona => persona.verificado);
+        filtered = filtered.filter(persona => persona.tienePruebas);
     } else if (appState.filters.hasProof === 'false') {
-        filtered = filtered.filter(persona => !persona.verificado);
+        filtered = filtered.filter(persona => !persona.tienePruebas);
     }
 
     appState.filteredData = filtered;
@@ -799,17 +799,17 @@ function renderDatabase() {
 
             return `
                 <tr onclick="showDetailsModalFromTable(${personaJSON})" tabindex="0" role="button" aria-label="Ver detalles ficticios de ${persona.nombre} ${persona.apellidos}">
-                <td>${persona.nombre} ${persona.apellidos} ${persona.ficticio ? '<span class="ficticio-badge">FICTICIO</span>' : ''}</td>
-                <td>${persona.edad} años</td>
-                <td>${persona.provincia}</td>
-                <td><div class="social-badges">${redesHTML}</div></td>
-                <td>
-                    <a href="https://instagram.com/infieles_db_espana" target="_blank" class="instagram-verify-btn" onclick="event.stopPropagation();">
-                        <i class="fab fa-instagram"></i> Contactar para verificar
-                    </a>
-                </td>
-                <td>${fechaFormateada}</td>
-            </tr>
+                    <td>${persona.nombre} ${persona.apellidos} ${persona.ficticio ? '<span class="ficticio-badge">FICTICIO</span>' : ''}</td>
+                    <td>${persona.edad} años</td>
+                    <td>${persona.provincia}</td>
+                    <td><div class="social-badges">${redesHTML}</div></td>
+                    <td>
+                        <a href="https://instagram.com/infieles_db_espana" target="_blank" class="instagram-verify-btn" onclick="event.stopPropagation();">
+                            <i class="fab fa-instagram"></i> Contactar para verificar
+                        </a>
+                    </td>
+                    <td>${fechaFormateada}</td>
+                </tr>
             `;
         }).join('');
 
@@ -840,6 +840,36 @@ function renderDatabase() {
                     margin-left: 5px;
                     vertical-align: middle;
                     font-weight: bold;
+                }
+                .instagram-verify-btn {
+                    display: inline-block;
+                    background: linear-gradient(45deg, #E4405F, #833AB4);
+                    color: white;
+                    padding: 8px 15px;
+                    border-radius: 20px;
+                    text-decoration: none;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    text-align: center;
+                    border: none;
+                    cursor: pointer;
+                    white-space: nowrap;
+                }
+                .instagram-verify-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(228, 64, 95, 0.3);
+                }
+                .instagram-verify-btn i {
+                    margin-right: 5px;
+                }
+                @media (max-width: 768px) {
+                    .instagram-verify-btn {
+                        padding: 6px 12px;
+                        font-size: 0.8rem;
+                        white-space: normal;
+                        line-height: 1.2;
+                    }
                 }
             `;
             document.head.appendChild(style);
@@ -942,13 +972,11 @@ function updateStatisticsDisplay() {
     const topProvince = document.getElementById('topProvince');
     const topProvinceCountEl = document.getElementById('topProvinceCount');
     const avgAge = document.getElementById('avgAge');
-    const withProofs = document.getElementById('withProofs');
     
     if (totalStats) totalStats.textContent = appState.stats.totalRegistros;
     if (topProvince) topProvince.textContent = topProvincia;
     if (topProvinceCountEl) topProvinceCountEl.textContent = `${topProvinciaCount} casos`;
     if (avgAge) avgAge.textContent = appState.stats.edadPromedio;
-    
 
     updateRecentActivity();
 }
@@ -979,7 +1007,7 @@ function updateRecentActivity() {
             </div>
             <div class="activity-content">
                 <h4>${persona.nombre} ${persona.apellidos} <span style="color: #ff6b6b; font-size: 0.8rem;">(FICTICIO)</span></h4>
-                <p>${persona.verificado ? 'Infiel ficticio verificado' : 'Infiel ficticio reportado'} - ${persona.provincia}</p>
+                <p>Infiel ficticio reportado - ${persona.provincia}</p>
                 <span class="activity-time">${fechaFormateada}</span>
             </div>
         `;
@@ -1151,10 +1179,13 @@ function copyTemplate() {
 • Otras redes: [Twitter, Facebook, etc. INVENTADOS]
 
 **PRUEBAS (OPCIONAL - FICTICIAS):**
-[Si tienes pruebas, descríbelas aquí (INVENTADAS). Las pruebas NO son obligatorias, pero si las envías, el reporte será marcado como VERIFICADO]
+[Si tienes pruebas, descríbelas aquí (INVENTADAS). Envía las pruebas a @infieles_db_espana para verificación]
 
 **INFORMACIÓN ADICIONAL:**
-[Contexto ficticio, cómo conoces a la persona (INVENTADO), etc.]`;
+[Contexto ficticio, cómo conoces a la persona (INVENTADO), etc.]
+
+**VERIFICACIÓN:**
+Contacta por Instagram: @infieles_db_espana con las pruebas para confirmar la infidelidad.`;
 
     navigator.clipboard.writeText(template).then(() => {
         showNotification('Plantilla copiada al portapapeles', 'success');
@@ -1175,6 +1206,29 @@ function showDetailsModal(persona) {
         modalDetails.style.overflowY = 'auto';
     }
 
+    const redesHTML = persona.redesSociales.map(red => {
+        const iconClass = getSocialIconClass(red.tipo);
+        return `
+            <span class="social-badge ${red.tipo}">
+                <i class="${iconClass}"></i>
+                ${red.usuario}
+            </span>
+        `;
+    }).join('');
+
+    const fechaRegistro = new Date(persona.fechaRegistro).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    const fechaActualizacion = new Date(persona.fechaActualizacion).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    modalTitle.textContent = `Detalles ficticios de ${persona.nombre} ${persona.apellidos}`;
     modalDetails.innerHTML = `
         <div class="persona-details">
             <h2 style="margin-bottom: 20px; color: var(--primary-color);">
@@ -1235,84 +1289,6 @@ function showDetailsModal(persona) {
             <div class="verification-note" style="background: var(--bg-tertiary); padding: 15px; border-radius: var(--border-radius); border-left: 4px solid var(--primary-color);">
                 <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-info-circle"></i> Nota sobre verificación</h4>
                 <p>La verificación de infieles se realiza exclusivamente a través de Instagram (<strong>@infieles_db_espana</strong>). Contacta con nosotros enviando las pruebas necesarias para confirmar la información.</p>
-            </div>
-        </div>
-    `;
-
-    const redesHTML = persona.redesSociales.map(red => {
-        const iconClass = getSocialIconClass(red.tipo);
-        return `
-            <span class="social-badge ${red.tipo}">
-                <i class="${iconClass}"></i>
-                ${red.usuario}
-            </span>
-        `;
-    }).join('');
-
-    const fechaRegistro = new Date(persona.fechaRegistro).toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    const fechaActualizacion = new Date(persona.fechaActualizacion).toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    modalTitle.textContent = `Detalles ficticios de ${persona.nombre} ${persona.apellidos}`;
-    modalDetails.innerHTML = `
-        <div class="persona-details">
-            <h2 style="margin-bottom: 20px; color: var(--primary-color);">
-                ${persona.nombre} ${persona.apellidos}
-                <span style="background: linear-gradient(135deg, #ff6b6b, #dc3545); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; margin-left: 10px;">FICTICIO</span>
-            </h2>
-            
-            <div class="legal-notice" style="background: #fff3cd; color: #856404; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px; border-left: 4px solid #ffc107;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div>
-                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica en la base de datos infielesdb.</p>
-                </div>
-            </div>
-            
-            <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-user"></i> Edad</h4>
-                    <p style="font-size: 1.2rem;">${persona.edad} años</p>
-                </div>
-                <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-map-marker-alt"></i> Provincia</h4>
-                    <p style="font-size: 1.2rem;">${persona.provincia}</p>
-                </div>
-                <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Estado</h4>
-                    <p style="font-size: 1.2rem; color: ${persona.verificado ? 'var(--success-color)' : '#666'}">
-                        ${persona.verificado ? 'Verificado' : 'No verificado'}
-                    </p>
-                </div>
-                <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-camera"></i> Pruebas</h4>
-                    <p style="font-size: 1.2rem;">${persona.tienePruebas ? 'Sí (ficticias)' : 'No'}</p>
-                </div>
-            </div>
-
-            <div class="detail-section" style="margin-bottom: 25px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-hashtag"></i> Redes Sociales Ficticias</h4>
-                <div class="social-badges" style="display: flex; flex-wrap: wrap; gap: 8px;">${redesHTML}</div>
-            </div>
-
-            ${persona.pruebasDescripcion ? `
-            <div class="detail-section" style="margin-bottom: 25px; background: var(--bg-secondary); padding: 15px; border-radius: 8px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-file-alt"></i> Descripción de Pruebas Ficticias</h4>
-                <p style="line-height: 1.6;">${persona.pruebasDescripcion}</p>
-            </div>
-            ` : ''}
-
-            <div class="detail-section" style="margin-bottom: 25px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-calendar-alt"></i> Fechas</h4>
-                <p style="margin-bottom: 5px;"><strong>Registrado:</strong> ${fechaRegistro}</p>
-                <p><strong>Última actualización:</strong> ${fechaActualizacion}</p>
             </div>
         </div>
     `;

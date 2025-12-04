@@ -1894,3 +1894,54 @@ footer {
 .proof-no {
     display: none;
 }
+
+.instagram-verify-btn {
+    display: inline-block;
+    background: linear-gradient(45deg, #E4405F, #833AB4);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.instagram-verify-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(228, 64, 95, 0.3);
+}
+
+.instagram-verify-btn i {
+    margin-right: 5px;
+}
+
+/* Responsive para el botón */
+@media (max-width: 768px) {
+    .instagram-verify-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        white-space: normal;
+        line-height: 1.2;
+    }
+}
+
+/* Eliminar estilos relacionados con proof-indicator */
+.proof-indicator,
+.proof-yes,
+.proof-no {
+    display: none;
+}
+
+/* Ajustar tabla para el nuevo botón */
+td .instagram-verify-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+}
