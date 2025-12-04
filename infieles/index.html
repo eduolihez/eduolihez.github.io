@@ -164,152 +164,177 @@
 
             <!-- SECCIÓN REPORTAR -->
             <div id="addSection" class="main-section hidden">
-                <div class="section-header">
-                    <h2><i class="fas fa-user-plus"></i> Reportar a una Persona Infiel</h2>
-                    <div class="section-badges">
-                        <span class="badge"><i class="fas fa-instagram"></i> Vía Instagram</span>
-                        <span class="badge"><i class="fas fa-check-circle"></i> Verificación opcional</span>
-                    </div>
+    <div class="section-header">
+        <h2><i class="fas fa-user-plus"></i> Reportar a una Persona Infiel</h2>
+        <div class="section-badges">
+            <span class="badge"><i class="fas fa-exclamation-triangle"></i> DATOS FICTICIOS</span>
+            <span class="badge"><i class="fas fa-gavel"></i> SOLO DEMOSTRACIÓN</span>
+        </div>
+    </div>
+    
+    <div class="legal-warning" style="background: linear-gradient(135deg, #ff6b6b, #dc3545); color: white; padding: 20px; border-radius: var(--border-radius); margin-bottom: 25px; border-left: 5px solid #ffd700;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-balance-scale" style="font-size: 2rem;"></i>
+            <div>
+                <h3 style="color: white; margin-bottom: 10px;">AVISO LEGAL IMPORTANTE</h3>
+                <p style="margin-bottom: 10px;"><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS</strong></p>
+                <p>Todos los datos mostrados son completamente inventados y sirven únicamente como demostración técnica. 
+                No se almacenan ni procesan datos reales de personas.</p>
+            </div>
+        </div>
+    </div>
+    
+    <form id="reportForm" class="report-form">
+        <div class="form-step active">
+            <h3><i class="fas fa-user"></i> Información Básica</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nombre">
+                        <i class="fas fa-user"></i> Nombre *
+                        <span class="hint">(Dato ficticio)</span>
+                    </label>
+                    <input type="text" id="nombre" name="nombre" required 
+                           placeholder="Ej: Juan" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,50}"
+                           title="Solo letras y espacios (2-50 caracteres)">
                 </div>
                 
-                <div class="report-flow">
-                    <div class="flow-step active">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h3>Requisitos Básicos</h3>
-                            <ul class="requirements">
-                                <li><i class="fas fa-check-circle"></i> La persona debe ser mayor de edad (+18 años)</li>
-                                <li><i class="fas fa-check-circle"></i> Debe residir en España (provincia requerida)</li>
-                                <li><i class="fas fa-check-circle"></i> Información veraz y precisa</li>
-                                <li><i class="fas fa-check-circle"></i> Solo personas físicas, no empresas</li>
-                            </ul>
-                            <div class="legal-notice" style="margin-top: 15px; font-size: 0.9rem;">
-                                <i class="fas fa-info-circle"></i>
-                                <div>
-                                    <p><strong>Nota sobre pruebas:</strong> Las pruebas no son obligatorias, pero si las proporcionas, 
-                                    la persona será marcada como <strong>verificada</strong> en la base de datos.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flow-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h3>Información Requerida</h3>
-                            <div class="info-grid">
-                                <div class="info-card">
-                                    <i class="fas fa-user"></i>
-                                    <h4>Nombre Completo</h4>
-                                    <p>Nombre y apellidos reales</p>
-                                </div>
-                                <div class="info-card">
-                                    <i class="fas fa-birthday-cake"></i>
-                                    <h4>Edad / Año Nacimiento</h4>
-                                    <p>Edad actual o año de nacimiento</p>
-                                </div>
-                                <div class="info-card">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <h4>Provincia</h4>
-                                    <p>Provincia de residencia</p>
-                                </div>
-                                <div class="info-card">
-                                    <i class="fab fa-instagram"></i>
-                                    <h4>Redes Sociales</h4>
-                                    <p>Instagram principal y otras</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flow-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>Envía por Instagram</h3>
-                            <div class="instagram-guide">
-                                <div class="instagram-header">
-                                    <i class="fab fa-instagram"></i>
-                                    <div>
-                                        <h4>Envía un DM a:</h4>
-                                        <div class="instagram-account">@infieles_db_espana</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="message-template">
-                                    <h4>Formato del mensaje:</h4>
-                                    <div class="template-box">
-                                        <pre>
-**REPORTE DE INFIEL - BASE DE DATOS**
-
-**DATOS PERSONALES:**
-• Nombre completo: [Nombre y apellidos]
-• Edad/Año nacimiento: [Edad o año de nacimiento]
-• Provincia: [Provincia de residencia]
-• Instagram: [@usuario_instagram]
-• Otras redes: [Twitter, Facebook, etc.]
-
-**PRUEBAS (OPCIONAL):**
-[Si tienes pruebas, descríbelas aquí. Las pruebas NO son obligatorias, pero si las envías, el reporte será marcado como VERIFICADO]
-
-**INFORMACIÓN ADICIONAL:**
-[Contexto, cómo conoces a la persona, etc.]</pre>
-                                    </div>
-                                    <button id="copyTemplate" class="btn small" aria-label="Copiar plantilla">
-                                        <i class="far fa-copy"></i> Copiar Plantilla
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="apellidos">
+                        <i class="fas fa-users"></i> Apellidos *
+                        <span class="hint">(Dato ficticio)</span>
+                    </label>
+                    <input type="text" id="apellidos" name="apellidos" required
+                           placeholder="Ej: Pérez García" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,100}">
                 </div>
                 
-                <div class="proofs-section">
-                    <h3><i class="fas fa-camera"></i> ¿Qué Pruebas Aceptamos? (Opcional)</h3>
-                    <p style="margin-bottom: 20px; color: var(--text-secondary); font-style: italic;">
-                        Las pruebas NO son obligatorias, pero si las envías, la persona será marcada como <strong>VERIFICADA</strong> en la base de datos.
-                    </p>
-                    <div class="proofs-grid">
-                        <div class="proof-card">
-                            <div class="proof-icon">
-                                <i class="fas fa-comment-alt"></i>
-                            </div>
-                            <h4>Capturas de Conversaciones</h4>
-                            <p>Screenshots de mensajes donde se confiesa la infidelidad</p>
-                        </div>
-                        <div class="proof-card">
-                            <div class="proof-icon">
-                                <i class="fas fa-image"></i>
-                            </div>
-                            <h4>Fotos y Videos</h4>
-                            <p>Imágenes que demuestren la relación y la infidelidad</p>
-                        </div>
-                        <div class="proof-card">
-                            <div class="proof-icon">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                            <h4>Pruebas de Fechas</h4>
-                            <p>Reservas, tickets, ubicaciones con timestamps</p>
-                        </div>
-                        <div class="proof-card">
-                            <div class="proof-icon">
-                                <i class="fas fa-user-friends"></i>
-                            </div>
-                            <h4>Testigos</h4>
-                            <p>Contacto de otras personas que puedan confirmar</p>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="edad">
+                        <i class="fas fa-birthday-cake"></i> Edad *
+                        <span class="hint">(Entre 18 y 99)</span>
+                    </label>
+                    <input type="number" id="edad" name="edad" required min="18" max="99"
+                           placeholder="25">
                 </div>
                 
-                <div class="legal-notice">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <h4>Importante: Verificación y Responsabilidad</h4>
-                        <p>Todos los reportes son revisados manualmente. Las pruebas <strong>NO son obligatorias</strong>, pero los reportes con pruebas serán marcados como VERIFICADOS. 
-                        El informante es responsable legalmente de la veracidad de la información. Se requiere consentimiento explícito 
-                        para el tratamiento de datos según la LOPD.</p>
+                <div class="form-group">
+                    <label for="provincia">
+                        <i class="fas fa-map-marker-alt"></i> Provincia *
+                    </label>
+                    <select id="provincia" name="provincia" required>
+                        <option value="">Selecciona una provincia</option>
+                        <!-- Se cargarán dinámicamente -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-step">
+            <h3><i class="fas fa-hashtag"></i> Redes Sociales</h3>
+            <div id="socialNetworksContainer">
+                <div class="social-input-group">
+                    <div class="form-group">
+                        <label for="red_tipo_1">Tipo de Red</label>
+                        <select class="red-tipo" name="redes[0][tipo]" required>
+                            <option value="instagram">Instagram</option>
+                            <option value="twitter">Twitter/X</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="tiktok">TikTok</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="red_usuario_1">Usuario *</label>
+                        <input type="text" class="red-usuario" name="redes[0][usuario]" required
+                               placeholder="@ejemplo_ficticio">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" class="red-principal" name="redes[0][principal]" checked>
+                            Red principal
+                        </label>
                     </div>
                 </div>
             </div>
+            <button type="button" id="addSocialNetwork" class="btn secondary small">
+                <i class="fas fa-plus"></i> Añadir otra red social
+            </button>
+        </div>
+        
+        <div class="form-step">
+            <h3><i class="fas fa-camera"></i> Información Adicional</h3>
+            
+            <div class="form-group">
+                <label for="pruebasDescripcion">
+                    <i class="fas fa-file-alt"></i> Descripción de las pruebas
+                    <span class="hint">(Opcional, datos ficticios)</span>
+                </label>
+                <textarea id="pruebasDescripcion" name="pruebasDescripcion" rows="4"
+                          placeholder="Ejemplo ficticio: Capturas de pantalla inventadas de conversaciones..."></textarea>
+            </div>
+            
+            <div class="form-group checkbox-group">
+                <label for="tienePruebas">
+                    <input type="checkbox" id="tienePruebas" name="tienePruebas">
+                    Marcar como "con pruebas" (ficticias)
+                </label>
+            </div>
+            
+            <div class="legal-confirmation" style="background: var(--bg-secondary); padding: 20px; border-radius: var(--border-radius); margin: 20px 0; border-left: 4px solid var(--accent-color);">
+                <h4><i class="fas fa-gavel"></i> Confirmación Legal Requerida</h4>
+                
+                <div class="checkbox-group required">
+                    <label>
+                        <input type="checkbox" id="consentimientoLegal" name="consentimientoLegal" required>
+                        <strong>CONFIRMO que todos los datos introducidos son completamente FICTICIOS</strong>
+                    </label>
+                    <p class="hint">Esta plataforma es solo para demostración técnica. No se almacenan datos reales.</p>
+                </div>
+                
+                <div class="checkbox-group required">
+                    <label>
+                        <input type="checkbox" id="aceptoTerminos" name="aceptoTerminos" required>
+                        Acepto que este es un proyecto educativo y que los datos mostrados NO son reales
+                    </label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="mayorEdad" name="mayorEdad" required>
+                        Confirmo que soy mayor de edad
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-navigation">
+            <button type="button" id="prevStep" class="btn secondary">
+                <i class="fas fa-arrow-left"></i> Anterior
+            </button>
+            <button type="button" id="nextStep" class="btn primary">
+                Siguiente <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" id="submitForm" class="btn success" style="display: none;">
+                <i class="fas fa-paper-plane"></i> Enviar Datos Ficticios
+            </button>
+        </div>
+        
+        <div class="form-progress">
+            <div class="progress-bar">
+                <div class="progress" id="formProgress"></div>
+            </div>
+            <div class="step-indicators">
+                <span class="step-indicator active">1</span>
+                <span class="step-indicator">2</span>
+                <span class="step-indicator">3</span>
+            </div>
+        </div>
+    </form>
+    
+    <div class="legal-disclaimer" style="margin-top: 30px; padding: 15px; background: var(--bg-tertiary); border-radius: var(--border-radius); font-size: 0.9rem;">
+        <p><i class="fas fa-info-circle"></i> <strong>Nota importante:</strong> Todos los datos enviados a través de este formulario son tratados como FICTICIOS. 
+        Esta plataforma opera bajo el artículo 83 del Reglamento de Desarrollo de la LOPD para proyectos educativos y de demostración técnica.</p>
+    </div>
+</div>
 
             <!-- SECCIÓN ESTADÍSTICAS -->
             <div id="statsSection" class="main-section hidden">

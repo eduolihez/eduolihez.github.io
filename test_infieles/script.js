@@ -4,7 +4,7 @@ let appState = {
     currentView: 'none',
     filteredData: [],
     currentPage: 1,
-    itemsPerPage: window.innerWidth <= 768 ? 5 : 10,
+    itemsPerPage: 5,
     filters: {
         search: '',
         provincia: '',
@@ -72,7 +72,7 @@ function throttle(func, limit) {
 async function loadDatabase() {
     try {
         const response = await fetch('api/get_infieles.php');
-        if (!response.ok) throw new Error('Error al cargar la base de datos infielesdb');
+        if (!response.ok) throw new Error('Error al cargar la base de datos');
         const data = await response.json();
         
         // Añadir aviso ficticio a todos los registros
@@ -81,13 +81,13 @@ async function loadDatabase() {
         });
         
         database = data;
-        console.log('Base de datos infielesdb cargada:', database.infieles.length, 'registros ficticios');
+        console.log('Base de datos cargada:', database.infieles.length, 'registros ficticios');
         initApp();
     } catch (error) {
         console.error('Error:', error);
         database.infieles = getSampleData();
         initApp();
-        showNotification('Error cargando la base de datos infielesdb. Se están usando datos de ejemplo ficticios.', 'error');
+        showNotification('Error cargando la base de datos. Se están usando datos de ejemplo ficticios.', 'error');
     }
 }
 
@@ -146,24 +146,40 @@ function getSampleData() {
 }
 
 function initApp() {
-    // Inicializar Select2
-    if ($('.select2').length) {
+    // Ajustar items por página según tamaño de pantalla
+    appState.itemsPerPage = window.innerWidth <= 768 ? 5 : 10;
+    
+    // Inicializar Select2 solo si hay espacio suficiente
+    if ($('.select2').length && window.innerWidth > 768) {
         $('.select2').select2({
             placeholder: "Selecciona una provincia",
             allowClear: true,
-            width: '100%'
+            width: '100%',
+            dropdownAutoWidth: true
         }).on('select2:open', () => {
             // Ajustar para móviles
             if (window.innerWidth <= 768) {
                 $('.select2-container').css('position', 'fixed');
                 $('.select2-dropdown').css('position', 'fixed');
+                $('.select2-dropdown').css('width', '90%');
+                $('.select2-dropdown').css('left', '5%');
+                $('.select2-dropdown').css('top', '50%');
+                $('.select2-dropdown').css('transform', 'translateY(-50%)');
             }
         }).on('select2:close', () => {
             if (window.innerWidth <= 768) {
-                $('.select2-container').css('position', 'absolute');
-                $('.select2-dropdown').css('position', 'absolute');
+                $('.select2-container').css('position', '');
+                $('.select2-dropdown').css('position', '');
+                $('.select2-dropdown').css('width', '');
+                $('.select2-dropdown').css('left', '');
+                $('.select2-dropdown').css('top', '');
+                $('.select2-dropdown').css('transform', '');
             }
         });
+    } else if (window.innerWidth <= 768) {
+        // En móviles, usar select nativo para mejor experiencia
+        $('.select2').removeClass('select2-hidden-accessible');
+        $('.select2-container').remove();
     }
 
     loadProvinces();
@@ -197,7 +213,7 @@ function loadProvinces() {
     });
     
     // Actualizar Select2 si está inicializado
-    if ($(provinceFilter).hasClass('select2')) {
+    if ($(provinceFilter).hasClass('select2') && window.innerWidth > 768) {
         $(provinceFilter).trigger('change');
     }
 }
@@ -251,9 +267,6 @@ function setupEventListeners() {
     document.getElementById('prevPage').addEventListener('click', prevPage);
     document.getElementById('nextPage').addEventListener('click', nextPage);
 
-    // Copiar plantilla de Instagram (mantenido para retrocompatibilidad)
-    document.getElementById('copyTemplate')?.addEventListener('click', copyTemplate);
-
     // Enlaces del footer
     document.querySelectorAll('.view-db').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -305,6 +318,24 @@ function setupEventListeners() {
     
     // Escuchar cambios en modo oscuro
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', detectDarkMode);
+    
+    // Mejorar accesibilidad táctil
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+}
+
+function handleTouchStart(e) {
+    // Añadir clase de feedback táctil
+    if (e.target.closest('.hero-btn, .btn, .pagination-btn, .social-badge')) {
+        e.target.classList.add('touch-active');
+    }
+}
+
+function handleTouchEnd(e) {
+    // Remover clase de feedback táctil
+    document.querySelectorAll('.touch-active').forEach(el => {
+        el.classList.remove('touch-active');
+    });
 }
 
 function setupFormEventListeners() {
@@ -323,6 +354,17 @@ function setupFormEventListeners() {
     
     // Cargar provincias en el select del formulario
     loadProvinciasForm();
+    
+    // Evitar zoom en inputs en iOS
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('focus', () => {
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+    });
 }
 
 function loadProvinciasForm() {
@@ -353,6 +395,11 @@ function nextFormStep() {
         
         currentFormStep++;
         updateFormUI();
+        
+        // Scroll al top del formulario en móviles
+        if (window.innerWidth <= 768) {
+            document.getElementById('addSection').scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }
 
@@ -360,6 +407,11 @@ function prevFormStep() {
     if (currentFormStep > 1) {
         currentFormStep--;
         updateFormUI();
+        
+        // Scroll al top del formulario en móviles
+        if (window.innerWidth <= 768) {
+            document.getElementById('addSection').scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }
 
@@ -503,6 +555,11 @@ function addSocialNetworkField() {
     `;
     container.appendChild(newGroup);
     socialNetworkCounter++;
+    
+    // Scroll al nuevo campo en móviles
+    if (window.innerWidth <= 768) {
+        newGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }
 
 async function handleFormSubmit(e) {
@@ -567,7 +624,7 @@ async function handleFormSubmit(e) {
         const result = await response.json();
         
         if (response.ok && result.success) {
-            showNotification('✅ Datos ficticios registrados correctamente en infielesdb', 'success');
+            showNotification('✅ Datos ficticios registrados correctamente', 'success');
             
             // Resetear formulario
             document.getElementById('reportForm').reset();
@@ -617,13 +674,13 @@ async function handleFormSubmit(e) {
             }, 1000);
             
         } else {
-            showNotification(result.error || 'Error al enviar los datos ficticios a infielesdb', 'error');
+            showNotification(result.error || 'Error al enviar los datos ficticios', 'error');
         }
         
     } catch (error) {
         console.error('Error:', error);
         if (error.message !== 'Envío cancelado por el usuario') {
-            showNotification('Error de conexión con el servidor o con infielesdb', 'error');
+            showNotification('Error de conexión con el servidor', 'error');
         }
         
     } finally {
@@ -635,6 +692,18 @@ async function handleFormSubmit(e) {
 
 function handleResize() {
     appState.itemsPerPage = window.innerWidth <= 768 ? 5 : 10;
+    
+    // Re-inicializar Select2 si cambia de móvil a escritorio
+    if (window.innerWidth > 768) {
+        $('.select2').select2({
+            placeholder: "Selecciona una provincia",
+            allowClear: true,
+            width: '100%'
+        });
+    } else {
+        $('.select2').select2('destroy');
+    }
+    
     if (appState.currentView === 'database') {
         applyFilters();
     }
@@ -645,13 +714,7 @@ function handleResize() {
 
 function handleOrientationChange() {
     setTimeout(() => {
-        appState.itemsPerPage = window.innerWidth <= 768 ? 5 : 10;
-        if (appState.currentView === 'database') {
-            applyFilters();
-        }
-        if (appState.currentView === 'stats') {
-            resizeCharts();
-        }
+        handleResize();
     }, 300);
 }
 
@@ -674,6 +737,11 @@ function showSection(section) {
                 targetSection.style.opacity = '1';
                 targetSection.style.transform = 'translateY(0)';
             });
+            
+            // Scroll al top en móviles
+            if (window.innerWidth <= 768) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
         
         appState.currentView = section;
@@ -773,9 +841,9 @@ function renderDatabase() {
     if (pageData.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" style="text-align: center; padding: 40px;">
-                    <i class="fas fa-search" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 10px;"></i>
-                    <p>No se encontraron registros ficticios en infielesdb</p>
+                <td colspan="6" style="text-align: center; padding: 50px;">
+                    <i class="fas fa-search" style="font-size: 2.5rem; color: var(--text-secondary); margin-bottom: 15px;"></i>
+                    <p style="margin-bottom: 15px; color: var(--text-secondary);">No se encontraron registros ficticios</p>
                     <button id="clearFiltersFromTable" class="btn small primary" style="margin-top: 10px;">
                         <i class="fas fa-times"></i> Limpiar filtros
                     </button>
@@ -789,40 +857,67 @@ function renderDatabase() {
             const redesHTML = persona.redesSociales.map(red => 
                 `<span class="social-badge ${red.tipo}">
                     <i class="${getSocialIconClass(red.tipo)}"></i>
-                    ${red.usuario}
+                    ${window.innerWidth <= 768 ? red.usuario.substring(0, 15) + '...' : red.usuario}
                 </span>`
             ).join('');
             
             const fecha = new Date(persona.fechaRegistro);
-            const fechaFormateada = fecha.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
+            const fechaFormateada = window.innerWidth <= 768 ? 
+                fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }) :
+                fecha.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
 
             const personaJSON = JSON.stringify(persona).replace(/"/g, '&quot;');
 
             return `
                 <tr onclick="showDetailsModalFromTable(${personaJSON})" tabindex="0" role="button" aria-label="Ver detalles ficticios de ${persona.nombre} ${persona.apellidos}">
-                    <td>${persona.nombre} ${persona.apellidos} ${persona.ficticio ? '<span class="ficticio-badge">FICTICIO</span>' : ''}</td>
-                    <td>${persona.edad} años</td>
-                    <td>${persona.provincia}</td>
-                    <td><div class="social-badges">${redesHTML}</div></td>
                     <td>
-                        <span class="proof-indicator ${persona.verificado ? 'proof-yes' : 'proof-no'}">
-                            <i class="fas fa-${persona.verificado ? 'check' : 'times'}"></i>
-                            ${persona.verificado ? 'Verificado' : 'No verificado'}
-                        </span>
+                        <div class="mobile-row">
+                            <strong>${persona.nombre} ${persona.apellidos}</strong>
+                            ${persona.ficticio ? '<span class="ficticio-badge">FICTICIO</span>' : ''}
+                        </div>
+                        ${window.innerWidth <= 768 ? `
+                            <div class="mobile-details">
+                                <span>${persona.edad} años • ${persona.provincia}</span>
+                                <span class="proof-indicator ${persona.verificado ? 'proof-yes' : 'proof-no'}">
+                                    <i class="fas fa-${persona.verificado ? 'check' : 'times'}"></i>
+                                    ${persona.verificado ? 'Verificado' : 'No verificado'}
+                                </span>
+                            </div>
+                        ` : ''}
                     </td>
-                    <td>${fechaFormateada}</td>
+                    ${window.innerWidth > 768 ? `
+                        <td>${persona.edad} años</td>
+                        <td>${persona.provincia}</td>
+                    ` : ''}
+                    <td><div class="social-badges">${redesHTML}</div></td>
+                    ${window.innerWidth > 768 ? `
+                        <td>
+                            <span class="proof-indicator ${persona.verificado ? 'proof-yes' : 'proof-no'}">
+                                <i class="fas fa-${persona.verificado ? 'check' : 'times'}"></i>
+                                ${persona.verificado ? 'Verificado' : 'No verificado'}
+                            </span>
+                        </td>
+                        <td>${fechaFormateada}</td>
+                    ` : ''}
                 </tr>
             `;
         }).join('');
 
         tbody.innerHTML = rowsHTML;
         
-        // Añadir event listeners para teclado
+        // Añadir event listeners para teclado y toque
         tbody.querySelectorAll('tr[role="button"]').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if (!e.target.closest('button') && !e.target.closest('a')) {
+                    const personaData = JSON.parse(row.getAttribute('onclick').match(/showDetailsModalFromTable\(([^)]+)\)/)[1]);
+                    showDetailsModalFromTable(personaData);
+                }
+            });
+            
             row.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
@@ -832,20 +927,37 @@ function renderDatabase() {
             });
         });
         
-        // Añadir CSS para la etiqueta ficticia
-        if (!document.querySelector('#ficticioBadgeStyle')) {
+        // Añadir CSS para la etiqueta ficticia y estilos móviles
+        if (!document.querySelector('#mobileTableStyles')) {
             const style = document.createElement('style');
-            style.id = 'ficticioBadgeStyle';
+            style.id = 'mobileTableStyles';
             style.textContent = `
+                .mobile-row {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                .mobile-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    font-size: 0.9rem;
+                    color: var(--text-secondary);
+                }
                 .ficticio-badge {
-                    background: linear-gradient(135deg, #ff6b6b, #dc3545);
+                    background: linear-gradient(135deg, #e91e63, #9c27b0);
                     color: white;
-                    font-size: 0.7rem;
-                    padding: 2px 6px;
-                    border-radius: 10px;
-                    margin-left: 5px;
-                    vertical-align: middle;
+                    font-size: 0.75rem;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    align-self: flex-start;
                     font-weight: bold;
+                    letter-spacing: 0.5px;
+                }
+                @media (max-width: 768px) {
+                    .mobile-hide {
+                        display: none !important;
+                    }
                 }
             `;
             document.head.appendChild(style);
@@ -970,7 +1082,7 @@ function updateRecentActivity() {
 
     const recent = [...database.infieles]
         .sort((a, b) => new Date(b.fechaRegistro) - new Date(a.fechaRegistro))
-        .slice(0, 5);
+        .slice(0, 3);
 
     activityList.innerHTML = '';
 
@@ -978,8 +1090,8 @@ function updateRecentActivity() {
         const fecha = new Date(persona.fechaRegistro);
         const fechaFormateada = fecha.toLocaleDateString('es-ES', {
             day: '2-digit',
-            month: 'short',
-            year: 'numeric'
+            month: window.innerWidth <= 768 ? 'numeric' : 'short',
+            year: window.innerWidth <= 768 ? '2-digit' : 'numeric'
         });
 
         const activityItem = document.createElement('div');
@@ -989,7 +1101,7 @@ function updateRecentActivity() {
                 <i class="fas fa-user-plus"></i>
             </div>
             <div class="activity-content">
-                <h4>${persona.nombre} ${persona.apellidos} <span style="color: #ff6b6b; font-size: 0.8rem;">(FICTICIO)</span></h4>
+                <h4>${persona.nombre} ${persona.apellidos} <span class="ficticio-text">(FICTICIO)</span></h4>
                 <p>${persona.verificado ? 'Infiel ficticio verificado' : 'Infiel ficticio reportado'} - ${persona.provincia}</p>
                 <span class="activity-time">${fechaFormateada}</span>
             </div>
@@ -1024,30 +1136,18 @@ function renderCharts() {
 
     const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    // Configuración de colores según modo
-    const chartColors = isDarkMode ? {
-        primary: 'rgba(255, 107, 107, 0.7)',
-        border: 'rgba(255, 107, 107, 1)',
-        background: 'rgba(255, 255, 255, 0.1)',
+    // Configuración de colores para el tema oscuro con rosa
+    const chartColors = {
+        primary: 'rgba(233, 30, 99, 0.7)',
+        border: 'rgba(233, 30, 99, 1)',
+        background: 'rgba(255, 255, 255, 0.05)',
         text: '#e0e0e0',
         grid: 'rgba(255, 255, 255, 0.1)',
         pieColors: [
-            'rgba(255, 107, 107, 0.7)',
-            'rgba(67, 97, 238, 0.7)',
-            'rgba(46, 204, 113, 0.7)',
-            'rgba(241, 196, 15, 0.7)'
-        ]
-    } : {
-        primary: 'rgba(220, 53, 69, 0.7)',
-        border: 'rgba(220, 53, 69, 1)',
-        background: 'rgba(0, 0, 0, 0.1)',
-        text: '#666',
-        grid: 'rgba(0, 0, 0, 0.1)',
-        pieColors: [
-            'rgba(220, 53, 69, 0.7)',
-            'rgba(40, 167, 69, 0.7)',
-            'rgba(23, 162, 184, 0.7)',
-            'rgba(255, 193, 7, 0.7)'
+            'rgba(233, 30, 99, 0.7)',
+            'rgba(156, 39, 176, 0.7)',
+            'rgba(255, 64, 129, 0.7)',
+            'rgba(103, 58, 183, 0.7)'
         ]
     };
 
@@ -1055,12 +1155,12 @@ function renderCharts() {
     const provinciasCount = appState.stats.porProvincia;
     const provinciasSorted = Object.entries(provinciasCount)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 10);
+        .slice(0, window.innerWidth <= 768 ? 5 : 10);
     
     const provinciaChartCtx = document.getElementById('provinceChart');
     if (provinciaChartCtx) {
         provinceChart = new Chart(provinciaChartCtx, {
-            type: 'bar',
+            type: window.innerWidth <= 768 ? 'horizontalBar' : 'bar',
             data: {
                 labels: provinciasSorted.map(p => p[0]),
                 datasets: [{
@@ -1079,7 +1179,10 @@ function renderCharts() {
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1,
-                            color: chartColors.text
+                            color: chartColors.text,
+                            font: {
+                                size: window.innerWidth <= 768 ? 10 : 12
+                            }
                         },
                         grid: {
                             color: chartColors.grid
@@ -1088,7 +1191,9 @@ function renderCharts() {
                     x: {
                         ticks: {
                             color: chartColors.text,
-                            maxRotation: window.innerWidth <= 768 ? 45 : 0
+                            font: {
+                                size: window.innerWidth <= 768 ? 10 : 12
+                            }
                         },
                         grid: {
                             color: chartColors.grid
@@ -1098,7 +1203,10 @@ function renderCharts() {
                 plugins: {
                     legend: {
                         labels: {
-                            color: chartColors.text
+                            color: chartColors.text,
+                            font: {
+                                size: window.innerWidth <= 768 ? 11 : 13
+                            }
                         }
                     }
                 }
@@ -1110,7 +1218,7 @@ function renderCharts() {
     const ageChartCtx = document.getElementById('ageChart');
     if (ageChartCtx) {
         ageChart = new Chart(ageChartCtx, {
-            type: 'pie',
+            type: window.innerWidth <= 768 ? 'doughnut' : 'pie',
             data: {
                 labels: Object.keys(appState.stats.porEdades),
                 datasets: [{
@@ -1124,10 +1232,13 @@ function renderCharts() {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom',
+                        position: window.innerWidth <= 768 ? 'bottom' : 'right',
                         labels: {
                             color: chartColors.text,
-                            padding: 20
+                            padding: 20,
+                            font: {
+                                size: window.innerWidth <= 768 ? 11 : 13
+                            }
                         }
                     },
                     tooltip: {
@@ -1146,32 +1257,6 @@ function renderCharts() {
 function resizeCharts() {
     [provinceChart, ageChart].forEach(chart => {
         if (chart && chart.resize) chart.resize();
-    });
-}
-
-function copyTemplate() {
-    const template = `**REPORTE DE INFIEL - BASE DE DATOS FICTICIA (infielesdb)**
-
-**AVISO IMPORTANTE:** Todos los datos deben ser COMPLETAMENTE FICTICIOS
-
-**DATOS PERSONALES (FICTICIOS):**
-• Nombre completo: [Nombre y apellidos INVENTADOS]
-• Edad/Año nacimiento: [Edad o año de nacimiento INVENTADO]
-• Provincia: [Provincia de residencia INVENTADA]
-• Instagram: [@usuario_instagram_INVENTADO]
-• Otras redes: [Twitter, Facebook, etc. INVENTADOS]
-
-**PRUEBAS (OPCIONAL - FICTICIAS):**
-[Si tienes pruebas, descríbelas aquí (INVENTADAS). Las pruebas NO son obligatorias, pero si las envías, el reporte será marcado como VERIFICADO]
-
-**INFORMACIÓN ADICIONAL:**
-[Contexto ficticio, cómo conoces a la persona (INVENTADO), etc.]`;
-
-    navigator.clipboard.writeText(template).then(() => {
-        showNotification('Plantilla copiada al portapapeles', 'success');
-    }).catch(err => {
-        console.error('Error al copiar:', err);
-        showNotification('Error al copiar la plantilla', 'error');
     });
 }
 
@@ -1213,51 +1298,51 @@ function showDetailsModal(persona) {
         <div class="persona-details">
             <h2 style="margin-bottom: 20px; color: var(--primary-color);">
                 ${persona.nombre} ${persona.apellidos}
-                <span style="background: linear-gradient(135deg, #ff6b6b, #dc3545); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; margin-left: 10px;">FICTICIO</span>
+                <span style="background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; margin-left: 10px;">FICTICIO</span>
             </h2>
             
-            <div class="legal-notice" style="background: #fff3cd; color: #856404; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px; border-left: 4px solid #ffc107;">
+            <div class="legal-notice" style="background: rgba(233, 30, 99, 0.1); color: var(--primary-color); padding: 15px; border-radius: var(--border-radius-sm); margin-bottom: 20px; border-left: 4px solid var(--primary-color);">
                 <i class="fas fa-exclamation-triangle"></i>
                 <div>
-                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica en la base de datos infielesdb.</p>
+                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica.</p>
                 </div>
             </div>
             
-            <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+            <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
                 <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-user"></i> Edad</h4>
-                    <p style="font-size: 1.2rem;">${persona.edad} años</p>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 5px;"><i class="fas fa-user"></i> Edad</h4>
+                    <p style="font-size: 1.2rem; color: var(--text-primary);">${persona.edad} años</p>
                 </div>
                 <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-map-marker-alt"></i> Provincia</h4>
-                    <p style="font-size: 1.2rem;">${persona.provincia}</p>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 5px;"><i class="fas fa-map-marker-alt"></i> Provincia</h4>
+                    <p style="font-size: 1.2rem; color: var(--text-primary);">${persona.provincia}</p>
                 </div>
                 <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Estado</h4>
-                    <p style="font-size: 1.2rem; color: ${persona.verificado ? 'var(--success-color)' : '#666'}">
+                    <h4 style="color: var(--text-secondary); margin-bottom: 5px;"><i class="fas fa-check-circle"></i> Estado</h4>
+                    <p style="font-size: 1.2rem; color: ${persona.verificado ? 'var(--success-color)' : '#f44336'}">
                         ${persona.verificado ? 'Verificado' : 'No verificado'}
                     </p>
                 </div>
                 <div class="detail-item">
-                    <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-camera"></i> Pruebas</h4>
-                    <p style="font-size: 1.2rem;">${persona.tienePruebas ? 'Sí (ficticias)' : 'No'}</p>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 5px;"><i class="fas fa-camera"></i> Pruebas</h4>
+                    <p style="font-size: 1.2rem; color: ${persona.tienePruebas ? 'var(--success-color)' : '#f44336'}">${persona.tienePruebas ? 'Sí (ficticias)' : 'No'}</p>
                 </div>
             </div>
 
             <div class="detail-section" style="margin-bottom: 25px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-hashtag"></i> Redes Sociales Ficticias</h4>
+                <h4 style="color: var(--text-secondary); margin-bottom: 10px;"><i class="fas fa-hashtag"></i> Redes Sociales Ficticias</h4>
                 <div class="social-badges" style="display: flex; flex-wrap: wrap; gap: 8px;">${redesHTML}</div>
             </div>
 
             ${persona.pruebasDescripcion ? `
-            <div class="detail-section" style="margin-bottom: 25px; background: var(--bg-secondary); padding: 15px; border-radius: 8px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-file-alt"></i> Descripción de Pruebas Ficticias</h4>
+            <div class="detail-section" style="margin-bottom: 25px; background: var(--background-light); padding: 15px; border-radius: 8px;">
+                <h4 style="color: var(--text-secondary); margin-bottom: 10px;"><i class="fas fa-file-alt"></i> Descripción de Pruebas Ficticias</h4>
                 <p style="line-height: 1.6;">${persona.pruebasDescripcion}</p>
             </div>
             ` : ''}
 
             <div class="detail-section" style="margin-bottom: 25px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-calendar-alt"></i> Fechas</h4>
+                <h4 style="color: var(--text-secondary); margin-bottom: 10px;"><i class="fas fa-calendar-alt"></i> Fechas</h4>
                 <p style="margin-bottom: 5px;"><strong>Registrado:</strong> ${fechaRegistro}</p>
                 <p><strong>Última actualización:</strong> ${fechaActualizacion}</p>
             </div>
@@ -1269,6 +1354,15 @@ function showDetailsModal(persona) {
     
     // Enfocar el modal para accesibilidad
     modal.focus();
+    
+    // Cerrar modal con toque fuera en móviles
+    if (window.innerWidth <= 768) {
+        modal.addEventListener('touchstart', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
 }
 
 function showLegalModal(type) {
@@ -1281,75 +1375,75 @@ function showLegalModal(type) {
         case 'lopd':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Protección de Datos Personales (LOPD/GDPR)</h2>
-                <p>Esta base de datos (infielesdb) es un proyecto demostrativo que cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
-                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <p>Esta base de datos es un proyecto demostrativo que cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
+                <div class="legal-notice" style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid var(--primary-color);">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>IMPORTANTE:</strong> Todos los datos almacenados en infielesdb son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica y educativa.</p>
+                        <p><strong>IMPORTANTE:</strong> Todos los datos almacenados son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica y educativa.</p>
                     </div>
                 </div>
-                <h3 style="margin-top: 20px; color: var(--secondary-color);">Bases legales para el tratamiento:</h3>
-                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <h3 style="margin-top: 20px; color: var(--text-secondary);">Bases legales para el tratamiento:</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px; color: var(--text-primary);">
                     <li>Proyecto educativo y demostrativo (Artículo 83 del Reglamento de Desarrollo LOPD)</li>
                     <li>Consentimiento explícito del usuario para el tratamiento de datos ficticios</li>
                     <li>Datos 100% ficticios sin relación con personas reales</li>
                 </ul>
-                <h3 style="color: var(--secondary-color);">Derechos ARCO:</h3>
-                <p>Todas las personas tienen derecho a acceder, rectificar, cancelar y oponerse al tratamiento de sus datos personales. En este caso, al ser datos ficticios, estos derechos se aplican de forma académica.</p>
+                <h3 style="color: var(--text-secondary);">Derechos ARCO:</h3>
+                <p style="color: var(--text-primary);">Todas las personas tienen derecho a acceder, rectificar, cancelar y oponerse al tratamiento de sus datos personales. En este caso, al ser datos ficticios, estos derechos se aplican de forma académica.</p>
             `;
             break;
         case 'terms':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Términos y Condiciones de Uso</h2>
-                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <div class="legal-notice" style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid var(--primary-color);">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>AVISO IMPORTANTE:</strong> Esta plataforma es UNICAMENTE para fines educativos y demostrativos. Todos los datos en infielesdb son FICTICIOS.</p>
+                        <p><strong>AVISO IMPORTANTE:</strong> Esta plataforma es UNICAMENTE para fines educativos y demostrativos. Todos los datos son FICTICIOS.</p>
                     </div>
                 </div>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Aceptación de términos</h3>
-                <p>Al utilizar esta plataforma, aceptas que es un proyecto educativo con datos completamente ficticios almacenados en la base de datos infielesdb.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Uso permitido</h3>
-                <p>Esta base de datos (infielesdb) solo puede ser consultada para fines educativos y de demostración técnica. No está permitido el uso comercial, la reventa de datos o la difamación.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Responsabilidad del usuario</h3>
-                <p>El usuario se compromete a NO introducir datos reales de personas en infielesdb. Todos los datos deben ser completamente inventados.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Limitación de responsabilidad</h3>
-                <p>Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros. Esta es una plataforma demostrativa con base de datos infielesdb.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">1. Aceptación de términos</h3>
+                <p style="color: var(--text-primary);">Al utilizar esta plataforma, aceptas que es un proyecto educativo con datos completamente ficticios.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">2. Uso permitido</h3>
+                <p style="color: var(--text-primary);">Esta base de datos solo puede ser consultada para fines educativos y de demostración técnica. No está permitido el uso comercial, la reventa de datos o la difamación.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">3. Responsabilidad del usuario</h3>
+                <p style="color: var(--text-primary);">El usuario se compromete a NO introducir datos reales de personas. Todos los datos deben ser completamente inventados.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">4. Limitación de responsabilidad</h3>
+                <p style="color: var(--text-primary);">Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros. Esta es una plataforma demostrativa.</p>
             `;
             break;
         case 'delete':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Solicitud de Eliminación de Datos Ficticios</h2>
-                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <div class="legal-notice" style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid var(--primary-color);">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>RECUERDA:</strong> Todos los datos en infielesdb son FICTICIOS. Si encuentras datos que parezcan reales, es coincidencia.</p>
+                        <p><strong>RECUERDA:</strong> Todos los datos son FICTICIOS. Si encuentras datos que parezcan reales, es coincidencia.</p>
                     </div>
                 </div>
-                <p>Si deseas solicitar la eliminación de datos ficticios que puedan coincidir casualmente con información real, puedes contactar a: <strong>demo@proyectoeducativo.es</strong></p>
-                <p>Debido a que todos los datos en infielesdb son generados aleatoriamente, cualquier coincidencia con la realidad es puramente casual.</p>
-                <p>Procesaremos tu solicitud en un plazo máximo de 30 días hábiles, aunque al ser datos ficticios, la eliminación es inmediata.</p>
+                <p style="color: var(--text-primary);">Si deseas solicitar la eliminación de datos ficticios que puedan coincidir casualmente con información real, puedes contactar a: <strong style="color: var(--primary-color);">demo@proyectoeducativo.es</strong></p>
+                <p style="color: var(--text-primary);">Debido a que todos los datos son generados aleatoriamente, cualquier coincidencia con la realidad es puramente casual.</p>
+                <p style="color: var(--text-primary);">Procesaremos tu solicitud en un plazo máximo de 30 días hábiles, aunque al ser datos ficticios, la eliminación es inmediata.</p>
             `;
             break;
         case 'disclaimer':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Aviso Legal - Proyecto Educativo</h2>
-                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <div class="legal-notice" style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid var(--primary-color);">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
-                        <p><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS EN INFIELESDB</strong></p>
+                        <p><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS</strong></p>
                     </div>
                 </div>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Responsabilidad</h3>
-                <p>Esta plataforma es una base de datos de carácter educativo y demostrativo. Todos los datos mostrados en infielesdb son completamente inventados.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Propiedad intelectual</h3>
-                <p>Todos los derechos de propiedad intelectual sobre la base de datos infielesdb y el código pertenecen a sus creadores como proyecto educativo.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Enlaces externos</h3>
-                <p>No nos responsabilizamos del contenido de enlaces externos a redes sociales u otras páginas web.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Jurisdicción</h3>
-                <p>Cualquier disputa será resuelta en los tribunales de Madrid, España.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">5. Contacto legal</h3>
-                <p>Para cuestiones legales relacionadas con este proyecto educativo: legal@proyectoeducativo.es</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">1. Responsabilidad</h3>
+                <p style="color: var(--text-primary);">Esta plataforma es una base de datos de carácter educativo y demostrativo. Todos los datos mostrados son completamente inventados.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">2. Propiedad intelectual</h3>
+                <p style="color: var(--text-primary);">Todos los derechos de propiedad intelectual sobre la base de datos y el código pertenecen a sus creadores como proyecto educativo.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">3. Enlaces externos</h3>
+                <p style="color: var(--text-primary);">No nos responsabilizamos del contenido de enlaces externos a redes sociales u otras páginas web.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">4. Jurisdicción</h3>
+                <p style="color: var(--text-primary);">Cualquier disputa será resuelta en los tribunales de Madrid, España.</p>
+                <h3 style="margin-top: 15px; color: var(--text-secondary);">5. Contacto legal</h3>
+                <p style="color: var(--text-primary);">Para cuestiones legales relacionadas con este proyecto educativo: legal@proyectoeducativo.es</p>
             `;
             break;
         default:
@@ -1392,10 +1486,19 @@ function adjustForTouch() {
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
         document.body.classList.add('touch-device');
         
-        // Ajustes específicos para touch
-        document.querySelectorAll('button, a, .social-badge, .pagination-btn').forEach(el => {
-            el.style.cursor = 'pointer';
-        });
+        // Añadir estilos CSS para feedback táctil
+        const style = document.createElement('style');
+        style.textContent = `
+            .touch-active {
+                transform: scale(0.98) !important;
+                opacity: 0.9 !important;
+                transition: transform 0.1s ease !important;
+            }
+            .hero-btn, .btn, .social-badge, .pagination-btn {
+                -webkit-tap-highlight-color: rgba(233, 30, 99, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
 
@@ -1416,7 +1519,10 @@ function setupLazyLoading() {
 // ========== INICIALIZACIÓN ==========
 document.addEventListener('DOMContentLoaded', () => {
     // Prevenir zoom en iOS al hacer focus en inputs
-    document.addEventListener('touchstart', function() {}, {passive: true});
+    const metaViewport = document.querySelector('meta[name=viewport]');
+    if (metaViewport) {
+        metaViewport.content = metaViewport.content + ', maximum-scale=1.0';
+    }
     
     loadDatabase();
     
@@ -1426,6 +1532,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.body.classList.add('light-mode');
     }
+    
+    // Manejar teclado virtual en iOS
+    window.addEventListener('resize', function() {
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+            window.setTimeout(function() {
+                document.activeElement.scrollIntoViewIfNeeded();
+            }, 0);
+        }
+    });
 });
 
 // Mejorar accesibilidad con teclado
@@ -1443,4 +1558,3 @@ document.addEventListener('keydown', (e) => {
 
 // Hacer funciones globales para eventos HTML
 window.showDetailsModalFromTable = showDetailsModalFromTable;
-window.copyTemplate = copyTemplate;

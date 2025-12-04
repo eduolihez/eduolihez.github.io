@@ -33,6 +33,11 @@ let appState = {
     }
 };
 
+// Variables para el formulario
+let currentFormStep = 1;
+const totalFormSteps = 3;
+let socialNetworkCounter = 1;
+
 // Variables para gráficos
 let provinceChart = null;
 let ageChart = null;
@@ -66,16 +71,23 @@ function throttle(func, limit) {
 // ========== FUNCIONES PRINCIPALES ==========
 async function loadDatabase() {
     try {
-        const response = await fetch('database.json');
-        if (!response.ok) throw new Error('Error al cargar la base de datos');
-        database = await response.json();
-        console.log('Base de datos cargada:', database.infieles.length, 'registros');
+        const response = await fetch('api/get_infieles.php');
+        if (!response.ok) throw new Error('Error al cargar la base de datos infielesdb');
+        const data = await response.json();
+        
+        // Añadir aviso ficticio a todos los registros
+        data.infieles.forEach(persona => {
+            persona.ficticio = true;
+        });
+        
+        database = data;
+        console.log('Base de datos infielesdb cargada:', database.infieles.length, 'registros ficticios');
         initApp();
     } catch (error) {
         console.error('Error:', error);
         database.infieles = getSampleData();
         initApp();
-        showNotification('Error cargando la base de datos. Se están usando datos de ejemplo.', 'error');
+        showNotification('Error cargando la base de datos infielesdb. Se están usando datos de ejemplo ficticios.', 'error');
     }
 }
 
@@ -84,32 +96,51 @@ function getSampleData() {
         {
             "id": 1,
             "nombre": "Ejemplo",
-            "apellidos": "Usuario",
+            "apellidos": "Ficticio 1",
             "edad": 25,
             "provincia": "Madrid",
             "redesSociales": [
-                { "tipo": "instagram", "usuario": "@ejemplo", "principal": true }
+                { "tipo": "instagram", "usuario": "@ejemplo_ficticio_1", "principal": true }
             ],
             "tienePruebas": true,
-            "pruebasDescripcion": "Capturas de pantalla de conversaciones",
+            "pruebasDescripcion": "Datos completamente ficticios para demostración técnica",
             "fechaRegistro": "2025-11-01",
             "fechaActualizacion": "2025-11-01",
-            "verificado": true
+            "verificado": true,
+            "ficticio": true
         },
         {
             "id": 2,
-            "nombre": "Otro",
-            "apellidos": "Ejemplo",
+            "nombre": "Persona",
+            "apellidos": "Ficticia 2",
             "edad": 32,
             "provincia": "Barcelona",
             "redesSociales": [
-                { "tipo": "instagram", "usuario": "@otroejemplo", "principal": true }
+                { "tipo": "instagram", "usuario": "@persona_ficticia_2", "principal": true }
             ],
             "tienePruebas": false,
-            "pruebasDescripcion": "",
+            "pruebasDescripcion": "Datos de ejemplo sin validez legal",
             "fechaRegistro": "2025-10-15",
             "fechaActualizacion": "2025-10-15",
-            "verificado": false
+            "verificado": false,
+            "ficticio": true
+        },
+        {
+            "id": 3,
+            "nombre": "Usuario",
+            "apellidos": "Demostración 3",
+            "edad": 28,
+            "provincia": "Valencia",
+            "redesSociales": [
+                { "tipo": "twitter", "usuario": "@usuario_ficticio", "principal": true },
+                { "tipo": "instagram", "usuario": "@demo_ficticia", "principal": false }
+            ],
+            "tienePruebas": true,
+            "pruebasDescripcion": "Información inventada para fines educativos",
+            "fechaRegistro": "2025-09-20",
+            "fechaActualizacion": "2025-09-20",
+            "verificado": true,
+            "ficticio": true
         }
     ];
 }
@@ -137,6 +168,7 @@ function initApp() {
 
     loadProvinces();
     setupEventListeners();
+    setupFormEventListeners();
     calculateStatistics();
     showSection('database');
     adjustForTouch();
@@ -219,8 +251,8 @@ function setupEventListeners() {
     document.getElementById('prevPage').addEventListener('click', prevPage);
     document.getElementById('nextPage').addEventListener('click', nextPage);
 
-    // Copiar plantilla de Instagram
-    document.getElementById('copyTemplate').addEventListener('click', copyTemplate);
+    // Copiar plantilla de Instagram (mantenido para retrocompatibilidad)
+    document.getElementById('copyTemplate')?.addEventListener('click', copyTemplate);
 
     // Enlaces del footer
     document.querySelectorAll('.view-db').forEach(link => {
@@ -275,6 +307,332 @@ function setupEventListeners() {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', detectDarkMode);
 }
 
+function setupFormEventListeners() {
+    // Navegación del formulario
+    document.getElementById('nextStep')?.addEventListener('click', nextFormStep);
+    document.getElementById('prevStep')?.addEventListener('click', prevFormStep);
+    
+    // Añadir red social
+    document.getElementById('addSocialNetwork')?.addEventListener('click', addSocialNetworkField);
+    
+    // Envío del formulario
+    const reportForm = document.getElementById('reportForm');
+    if (reportForm) {
+        reportForm.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // Cargar provincias en el select del formulario
+    loadProvinciasForm();
+}
+
+function loadProvinciasForm() {
+    const select = document.getElementById('provincia');
+    if (!select) return;
+    
+    // Limpiar opciones excepto la primera
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
+    const provincias = appState.provinces.sort();
+    provincias.forEach(provincia => {
+        const option = document.createElement('option');
+        option.value = provincia;
+        option.textContent = provincia;
+        select.appendChild(option);
+    });
+}
+
+function nextFormStep() {
+    if (currentFormStep < totalFormSteps) {
+        // Validar paso actual
+        if (!validateFormStep(currentFormStep)) {
+            showNotification('Por favor, completa todos los campos requeridos', 'error');
+            return;
+        }
+        
+        currentFormStep++;
+        updateFormUI();
+    }
+}
+
+function prevFormStep() {
+    if (currentFormStep > 1) {
+        currentFormStep--;
+        updateFormUI();
+    }
+}
+
+function updateFormUI() {
+    // Ocultar todos los pasos
+    document.querySelectorAll('.form-step').forEach(step => {
+        step.classList.remove('active');
+    });
+    
+    // Mostrar paso actual
+    const steps = document.querySelectorAll('.form-step');
+    if (steps.length >= currentFormStep) {
+        steps[currentFormStep - 1].classList.add('active');
+    }
+    
+    // Actualizar botones
+    const prevBtn = document.getElementById('prevStep');
+    const nextBtn = document.getElementById('nextStep');
+    const submitBtn = document.getElementById('submitForm');
+    
+    if (prevBtn) prevBtn.style.display = currentFormStep === 1 ? 'none' : 'block';
+    if (nextBtn) nextBtn.style.display = currentFormStep === totalFormSteps ? 'none' : 'block';
+    if (submitBtn) submitBtn.style.display = currentFormStep === totalFormSteps ? 'block' : 'none';
+    
+    // Actualizar barra de progreso
+    const progress = (currentFormStep / totalFormSteps) * 100;
+    const progressBar = document.getElementById('formProgress');
+    if (progressBar) progressBar.style.width = `${progress}%`;
+    
+    // Actualizar indicadores
+    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+        if (index < currentFormStep) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
+    });
+}
+
+function validateFormStep(step) {
+    let isValid = true;
+    
+    if (step === 1) {
+        const requiredFields = ['nombre', 'apellidos', 'edad', 'provincia'];
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field && !field.value.trim()) {
+                isValid = false;
+                field.style.borderColor = 'var(--primary-color)';
+            } else if (field) {
+                field.style.borderColor = '';
+            }
+        });
+        
+        // Validar edad
+        const edadInput = document.getElementById('edad');
+        if (edadInput) {
+            const edad = parseInt(edadInput.value);
+            if (edad < 18 || edad > 99 || isNaN(edad)) {
+                isValid = false;
+                edadInput.style.borderColor = 'var(--primary-color)';
+            } else {
+                edadInput.style.borderColor = '';
+            }
+        }
+    }
+    
+    if (step === 2) {
+        // Validar al menos una red social
+        const socialInputs = document.querySelectorAll('.red-usuario');
+        let hasSocial = false;
+        socialInputs.forEach(input => {
+            if (input.value.trim().includes('@')) {
+                hasSocial = true;
+                input.style.borderColor = '';
+            } else {
+                input.style.borderColor = 'var(--primary-color)';
+                isValid = false;
+            }
+        });
+        
+        if (socialInputs.length === 0) {
+            isValid = false;
+            showNotification('Debe añadir al menos una red social', 'error');
+        } else if (!hasSocial) {
+            isValid = false;
+        }
+    }
+    
+    if (step === 3) {
+        // Validar checkboxes legales
+        const legalChecks = [
+            'consentimientoLegal',
+            'aceptoTerminos',
+            'mayorEdad'
+        ];
+        
+        legalChecks.forEach(checkId => {
+            const check = document.getElementById(checkId);
+            if (check && !check.checked) {
+                isValid = false;
+                check.parentElement.style.color = 'var(--primary-color)';
+            } else if (check) {
+                check.parentElement.style.color = '';
+            }
+        });
+    }
+    
+    return isValid;
+}
+
+function addSocialNetworkField() {
+    const container = document.getElementById('socialNetworksContainer');
+    if (!container) return;
+    
+    const newGroup = document.createElement('div');
+    newGroup.className = 'social-input-group';
+    newGroup.innerHTML = `
+        <div class="form-group">
+            <label for="red_tipo_${socialNetworkCounter}">Tipo de Red</label>
+            <select class="red-tipo" name="redes[${socialNetworkCounter}][tipo]">
+                <option value="instagram">Instagram</option>
+                <option value="twitter">Twitter/X</option>
+                <option value="facebook">Facebook</option>
+                <option value="tiktok">TikTok</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="red_usuario_${socialNetworkCounter}">Usuario *</label>
+            <input type="text" class="red-usuario" 
+                   name="redes[${socialNetworkCounter}][usuario]" required
+                   placeholder="@ejemplo_ficticio">
+        </div>
+        <div class="form-group checkbox-group">
+            <label>
+                <input type="checkbox" class="red-principal" 
+                       name="redes[${socialNetworkCounter}][principal]">
+                Red principal
+            </label>
+        </div>
+    `;
+    container.appendChild(newGroup);
+    socialNetworkCounter++;
+}
+
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    // Validar último paso
+    if (!validateFormStep(3)) {
+        showNotification('Debes aceptar todas las confirmaciones legales', 'error');
+        return;
+    }
+    
+    // Mostrar loading
+    const submitBtn = document.getElementById('submitForm');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    submitBtn.disabled = true;
+    
+    try {
+        // Recopilar datos del formulario
+        const formData = {
+            nombre: document.getElementById('nombre').value,
+            apellidos: document.getElementById('apellidos').value,
+            edad: parseInt(document.getElementById('edad').value),
+            provincia: document.getElementById('provincia').value,
+            tienePruebas: document.getElementById('tienePruebas').checked,
+            pruebasDescripcion: document.getElementById('pruebasDescripcion').value,
+            consentimientoLegal: document.getElementById('consentimientoLegal').checked,
+            aceptoTerminos: document.getElementById('aceptoTerminos').checked,
+            mayorEdad: document.getElementById('mayorEdad').checked,
+            redes: []
+        };
+        
+        // Recopilar redes sociales
+        document.querySelectorAll('.social-input-group').forEach((group, index) => {
+            const tipo = group.querySelector('.red-tipo').value;
+            const usuario = group.querySelector('.red-usuario').value;
+            const principal = group.querySelector('.red-principal').checked;
+            
+            if (usuario) {
+                formData.redes.push({
+                    tipo,
+                    usuario,
+                    principal: index === 0 ? true : principal
+                });
+            }
+        });
+        
+        // Mostrar confirmación adicional
+        if (!confirm('¿CONFIRMAS que todos los datos son FICTICIOS y que este es solo un proyecto demostrativo?\n\nIMPORTANTE: No introduzcas datos reales de personas.')) {
+            throw new Error('Envío cancelado por el usuario');
+        }
+        
+        // Enviar a la API
+        const response = await fetch('api/add_infiel.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            showNotification('✅ Datos ficticios registrados correctamente en infielesdb', 'success');
+            
+            // Resetear formulario
+            document.getElementById('reportForm').reset();
+            currentFormStep = 1;
+            updateFormUI();
+            socialNetworkCounter = 1;
+            
+            // Resetear contenedor de redes sociales (mantener solo una)
+            const container = document.getElementById('socialNetworksContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="social-input-group">
+                        <div class="form-group">
+                            <label for="red_tipo_1">Tipo de Red</label>
+                            <select class="red-tipo" name="redes[0][tipo]" required>
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">Twitter/X</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="tiktok">TikTok</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="red_usuario_1">Usuario *</label>
+                            <input type="text" class="red-usuario" name="redes[0][usuario]" required
+                                   placeholder="@ejemplo_ficticio">
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" class="red-principal" name="redes[0][principal]" checked>
+                                Red principal
+                            </label>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Recargar base de datos
+            setTimeout(() => {
+                loadDatabase();
+                if (appState.currentView === 'database') {
+                    applyFilters();
+                }
+                if (appState.currentView === 'stats') {
+                    calculateStatistics();
+                    updateStatisticsDisplay();
+                }
+            }, 1000);
+            
+        } else {
+            showNotification(result.error || 'Error al enviar los datos ficticios a infielesdb', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        if (error.message !== 'Envío cancelado por el usuario') {
+            showNotification('Error de conexión con el servidor o con infielesdb', 'error');
+        }
+        
+    } finally {
+        // Restaurar botón
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
 function handleResize() {
     appState.itemsPerPage = window.innerWidth <= 768 ? 5 : 10;
     if (appState.currentView === 'database') {
@@ -322,11 +680,15 @@ function showSection(section) {
         
         if (section === 'database') {
             applyFilters();
+        } else if (section === 'add') {
+            // Resetear formulario al entrar
+            currentFormStep = 1;
+            updateFormUI();
         } else if (section === 'stats') {
             calculateStatistics();
             updateStatisticsDisplay();
             setTimeout(() => {
-                detectDarkMode(); // Aplicar modo oscuro antes de renderizar gráficos
+                detectDarkMode();
                 renderCharts();
             }, 100);
         }
@@ -413,7 +775,7 @@ function renderDatabase() {
             <tr>
                 <td colspan="6" style="text-align: center; padding: 40px;">
                     <i class="fas fa-search" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 10px;"></i>
-                    <p>No se encontraron registros</p>
+                    <p>No se encontraron registros ficticios en infielesdb</p>
                     <button id="clearFiltersFromTable" class="btn small primary" style="margin-top: 10px;">
                         <i class="fas fa-times"></i> Limpiar filtros
                     </button>
@@ -441,8 +803,8 @@ function renderDatabase() {
             const personaJSON = JSON.stringify(persona).replace(/"/g, '&quot;');
 
             return `
-                <tr onclick="showDetailsModalFromTable(${personaJSON})" tabindex="0" role="button" aria-label="Ver detalles de ${persona.nombre} ${persona.apellidos}">
-                    <td>${persona.nombre} ${persona.apellidos}</td>
+                <tr onclick="showDetailsModalFromTable(${personaJSON})" tabindex="0" role="button" aria-label="Ver detalles ficticios de ${persona.nombre} ${persona.apellidos}">
+                    <td>${persona.nombre} ${persona.apellidos} ${persona.ficticio ? '<span class="ficticio-badge">FICTICIO</span>' : ''}</td>
                     <td>${persona.edad} años</td>
                     <td>${persona.provincia}</td>
                     <td><div class="social-badges">${redesHTML}</div></td>
@@ -469,6 +831,25 @@ function renderDatabase() {
                 }
             });
         });
+        
+        // Añadir CSS para la etiqueta ficticia
+        if (!document.querySelector('#ficticioBadgeStyle')) {
+            const style = document.createElement('style');
+            style.id = 'ficticioBadgeStyle';
+            style.textContent = `
+                .ficticio-badge {
+                    background: linear-gradient(135deg, #ff6b6b, #dc3545);
+                    color: white;
+                    font-size: 0.7rem;
+                    padding: 2px 6px;
+                    border-radius: 10px;
+                    margin-left: 5px;
+                    vertical-align: middle;
+                    font-weight: bold;
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
 
     document.getElementById('totalCount').textContent = database.infieles.length;
@@ -500,9 +881,9 @@ function updatePagination() {
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
 
-    pageInfo.textContent = `Página ${appState.currentPage} de ${totalPages || 1}`;
-    prevBtn.disabled = appState.currentPage <= 1;
-    nextBtn.disabled = appState.currentPage >= totalPages;
+    if (pageInfo) pageInfo.textContent = `Página ${appState.currentPage} de ${totalPages || 1}`;
+    if (prevBtn) prevBtn.disabled = appState.currentPage <= 1;
+    if (nextBtn) nextBtn.disabled = appState.currentPage >= totalPages;
 }
 
 function prevPage() {
@@ -565,14 +946,20 @@ function updateStatisticsDisplay() {
         }
     });
 
-    document.getElementById('totalStats').textContent = appState.stats.totalRegistros;
-    document.getElementById('topProvince').textContent = topProvincia;
-    document.getElementById('topProvinceCount').textContent = `${topProvinciaCount} casos`;
-    document.getElementById('avgAge').textContent = appState.stats.edadPromedio;
+    const totalStats = document.getElementById('totalStats');
+    const topProvince = document.getElementById('topProvince');
+    const topProvinceCountEl = document.getElementById('topProvinceCount');
+    const avgAge = document.getElementById('avgAge');
+    const withProofs = document.getElementById('withProofs');
+    
+    if (totalStats) totalStats.textContent = appState.stats.totalRegistros;
+    if (topProvince) topProvince.textContent = topProvincia;
+    if (topProvinceCountEl) topProvinceCountEl.textContent = `${topProvinciaCount} casos`;
+    if (avgAge) avgAge.textContent = appState.stats.edadPromedio;
     
     const porcentajeVerificados = appState.stats.totalRegistros > 0 ? 
         ((appState.stats.verificado / appState.stats.totalRegistros) * 100).toFixed(1) : 0;
-    document.getElementById('withProofs').textContent = `${porcentajeVerificados}%`;
+    if (withProofs) withProofs.textContent = `${porcentajeVerificados}%`;
 
     updateRecentActivity();
 }
@@ -602,8 +989,8 @@ function updateRecentActivity() {
                 <i class="fas fa-user-plus"></i>
             </div>
             <div class="activity-content">
-                <h4>${persona.nombre} ${persona.apellidos}</h4>
-                <p>${persona.verificado ? 'Infiel verificado' : 'Infiel reportado'} - ${persona.provincia}</p>
+                <h4>${persona.nombre} ${persona.apellidos} <span style="color: #ff6b6b; font-size: 0.8rem;">(FICTICIO)</span></h4>
+                <p>${persona.verificado ? 'Infiel ficticio verificado' : 'Infiel ficticio reportado'} - ${persona.provincia}</p>
                 <span class="activity-time">${fechaFormateada}</span>
             </div>
         `;
@@ -677,7 +1064,7 @@ function renderCharts() {
             data: {
                 labels: provinciasSorted.map(p => p[0]),
                 datasets: [{
-                    label: 'Número de casos',
+                    label: 'Número de casos ficticios',
                     data: provinciasSorted.map(p => p[1]),
                     backgroundColor: chartColors.primary,
                     borderColor: chartColors.border,
@@ -742,6 +1129,13 @@ function renderCharts() {
                             color: chartColors.text,
                             padding: 20
                         }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Casos ficticios: ${context.raw}`;
+                            }
+                        }
                     }
                 }
             }
@@ -756,20 +1150,22 @@ function resizeCharts() {
 }
 
 function copyTemplate() {
-    const template = `**REPORTE DE INFIEL - BASE DE DATOS**
+    const template = `**REPORTE DE INFIEL - BASE DE DATOS FICTICIA (infielesdb)**
 
-**DATOS PERSONALES:**
-• Nombre completo: [Nombre y apellidos]
-• Edad/Año nacimiento: [Edad o año de nacimiento]
-• Provincia: [Provincia de residencia]
-• Instagram: [@usuario_instagram]
-• Otras redes: [Twitter, Facebook, etc.]
+**AVISO IMPORTANTE:** Todos los datos deben ser COMPLETAMENTE FICTICIOS
 
-**PRUEBAS (OPCIONAL):**
-[Si tienes pruebas, descríbelas aquí. Las pruebas NO son obligatorias, pero si las envías, el reporte será marcado como VERIFICADO]
+**DATOS PERSONALES (FICTICIOS):**
+• Nombre completo: [Nombre y apellidos INVENTADOS]
+• Edad/Año nacimiento: [Edad o año de nacimiento INVENTADO]
+• Provincia: [Provincia de residencia INVENTADA]
+• Instagram: [@usuario_instagram_INVENTADO]
+• Otras redes: [Twitter, Facebook, etc. INVENTADOS]
+
+**PRUEBAS (OPCIONAL - FICTICIAS):**
+[Si tienes pruebas, descríbelas aquí (INVENTADAS). Las pruebas NO son obligatorias, pero si las envías, el reporte será marcado como VERIFICADO]
 
 **INFORMACIÓN ADICIONAL:**
-[Contexto, cómo conoces a la persona, etc.]`;
+[Contexto ficticio, cómo conoces a la persona (INVENTADO), etc.]`;
 
     navigator.clipboard.writeText(template).then(() => {
         showNotification('Plantilla copiada al portapapeles', 'success');
@@ -812,10 +1208,20 @@ function showDetailsModal(persona) {
         year: 'numeric'
     });
 
-    modalTitle.textContent = `Detalles de ${persona.nombre} ${persona.apellidos}`;
+    modalTitle.textContent = `Detalles ficticios de ${persona.nombre} ${persona.apellidos}`;
     modalDetails.innerHTML = `
         <div class="persona-details">
-            <h2 style="margin-bottom: 20px; color: var(--primary-color);">${persona.nombre} ${persona.apellidos}</h2>
+            <h2 style="margin-bottom: 20px; color: var(--primary-color);">
+                ${persona.nombre} ${persona.apellidos}
+                <span style="background: linear-gradient(135deg, #ff6b6b, #dc3545); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; margin-left: 10px;">FICTICIO</span>
+            </h2>
+            
+            <div class="legal-notice" style="background: #fff3cd; color: #856404; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <p><strong>AVISO LEGAL:</strong> Estos datos son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica en la base de datos infielesdb.</p>
+                </div>
+            </div>
             
             <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
                 <div class="detail-item">
@@ -834,18 +1240,18 @@ function showDetailsModal(persona) {
                 </div>
                 <div class="detail-item">
                     <h4 style="color: var(--secondary-color); margin-bottom: 5px;"><i class="fas fa-camera"></i> Pruebas</h4>
-                    <p style="font-size: 1.2rem;">${persona.tienePruebas ? 'Sí' : 'No'}</p>
+                    <p style="font-size: 1.2rem;">${persona.tienePruebas ? 'Sí (ficticias)' : 'No'}</p>
                 </div>
             </div>
 
             <div class="detail-section" style="margin-bottom: 25px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-hashtag"></i> Redes Sociales</h4>
+                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-hashtag"></i> Redes Sociales Ficticias</h4>
                 <div class="social-badges" style="display: flex; flex-wrap: wrap; gap: 8px;">${redesHTML}</div>
             </div>
 
             ${persona.pruebasDescripcion ? `
             <div class="detail-section" style="margin-bottom: 25px; background: var(--bg-secondary); padding: 15px; border-radius: 8px;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-file-alt"></i> Descripción de Pruebas</h4>
+                <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-file-alt"></i> Descripción de Pruebas Ficticias</h4>
                 <p style="line-height: 1.6;">${persona.pruebasDescripcion}</p>
             </div>
             ` : ''}
@@ -875,57 +1281,75 @@ function showLegalModal(type) {
         case 'lopd':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Protección de Datos Personales (LOPD/GDPR)</h2>
-                <p>Esta base de datos cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
+                <p>Esta base de datos (infielesdb) es un proyecto demostrativo que cumple con la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales, y el Reglamento General de Protección de Datos (RGPD).</p>
+                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <p><strong>IMPORTANTE:</strong> Todos los datos almacenados en infielesdb son COMPLETAMENTE FICTICIOS y sirven únicamente para demostración técnica y educativa.</p>
+                    </div>
+                </div>
                 <h3 style="margin-top: 20px; color: var(--secondary-color);">Bases legales para el tratamiento:</h3>
                 <ul style="margin-left: 20px; margin-bottom: 20px;">
-                    <li>Interés público en la prevención de conductas fraudulentas en relaciones personales.</li>
-                    <li>Consentimiento explícito del informante para el tratamiento de los datos.</li>
-                    <li>Derecho a la información de potenciales víctimas de infidelidades.</li>
+                    <li>Proyecto educativo y demostrativo (Artículo 83 del Reglamento de Desarrollo LOPD)</li>
+                    <li>Consentimiento explícito del usuario para el tratamiento de datos ficticios</li>
+                    <li>Datos 100% ficticios sin relación con personas reales</li>
                 </ul>
                 <h3 style="color: var(--secondary-color);">Derechos ARCO:</h3>
-                <p>Todas las personas tienen derecho a acceder, rectificar, cancelar y oponerse al tratamiento de sus datos personales.</p>
+                <p>Todas las personas tienen derecho a acceder, rectificar, cancelar y oponerse al tratamiento de sus datos personales. En este caso, al ser datos ficticios, estos derechos se aplican de forma académica.</p>
             `;
             break;
         case 'terms':
             content = `
                 <h2 style="color: var(--primary-color); margin-bottom: 20px;">Términos y Condiciones de Uso</h2>
+                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <p><strong>AVISO IMPORTANTE:</strong> Esta plataforma es UNICAMENTE para fines educativos y demostrativos. Todos los datos en infielesdb son FICTICIOS.</p>
+                    </div>
+                </div>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Aceptación de términos</h3>
-                <p>Al utilizar esta plataforma, aceptas estos términos y condiciones en su totalidad.</p>
+                <p>Al utilizar esta plataforma, aceptas que es un proyecto educativo con datos completamente ficticios almacenados en la base de datos infielesdb.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Uso permitido</h3>
-                <p>Esta base de datos solo puede ser consultada para fines informativos personales. No está permitido el uso comercial, la reventa de datos o la difamación masiva.</p>
-                <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Responsabilidad del informante</h3>
-                <p>La persona que reporta a un infiel es legalmente responsable de la veracidad de la información proporcionada.</p>
+                <p>Esta base de datos (infielesdb) solo puede ser consultada para fines educativos y de demostración técnica. No está permitido el uso comercial, la reventa de datos o la difamación.</p>
+                <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Responsabilidad del usuario</h3>
+                <p>El usuario se compromete a NO introducir datos reales de personas en infielesdb. Todos los datos deben ser completamente inventados.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Limitación de responsabilidad</h3>
-                <p>Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros.</p>
+                <p>Los administradores no se responsabilizan por el uso indebido de la información por parte de terceros. Esta es una plataforma demostrativa con base de datos infielesdb.</p>
             `;
             break;
         case 'delete':
             content = `
-                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Solicitud de Eliminación de Datos</h2>
-                <p>Si deseas solicitar la eliminación de tus datos personales de nuestra base de datos, debes enviar un correo electrónico a <strong>eliminacion@infielesdb.es</strong> con la siguiente información:</p>
-                <ul style="margin-left: 20px; margin-bottom: 20px;">
-                    <li>Nombre completo</li>
-                    <li>Forma de verificar que eres quien dices ser</li>
-                    <li>Motivo de la solicitud</li>
-                    <li>Pruebas de que eres la persona cuyos datos quieres eliminar</li>
-                </ul>
-                <p>Procesaremos tu solicitud en un plazo máximo de 30 días hábiles.</p>
-                <p>Si los datos han sido obtenidos de forma legítima y existe interés público en su conservación, podremos denegar la solicitud, notificándote los motivos.</p>
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Solicitud de Eliminación de Datos Ficticios</h2>
+                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <p><strong>RECUERDA:</strong> Todos los datos en infielesdb son FICTICIOS. Si encuentras datos que parezcan reales, es coincidencia.</p>
+                    </div>
+                </div>
+                <p>Si deseas solicitar la eliminación de datos ficticios que puedan coincidir casualmente con información real, puedes contactar a: <strong>demo@proyectoeducativo.es</strong></p>
+                <p>Debido a que todos los datos en infielesdb son generados aleatoriamente, cualquier coincidencia con la realidad es puramente casual.</p>
+                <p>Procesaremos tu solicitud en un plazo máximo de 30 días hábiles, aunque al ser datos ficticios, la eliminación es inmediata.</p>
             `;
             break;
         case 'disclaimer':
             content = `
-                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Aviso Legal</h2>
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Aviso Legal - Proyecto Educativo</h2>
+                <div class="legal-notice" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <p><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS EN INFIELESDB</strong></p>
+                    </div>
+                </div>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">1. Responsabilidad</h3>
-                <p>Esta plataforma es una base de datos de carácter informativo. Los administradores revisan la información recibida pero no garantizan al 100% su exactitud.</p>
+                <p>Esta plataforma es una base de datos de carácter educativo y demostrativo. Todos los datos mostrados en infielesdb son completamente inventados.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">2. Propiedad intelectual</h3>
-                <p>Todos los derechos de propiedad intelectual sobre la base de datos pertenecen a sus creadores.</p>
+                <p>Todos los derechos de propiedad intelectual sobre la base de datos infielesdb y el código pertenecen a sus creadores como proyecto educativo.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">3. Enlaces externos</h3>
                 <p>No nos responsabilizamos del contenido de enlaces externos a redes sociales u otras páginas web.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">4. Jurisdicción</h3>
                 <p>Cualquier disputa será resuelta en los tribunales de Madrid, España.</p>
                 <h3 style="margin-top: 15px; color: var(--secondary-color);">5. Contacto legal</h3>
-                <p>Para cuestiones legales: legal@infielesdb.es</p>
+                <p>Para cuestiones legales relacionadas con este proyecto educativo: legal@proyectoeducativo.es</p>
             `;
             break;
         default:
@@ -1016,3 +1440,7 @@ document.addEventListener('keydown', (e) => {
         });
     }
 });
+
+// Hacer funciones globales para eventos HTML
+window.showDetailsModalFromTable = showDetailsModalFromTable;
+window.copyTemplate = copyTemplate;
