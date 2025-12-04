@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://eduolihez.com/sitemap.xml
+
+# Allow all crawlers to access main content
+Disallow: /private/
+Disallow: /admin/
+Disallow: /tmp/
+Disallow: /backup/
+
+# Allow social media bots
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+# Crawl delay (opcional, para evitar sobrecarga del servidor)
+# Crawl-delay: 1

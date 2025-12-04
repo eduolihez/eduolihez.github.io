@@ -1,3 +1,0 @@
-1. Fix Links
-2. Añadir Guia
-3. Optimizar Codigo
