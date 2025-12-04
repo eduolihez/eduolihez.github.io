@@ -27,12 +27,3 @@ CREATE TABLE IF NOT EXISTS redes_sociales (
     principal BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (infiel_id) REFERENCES infieles(id) ON DELETE CASCADE
 );
-
--- Insertar datos de ejemplo ficticios
-INSERT INTO infieles (nombre, apellidos, edad, provincia, tiene_pruebas, pruebas_descripcion, fecha_registro, fecha_actualizacion, verificado, ficticio, consentimiento_legal) VALUES
-('Persona', 'Ejemplo 1', 28, 'Madrid', TRUE, 'Datos completamente ficticios para demostración', CURDATE(), CURDATE(), TRUE, TRUE, TRUE),
-('Persona', 'Ejemplo 2', 34, 'Barcelona', FALSE, 'Datos de ejemplo sin validez legal', CURDATE(), CURDATE(), FALSE, TRUE, TRUE);
-
-INSERT INTO redes_sociales (infiel_id, tipo, usuario, principal) VALUES
-(1, 'instagram', '@ejemplo_ficticio_1', TRUE),
-(2, 'instagram', '@ejemplo_ficticio_2', TRUE);
