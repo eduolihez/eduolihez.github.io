@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Base de Datos Española de Infieles</title>
-    <meta name="theme-color" content="#e91e63">
+    <meta name="theme-color" content="#dc3545">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="description" content="Registro verificable de conductas infieles en España. Verificación manual mediante evidencia enviada por correo.">
+    <meta name="description" content="Registro de personas con conductas infieles verificadas en España">
     
     <!-- Preconexiones para mejorar rendimiento -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -19,742 +19,458 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header con diseño moderno -->
-        <header class="main-header">
-            <div class="header-top-bar">
-                <div class="logo-container">
-                    <div class="logo-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="logo-text">
+        <header>
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
                         <h1>Base de Datos Española de Infieles</h1>
-                        <p class="tagline">Verificación ética y transparente</p>
+                        <p class="subtitle">Registro de personas con conductas infieles verificadas en España</p>
                     </div>
                 </div>
-                
-                <div class="header-badge">
-                    <div class="verification-badge">
-                        <i class="fas fa-envelope"></i>
-                        <span>Verificación Manual</span>
-                    </div>
+                <div class="spain-flag">
+                    <i class="fas fa-flag"></i>
+                    <span>ESPAÑA</span>
                 </div>
-            </div>
-            
-            <div class="header-navigation">
-                <nav class="nav-menu">
-                    <button class="nav-btn active" data-section="database">
-                        <i class="fas fa-database"></i>
-                        <span>Base de Datos</span>
-                    </button>
-                    <button class="nav-btn" data-section="report">
-                        <i class="fas fa-envelope-open-text"></i>
-                        <span>Reportar Infidelidad</span>
-                    </button>
-                    <button class="nav-btn" data-section="stats">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Estadísticas</span>
-                    </button>
-                    <button class="nav-btn" data-section="process">
-                        <i class="fas fa-clipboard-check"></i>
-                        <span>Proceso de Verificación</span>
-                    </button>
-                </nav>
             </div>
             
             <div class="header-alert">
-                <div class="alert-icon">
-                    <i class="fas fa-gavel"></i>
-                </div>
-                <div class="alert-content">
-                    <p><strong>PROCESO DE VERIFICACIÓN MANUAL:</strong> Todos los registros son verificados manualmente mediante evidencia enviada a <strong>infidelidad@eduolihez.com</strong>. Sin evidencia no hay verificación.</p>
+                <i class="fas fa-gavel"></i>
+                <div>
+                    <p><strong>AVISO LEGAL:</strong> Esta base de datos opera bajo la Ley Orgánica 3/2018 de Protección de Datos Personales. 
+                    Solo se incluyen mayores de edad españoles con pruebas verificadas de infidelidad.</p>
                 </div>
             </div>
         </header>
 
-        <main class="main-content">
-            <!-- Indicador de sección activa -->
-            <div class="section-indicator">
-                <h2 id="sectionTitle">Base de Datos Verificada</h2>
-                <div class="section-status">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Registros con evidencia verificada</span>
-                </div>
+        <main>
+            <div class="hero-buttons">
+                <button id="viewDatabaseBtn" class="hero-btn primary" aria-label="Ver base de datos">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <span class="btn-title">Ver Base de Datos</span>
+                        <span class="btn-desc">Consulta los registros verificados</span>
+                    </div>
+                </button>
+                
+                <button id="addPersonBtn" class="hero-btn secondary" aria-label="Reportar infiel">
+                    <i class="fas fa-user-plus"></i>
+                    <div>
+                        <span class="btn-title">Reportar Infiel</span>
+                        <span class="btn-desc">Añade a alguien a la base</span>
+                    </div>
+                </button>
+                
+                <button id="statsBtn" class="hero-btn tertiary" aria-label="Ver estadísticas">
+                    <i class="fas fa-chart-bar"></i>
+                    <div>
+                        <span class="btn-title">Estadísticas</span>
+                        <span class="btn-desc">Datos y gráficos</span>
+                    </div>
+                </button>
             </div>
 
             <!-- SECCIÓN BASE DE DATOS -->
-            <section id="databaseSection" class="content-section active">
+            <div id="databaseSection" class="main-section hidden">
                 <div class="section-header">
-                    <div class="section-header-left">
-                        <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
-                        <p class="section-subtitle">Encuentra registros específicos en la base de datos</p>
-                    </div>
-                    <div class="section-header-right">
-                        <div class="stats-badge">
-                            <span class="stat-number" id="totalCount">0</span>
-                            <span class="stat-label">Registros Totales</span>
-                        </div>
+                    <h2><i class="fas fa-list"></i> Base de Datos de Infieles</h2>
+                    <div class="section-badges">
+                        <span class="badge"><i class="fas fa-users"></i> <span id="totalCount">0</span> registros</span>
+                        <span class="badge"><i class="fas fa-filter"></i> <span id="filteredCount">0</span> filtrados</span>
                     </div>
                 </div>
                 
-                <div class="search-filters">
-                    <div class="filter-grid">
-                        <div class="filter-group">
-                            <label for="searchInput" class="filter-label">
-                                <i class="fas fa-search"></i> Buscar por nombre
-                            </label>
-                            <div class="search-box">
-                                <input type="text" id="searchInput" placeholder="Ej: Juan Pérez" aria-label="Buscar en la base de datos">
-                                <button class="search-btn" aria-label="Buscar">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                <div class="filters-panel">
+                    <div class="filter-row">
+                        <div class="filter-box">
+                            <label for="searchInput"><i class="fas fa-search"></i> Buscar</label>
+                            <input type="text" id="searchInput" placeholder="Nombre, apellidos, redes sociales..." aria-label="Buscar en la base de datos">
                         </div>
                         
-                        <div class="filter-group">
-                            <label for="provinceFilter" class="filter-label">
-                                <i class="fas fa-map-marker-alt"></i> Provincia
-                            </label>
-                            <select id="provinceFilter" class="modern-select" aria-label="Filtrar por provincia">
+                        <div class="filter-box">
+                            <label for="provinceFilter"><i class="fas fa-map-marker-alt"></i> Provincia</label>
+                            <select id="provinceFilter" class="select2" aria-label="Filtrar por provincia">
                                 <option value="">Todas las provincias</option>
+                                <!-- Provincias se cargarán dinámicamente -->
                             </select>
                         </div>
                         
-                        <div class="filter-group">
-                            <label class="filter-label">
-                                <i class="fas fa-user-clock"></i> Rango de edad
-                            </label>
-                            <div class="age-slider-container">
-                                <div class="age-slider">
-                                    <input type="range" id="minAgeSlider" min="18" max="99" value="18">
-                                    <input type="range" id="maxAgeSlider" min="18" max="99" value="99">
-                                </div>
-                                <div class="age-display">
-                                    <span id="minAgeDisplay">18</span>
-                                    <span>a</span>
-                                    <span id="maxAgeDisplay">99</span>
-                                    <span>años</span>
-                                </div>
+                        <div class="filter-box">
+                            <label><i class="fas fa-user"></i> Edad</label>
+                            <div class="age-range">
+                                <input type="number" id="minAge" placeholder="18" min="18" max="99" aria-label="Edad mínima">
+                                <span>a</span>
+                                <input type="number" id="maxAge" placeholder="99" min="18" max="99" aria-label="Edad máxima">
                             </div>
                         </div>
                         
-                        <div class="filter-group">
-                            <label for="verificationFilter" class="filter-label">
-                                <i class="fas fa-check-double"></i> Estado de verificación
-                            </label>
-                            <div class="verification-toggle">
-                                <button class="toggle-btn active" data-value="">Todos</button>
-                                <button class="toggle-btn" data-value="true">Verificados</button>
-                                <button class="toggle-btn" data-value="false">Pendientes</button>
-                            </div>
+                        <div class="filter-box">
+                            <label for="proofFilter"><i class="fas fa-check-circle"></i> Estado</label>
+                            <select id="proofFilter" aria-label="Filtrar por estado de verificación">
+                                <option value="">Todos</option>
+                                <option value="true">Verificados</option>
+                                <option value="false">No verificados</option>
+                            </select>
                         </div>
-                    </div>
-                    
-                    <div class="filter-actions">
-                        <button id="applyFilters" class="btn primary-btn">
-                            <i class="fas fa-filter"></i> Aplicar Filtros
-                        </button>
-                        <button id="clearFilters" class="btn secondary-btn">
-                            <i class="fas fa-redo"></i> Restablecer
-                        </button>
+                        
+                        <div class="filter-actions">
+                            <button id="applyFilters" class="btn small primary" aria-label="Aplicar filtros">
+                                <i class="fas fa-filter"></i> Aplicar
+                            </button>
+                            <button id="clearFilters" class="btn small" aria-label="Limpiar filtros">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="database-container">
-                    <div class="table-header">
-                        <div class="table-header-info">
-                            <h4>Registros Verificados</h4>
-                            <p id="filteredCount">Mostrando 0 de 0 registros</p>
-                        </div>
-                        <div class="table-header-actions">
-                            <button class="table-action-btn" title="Ordenar">
-                                <i class="fas fa-sort-amount-down"></i>
-                            </button>
-                            <button class="table-action-btn" title="Vista compacta">
-                                <i class="fas fa-list"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="records-container">
-                        <div class="records-table">
-                            <div class="table-row header-row">
-                                <div class="table-cell">Nombre Completo</div>
-                                <div class="table-cell">Edad</div>
-                                <div class="table-cell">Provincia</div>
-                                <div class="table-cell">Evidencia</div>
-                                <div class="table-cell">Estado</div>
-                                <div class="table-cell">Fecha Registro</div>
-                            </div>
-                            <div id="databaseBody" class="records-body">
-                                <!-- Los registros se cargarán aquí -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="table-footer">
-                        <div class="pagination-controls">
-                            <button id="prevPage" class="pagination-btn" disabled>
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <div class="page-info">
-                                <span id="currentPage">1</span>
-                                <span>de</span>
-                                <span id="totalPages">1</span>
-                            </div>
-                            <button id="nextPage" class="pagination-btn" disabled>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="results-per-page">
-                            <label for="itemsPerPage">Mostrar:</label>
-                            <select id="itemsPerPage" class="page-select">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
+                <div class="table-container">
+                    <div class="table-scroll-wrapper">
+                        <table id="databaseTable" aria-label="Base de datos de infieles">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Completo</th>
+                                    <th>Edad</th>
+                                    <th>Provincia</th>
+                                    <th>Redes Sociales</th>
+                                    <th>Verificar</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="databaseBody">
+                                <!-- Los datos se cargarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </section>
+                
+                <div class="table-footer">
+                    <div class="pagination">
+                        <button id="prevPage" class="pagination-btn" disabled aria-label="Página anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="pageInfo">Página 1 de 1</span>
+                        <button id="nextPage" class="pagination-btn" disabled aria-label="Página siguiente">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="export-options">
+                        <button class="btn small" disabled style="opacity: 0.6; cursor: not-allowed;" aria-label="Exportar deshabilitado">
+                            <i class="fas fa-lock"></i> Exportar deshabilitado
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            <!-- SECCIÓN REPORTAR INFIDELIDAD -->
-            <section id="reportSection" class="content-section">
-                <div class="section-header">
-                    <div class="section-header-left">
-                        <h3><i class="fas fa-envelope-open-text"></i> Reportar Infidelidad</h3>
-                        <p class="section-subtitle">Envía evidencia para verificación manual</p>
-                    </div>
-                    <div class="section-header-right">
-                        <div class="stats-badge warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>Verificación Manual Requerida</span>
-                        </div>
-                    </div>
+            <!-- SECCIÓN REPORTAR -->
+            <div id="addSection" class="main-section hidden">
+    <div class="section-header">
+        <h2><i class="fas fa-user-plus"></i> Reportar a una Persona Infiel</h2>
+        <div class="section-badges">
+            <span class="badge"><i class="fas fa-exclamation-triangle"></i> DATOS FICTICIOS</span>
+            <span class="badge"><i class="fas fa-gavel"></i> SOLO DEMOSTRACIÓN</span>
+        </div>
+    </div>
+    
+    <div class="legal-warning" style="background: linear-gradient(135deg, #ff6b6b, #dc3545); color: white; padding: 20px; border-radius: var(--border-radius); margin-bottom: 25px; border-left: 5px solid #ffd700;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-balance-scale" style="font-size: 2rem;"></i>
+            <div>
+                <h3 style="color: white; margin-bottom: 10px;">AVISO LEGAL IMPORTANTE</h3>
+                <p style="margin-bottom: 10px;"><strong>ESTA ES UNA PLATAFORMA DEMOSTRATIVA CON DATOS 100% FICTICIOS</strong></p>
+                <p>Todos los datos mostrados son completamente inventados y sirven únicamente como demostración técnica. 
+                No se almacenan ni procesan datos reales de personas.</p>
+            </div>
+        </div>
+    </div>
+    
+    <form id="reportForm" class="report-form">
+        <div class="form-step active">
+            <h3><i class="fas fa-user"></i> Información Básica</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nombre">
+                        <i class="fas fa-user"></i> Nombre *
+                        <span class="hint">(Dato ficticio)</span>
+                    </label>
+                    <input type="text" id="nombre" name="nombre" required 
+                           placeholder="Ej: Juan" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,50}"
+                           title="Solo letras y espacios (2-50 caracteres)">
                 </div>
                 
-                <div class="verification-process">
-                    <div class="process-steps">
-                        <div class="step active">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Recopila Evidencia</h4>
-                                <p>Captura pantallas, mensajes, fotos o cualquier prueba de la infidelidad</p>
-                                <ul class="step-list">
-                                    <li><i class="fas fa-check"></i> Mensajes de texto o chat</li>
-                                    <li><i class="fas fa-check"></i> Fotografías con fecha</li>
-                                    <li><i class="fas fa-check"></i> Capturas de pantalla</li>
-                                    <li><i class="fas fa-check"></i> Testimonios verificables</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Prepara el Correo</h4>
-                                <p>Incluye toda la información necesaria para la verificación</p>
-                                <div class="email-template">
-                                    <div class="template-header">
-                                        <i class="fas fa-envelope"></i>
-                                        <span>Estructura del correo</span>
-                                    </div>
-                                    <div class="template-content">
-                                        <p><strong>Asunto:</strong> Reporte de Infidelidad - [Nombre de la persona]</p>
-                                        <p><strong>Cuerpo del mensaje debe incluir:</strong></p>
-                                        <ul>
-                                            <li>Nombre completo de la persona</li>
-                                            <li>Edad aproximada</li>
-                                            <li>Provincia de residencia</li>
-                                            <li>Redes sociales (si aplica)</li>
-                                            <li>Descripción detallada de la situación</li>
-                                            <li>Evidencia adjunta (archivos)</li>
-                                            <li>Tus datos de contacto (confidenciales)</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Envía a Verificación</h4>
-                                <p>Envía toda la información a nuestro equipo de verificación</p>
-                                <div class="verification-email">
-                                    <div class="email-address">
-                                        <i class="fas fa-at"></i>
-                                        <div>
-                                            <h5>Correo de Verificación</h5>
-                                            <a href="mailto:infidelidad@eduolihez.com" class="email-link">
-                                                infidelidad@eduolihez.com
-                                            </a>
-                                            <button class="copy-email-btn" data-email="infidelidad@eduolihez.com">
-                                                <i class="far fa-copy"></i> Copiar dirección
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="email-notes">
-                                        <p><i class="fas fa-info-circle"></i> Recibirás una confirmación en 24-48 horas</p>
-                                        <p><i class="fas fa-shield-alt"></i> Tu información de contacto es confidencial</p>
-                                        <p><i class="fas fa-clock"></i> Proceso de verificación: 3-5 días hábiles</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="verification-requirements">
-                        <h4><i class="fas fa-clipboard-list"></i> Requisitos de Verificación</h4>
-                        <div class="requirements-grid">
-                            <div class="requirement-card">
-                                <div class="requirement-icon">
-                                    <i class="fas fa-camera"></i>
-                                </div>
-                                <h5>Evidencia Visual</h5>
-                                <p>Fotos o capturas que demuestren la infidelidad claramente</p>
-                            </div>
-                            <div class="requirement-card">
-                                <div class="requirement-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <h5>Fechas y Tiempos</h5>
-                                <p>Incluir fechas específicas de los eventos mencionados</p>
-                            </div>
-                            <div class="requirement-card">
-                                <div class="requirement-icon">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <h5>Identificación Clara</h5>
-                                <p>Datos suficientes para identificar a la persona correctamente</p>
-                            </div>
-                            <div class="requirement-card">
-                                <div class="requirement-icon">
-                                    <i class="fas fa-eye-slash"></i>
-                                </div>
-                                <h5>Confidencialidad</h5>
-                                <p>Tu información personal permanecerá protegida</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="apellidos">
+                        <i class="fas fa-users"></i> Apellidos *
+                        <span class="hint">(Dato ficticio)</span>
+                    </label>
+                    <input type="text" id="apellidos" name="apellidos" required
+                           placeholder="Ej: Pérez García" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,100}">
                 </div>
                 
-                <div class="legal-disclaimer">
-                    <div class="disclaimer-icon">
-                        <i class="fas fa-balance-scale"></i>
+                <div class="form-group">
+                    <label for="edad">
+                        <i class="fas fa-birthday-cake"></i> Edad *
+                        <span class="hint">(Entre 18 y 99)</span>
+                    </label>
+                    <input type="number" id="edad" name="edad" required min="18" max="99"
+                           placeholder="25">
+                </div>
+                
+                <div class="form-group">
+                    <label for="provincia">
+                        <i class="fas fa-map-marker-alt"></i> Provincia *
+                    </label>
+                    <select id="provincia" name="provincia" required>
+                        <option value="">Selecciona una provincia</option>
+                        <!-- Se cargarán dinámicamente -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-step">
+            <h3><i class="fas fa-hashtag"></i> Redes Sociales</h3>
+            <div id="socialNetworksContainer">
+                <div class="social-input-group">
+                    <div class="form-group">
+                        <label for="red_tipo_1">Tipo de Red</label>
+                        <select class="red-tipo" name="redes[0][tipo]" required>
+                            <option value="instagram">Instagram</option>
+                            <option value="twitter">Twitter/X</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="tiktok">TikTok</option>
+                        </select>
                     </div>
-                    <div class="disclaimer-content">
-                        <h5>Aviso Legal y de Privacidad</h5>
-                        <p>Esta base de datos opera bajo la Ley Orgánica 3/2018 de Protección de Datos Personales. Solo se incluyen mayores de edad con evidencia verificada. La información de contacto del denunciante es completamente confidencial y solo se utiliza para el proceso de verificación.</p>
+                    <div class="form-group">
+                        <label for="red_usuario_1">Usuario *</label>
+                        <input type="text" class="red-usuario" name="redes[0][usuario]" required
+                               placeholder="@ejemplo_ficticio">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" class="red-principal" name="redes[0][principal]" checked>
+                            Red principal
+                        </label>
                     </div>
                 </div>
-            </section>
+            </div>
+            <button type="button" id="addSocialNetwork" class="btn secondary small">
+                <i class="fas fa-plus"></i> Añadir otra red social
+            </button>
+        </div>
+        
+        <div class="form-step">
+            <h3><i class="fas fa-camera"></i> Información Adicional</h3>
+            
+            <div class="form-group">
+                <label for="pruebasDescripcion">
+                    <i class="fas fa-file-alt"></i> Descripción de las pruebas
+                    <span class="hint">(Opcional, datos ficticios)</span>
+                </label>
+                <textarea id="pruebasDescripcion" name="pruebasDescripcion" rows="4"
+                          placeholder="Ejemplo ficticio: Capturas de pantalla inventadas de conversaciones..."></textarea>
+            </div>
+            
+            <div class="form-group checkbox-group">
+                <label for="tienePruebas">
+                    <input type="checkbox" id="tienePruebas" name="tienePruebas">
+                    Marcar como "con pruebas" (ficticias)
+                </label>
+            </div>
+            
+            <div class="legal-confirmation" style="background: var(--bg-secondary); padding: 20px; border-radius: var(--border-radius); margin: 20px 0; border-left: 4px solid var(--accent-color);">
+                <h4><i class="fas fa-gavel"></i> Confirmación Legal Requerida</h4>
+                
+                <div class="checkbox-group required">
+                    <label>
+                        <input type="checkbox" id="consentimientoLegal" name="consentimientoLegal" required>
+                        <strong>CONFIRMO que todos los datos introducidos son completamente FICTICIOS</strong>
+                    </label>
+                    <p class="hint">Esta plataforma es solo para demostración técnica. No se almacenan datos reales.</p>
+                </div>
+                
+                <div class="checkbox-group required">
+                    <label>
+                        <input type="checkbox" id="aceptoTerminos" name="aceptoTerminos" required>
+                        Acepto que este es un proyecto educativo y que los datos mostrados NO son reales
+                    </label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="mayorEdad" name="mayorEdad" required>
+                        Confirmo que soy mayor de edad
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-navigation">
+            <button type="button" id="prevStep" class="btn secondary">
+                <i class="fas fa-arrow-left"></i> Anterior
+            </button>
+            <button type="button" id="nextStep" class="btn primary">
+                Siguiente <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" id="submitForm" class="btn success" style="display: none;">
+                <i class="fas fa-paper-plane"></i> Enviar Datos Ficticios
+            </button>
+        </div>
+        
+        <div class="form-progress">
+            <div class="progress-bar">
+                <div class="progress" id="formProgress"></div>
+            </div>
+            <div class="step-indicators">
+                <span class="step-indicator active">1</span>
+                <span class="step-indicator">2</span>
+                <span class="step-indicator">3</span>
+            </div>
+        </div>
+    </form>
+    
+    <div class="legal-disclaimer" style="margin-top: 30px; padding: 15px; background: var(--bg-tertiary); border-radius: var(--border-radius); font-size: 0.9rem;">
+        <p><i class="fas fa-info-circle"></i> <strong>Nota importante:</strong> Todos los datos enviados a través de este formulario son tratados como FICTICIOS. 
+        Esta plataforma opera bajo el artículo 83 del Reglamento de Desarrollo de la LOPD para proyectos educativos y de demostración técnica.</p>
+    </div>
+</div>
 
             <!-- SECCIÓN ESTADÍSTICAS -->
-            <section id="statsSection" class="content-section">
+            <div id="statsSection" class="main-section hidden">
                 <div class="section-header">
-                    <div class="section-header-left">
-                        <h3><i class="fas fa-chart-pie"></i> Estadísticas y Análisis</h3>
-                        <p class="section-subtitle">Datos y tendencias de los registros verificados</p>
-                    </div>
-                    <div class="section-header-right">
-                        <div class="stats-badge">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>Actualizado en tiempo real</span>
-                        </div>
+                    <h2><i class="fas fa-chart-bar"></i> Estadísticas y Gráficos</h2>
+                    <div class="section-badges">
+                        <span class="badge"><i class="fas fa-sync-alt"></i> Actualizado hoy</span>
                     </div>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card primary">
+                <div class="stats-overview">
+                    <div class="stat-card large">
                         <div class="stat-icon">
                             <i class="fas fa-database"></i>
                         </div>
                         <div class="stat-content">
-                            <h4>Total de Registros</h4>
-                            <div class="stat-number" id="totalStats">0</div>
-                            <p class="stat-desc">Personas en la base de datos</p>
+                            <h3>Total en Base de Datos</h3>
+                            <p class="stat-number" id="totalStats">0</p>
+                            <p class="stat-desc">Personas registradas</p>
                         </div>
                     </div>
                     
-                    <div class="stat-card success">
+                    <div class="stat-card">
                         <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fab fa-instagram"></i>
                         </div>
                         <div class="stat-content">
-                            <h4>Verificados</h4>
-                            <div class="stat-number" id="verifiedStats">0</div>
-                            <p class="stat-desc">Con evidencia confirmada</p>
+                            <h3>Verificación</h3>
+                            <p class="stat-number">Instagram</p>
+                            <p class="stat-desc">@infieles_db_espana</p>
                         </div>
                     </div>
                     
-                    <div class="stat-card warning">
+                    <div class="stat-card">
                         <div class="stat-icon">
-                            <i class="fas fa-clock"></i>
+                            <i class="fas fa-map-marked-alt"></i>
                         </div>
                         <div class="stat-content">
-                            <h4>Pendientes</h4>
-                            <div class="stat-number" id="pendingStats">0</div>
-                            <p class="stat-desc">En proceso de verificación</p>
+                            <h3>Provincia con más casos</h3>
+                            <p class="stat-number" id="topProvince">-</p>
+                            <p class="stat-desc" id="topProvinceCount">0 casos</p>
                         </div>
                     </div>
                     
-                    <div class="stat-card info">
+                    <div class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-user-friends"></i>
                         </div>
                         <div class="stat-content">
-                            <h4>Edad Promedio</h4>
-                            <div class="stat-number" id="avgAge">0</div>
-                            <p class="stat-desc">Años</p>
+                            <h3>Edad Promedio</h3>
+                            <p class="stat-number" id="avgAge">0</p>
+                            <p class="stat-desc">años</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="charts-container">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h4><i class="fas fa-map-marked-alt"></i> Distribución Geográfica</h4>
-                            <div class="chart-legend">
-                                <span class="legend-item">
-                                    <span class="legend-color" style="background-color: #e91e63;"></span>
-                                    <span>Número de Casos</span>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="chart-box">
+                        <h3><i class="fas fa-map"></i> Distribución por Provincia</h3>
                         <div class="chart-wrapper">
-                            <canvas id="provinceChart"></canvas>
+                            <canvas id="provinceChart" aria-label="Gráfico de distribución por provincia"></canvas>
                         </div>
                     </div>
                     
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h4><i class="fas fa-chart-bar"></i> Tendencias por Edad</h4>
-                            <div class="chart-legend">
-                                <span class="legend-item">
-                                    <span class="legend-color" style="background-color: #2196f3;"></span>
-                                    <span>Por rango de edad</span>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="chart-box">
+                        <h3><i class="fas fa-user-friends"></i> Distribución por Edad</h3>
                         <div class="chart-wrapper">
-                            <canvas id="ageChart"></canvas>
+                            <canvas id="ageChart" aria-label="Gráfico de distribución por edad"></canvas>
                         </div>
                     </div>
                 </div>
                 
                 <div class="recent-activity">
-                    <div class="activity-header">
-                        <h4><i class="fas fa-history"></i> Actividad Reciente</h4>
-                        <button class="refresh-btn">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
+                    <h3><i class="fas fa-history"></i> Registros Recientes</h3>
                     <div class="activity-list" id="recentActivity">
                         <!-- Actividad reciente -->
                     </div>
                 </div>
-            </section>
-
-            <!-- SECCIÓN PROCESO DE VERIFICACIÓN -->
-            <section id="processSection" class="content-section">
-                <div class="section-header">
-                    <div class="section-header-left">
-                        <h3><i class="fas fa-clipboard-check"></i> Proceso de Verificación Manual</h3>
-                        <p class="section-subtitle">Cómo funciona nuestro sistema de validación ética</p>
-                    </div>
-                    <div class="section-header-right">
-                        <div class="stats-badge">
-                            <i class="fas fa-user-shield"></i>
-                            <span>Verificación Ética</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="verification-flow">
-                    <div class="flow-diagram">
-                        <div class="flow-step">
-                            <div class="flow-step-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="flow-step-content">
-                                <h5>1. Recepción del Correo</h5>
-                                <p>El equipo recibe el correo en infidelidad@eduolihez.com con toda la evidencia adjunta</p>
-                            </div>
-                            <div class="flow-step-time">
-                                <i class="fas fa-clock"></i>
-                                <span>24-48 horas</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <div class="flow-step-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <div class="flow-step-content">
-                                <h5>2. Análisis de Evidencia</h5>
-                                <p>Verificamos autenticidad, fechas, consistencia y calidad de la evidencia proporcionada</p>
-                                <ul class="analysis-list">
-                                    <li><i class="fas fa-check"></i> Verificación de metadatos</li>
-                                    <li><i class="fas fa-check"></i> Validación de fechas</li>
-                                    <li><i class="fas fa-check"></i> Análisis de consistencia</li>
-                                </ul>
-                            </div>
-                            <div class="flow-step-time">
-                                <i class="fas fa-clock"></i>
-                                <span>1-2 días</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <div class="flow-step-icon">
-                                <i class="fas fa-user-check"></i>
-                            </div>
-                            <div class="flow-step-content">
-                                <h5>3. Validación de Identidad</h5>
-                                <p>Confirmamos que la persona reportada coincide con los datos proporcionados</p>
-                                <div class="validation-criteria">
-                                    <div class="criterion">
-                                        <i class="fas fa-id-card"></i>
-                                        <span>Nombre completo</span>
-                                    </div>
-                                    <div class="criterion">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>Ubicación</span>
-                                    </div>
-                                    <div class="criterion">
-                                        <i class="fas fa-camera"></i>
-                                        <span>Reconocimiento visual</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flow-step-time">
-                                <i class="fas fa-clock"></i>
-                                <span>1 día</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <div class="flow-step-icon">
-                                <i class="fas fa-clipboard-check"></i>
-                            </div>
-                            <div class="flow-step-content">
-                                <h5>4. Decisión Final</h5>
-                                <p>Evaluamos toda la información y tomamos una decisión sobre la verificación</p>
-                                <div class="decision-outcomes">
-                                    <div class="outcome approved">
-                                        <i class="fas fa-check-circle"></i>
-                                        <div>
-                                            <strong>Aprobado</strong>
-                                            <span>Evidencia suficiente y verificable</span>
-                                        </div>
-                                    </div>
-                                    <div class="outcome rejected">
-                                        <i class="fas fa-times-circle"></i>
-                                        <div>
-                                            <strong>Rechazado</strong>
-                                            <span>Falta de evidencia o datos insuficientes</span>
-                                        </div>
-                                    </div>
-                                    <div class="outcome pending">
-                                        <i class="fas fa-question-circle"></i>
-                                        <div>
-                                            <strong>Información Adicional</strong>
-                                            <span>Se solicita más evidencia</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flow-step-time">
-                                <i class="fas fa-clock"></i>
-                                <span>1 día</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flow-step">
-                            <div class="flow-step-icon">
-                                <i class="fas fa-database"></i>
-                            </div>
-                            <div class="flow-step-content">
-                                <h5>5. Actualización de Base de Datos</h5>
-                                <p>Si es aprobado, el registro se añade a la base de datos con estado verificado</p>
-                                <div class="database-update">
-                                    <div class="update-item">
-                                        <i class="fas fa-user-plus"></i>
-                                        <span>Registro añadido</span>
-                                    </div>
-                                    <div class="update-item">
-                                        <i class="fas fa-bell"></i>
-                                        <span>Notificación al denunciante</span>
-                                    </div>
-                                    <div class="update-item">
-                                        <i class="fas fa-shield-alt"></i>
-                                        <span>Datos protegidos</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flow-step-time">
-                                <i class="fas fa-clock"></i>
-                                <span>Inmediato</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="verification-timeline">
-                    <h4><i class="fas fa-calendar-alt"></i> Tiempo Total del Proceso</h4>
-                    <div class="timeline-summary">
-                        <div class="timeline-item">
-                            <div class="timeline-duration">
-                                <span class="duration-number">3-5</span>
-                                <span class="duration-unit">días</span>
-                            </div>
-                            <div class="timeline-description">
-                                <strong>Tiempo promedio de verificación</strong>
-                                <p>Desde la recepción del correo hasta la actualización en la base de datos</p>
-                            </div>
-                        </div>
-                        <div class="timeline-note">
-                            <i class="fas fa-info-circle"></i>
-                            <p>Los tiempos pueden variar dependiendo de la complejidad del caso y la calidad de la evidencia proporcionada.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-support">
-                    <div class="support-header">
-                        <i class="fas fa-headset"></i>
-                        <h4>Soporte y Consultas</h4>
-                    </div>
-                    <div class="support-content">
-                        <p>Si tienes preguntas sobre el proceso de verificación o necesitas asistencia:</p>
-                        <div class="support-options">
-                            <div class="support-option">
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <strong>Correo de Verificación</strong>
-                                    <a href="mailto:infidelidad@eduolihez.com">infidelidad@eduolihez.com</a>
-                                </div>
-                            </div>
-                            <div class="support-option">
-                                <i class="fas fa-comment-alt"></i>
-                                <div>
-                                    <strong>Consultas Generales</strong>
-                                    <span>Respuesta en 24-48 horas</span>
-                                </div>
-                            </div>
-                            <div class="support-option">
-                                <i class="fas fa-file-contract"></i>
-                                <div>
-                                    <strong>Aspectos Legales</strong>
-                                    <span>Consulta nuestra política de privacidad</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
         </main>
 
-        <footer class="main-footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-shield-alt"></i>
-                        <h4>Base de Datos Española de Infieles</h4>
-                    </div>
-                    <p class="footer-description">
-                        Sistema de verificación ética y transparente de conductas infieles en España. 
-                        Todos los registros son verificados manualmente mediante evidencia comprobable.
-                    </p>
+        <footer>
+            <div class="footer-main">
+                <div class="footer-col">
+                    <h4><i class="fas fa-database"></i> Base de Datos</h4>
+                    <p>Registro de conductas infieles verificadas en territorio español. 
+                    Solo mayores de edad. Las pruebas NO son obligatorias pero verifican el reporte.</p>
                     <div class="footer-tags">
-                        <span class="tag">Verificación Manual</span>
-                        <span class="tag">Confidencialidad</span>
-                        <span class="tag">Ética</span>
-                        <span class="tag">Transparencia</span>
+                        <span class="tag">España</span>
+                        <span class="tag">+18 años</span>
+                        <span class="tag">Verificación opcional</span>
                     </div>
                 </div>
                 
-                <div class="footer-section">
-                    <h5>Enlaces Rápidos</h5>
-                    <ul class="footer-links">
-                        <li><a href="#" data-section="database"><i class="fas fa-database"></i> Base de Datos</a></li>
-                        <li><a href="#" data-section="report"><i class="fas fa-envelope-open-text"></i> Reportar Infidelidad</a></li>
-                        <li><a href="#" data-section="stats"><i class="fas fa-chart-pie"></i> Estadísticas</a></li>
-                        <li><a href="#" data-section="process"><i class="fas fa-clipboard-check"></i> Proceso de Verificación</a></li>
+                <div class="footer-col">
+                    <h4><i class="fas fa-link"></i> Acceso Rápido</h4>
+                    <ul>
+                        <li><a href="#" class="footer-link view-db"><i class="fas fa-database"></i> Ver Base de Datos</a></li>
+                        <li><a href="#" class="footer-link report"><i class="fas fa-user-plus"></i> Reportar Infiel</a></li>
+                        <li><a href="#" class="footer-link stats"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
+                        <li><a href="#" class="footer-link instagram"><i class="fab fa-instagram"></i> Instagram</a></li>
                     </ul>
                 </div>
                 
-                <div class="footer-section">
-                    <h5>Contacto de Verificación</h5>
+                <div class="footer-col">
+                    <h4><i class="fas fa-balance-scale"></i> Legal España</h4>
+                    <ul>
+                        <li><a href="#" class="footer-link legal" data-type="lopd">LOPD/GDPR</a></li>
+                        <li><a href="#" class="footer-link legal" data-type="terms">Términos de Uso</a></li>
+                        <li><a href="#" class="footer-link legal" data-type="delete">Eliminar Datos</a></li>
+                        <li><a href="#" class="footer-link legal" data-type="disclaimer">Aviso Legal</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4><i class="fas fa-headset"></i> Contacto</h4>
                     <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <strong>Correo de Verificación</strong>
-                                <a href="mailto:infidelidad@eduolihez.com">infidelidad@eduolihez.com</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <strong>Tiempo de Respuesta</strong>
-                                <span>24-48 horas hábiles</span>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <div>
-                                <strong>Protección de Datos</strong>
-                                <span>LOPD/GDPR Compliant</span>
-                            </div>
-                        </div>
+                        <p><i class="fab fa-instagram"></i> <strong>Instagram:</strong> @infieles_db_espana</p>
                     </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h5>Legal y Privacidad</h5>
-                    <ul class="footer-links">
-                        <li><a href="#" class="legal-link" data-type="privacy">Política de Privacidad</a></li>
-                        <li><a href="#" class="legal-link" data-type="terms">Términos de Uso</a></li>
-                        <li><a href="#" class="legal-link" data-type="cookies">Política de Cookies</a></li>
-                        <li><a href="#" class="legal-link" data-type="gdpr">Protección de Datos</a></li>
-                        <li><a href="#" class="legal-link" data-type="disclaimer">Aviso Legal</a></li>
-                    </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <div class="copyright">
-                    <p>© 2025 Base de Datos Española de Infieles. Todos los derechos reservados.</p>
-                    <p class="legal-note">
-                        Esta web opera bajo la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales. 
-                        Los datos se conservan con fines de interés público según artículo 6.1.e) del RGPD.
-                    </p>
-                </div>
-                <div class="footer-badges">
-                    <div class="badge">
-                        <i class="fas fa-user-shield"></i>
-                        <span>Verificación Ética</span>
-                    </div>
-                    <div class="badge">
-                        <i class="fas fa-lock"></i>
-                        <span>Datos Protegidos</span>
-                    </div>
-                </div>
+                <p>© 2025 Base de Datos Española de Infieles - Plataforma educativa. No nos hacemos responsables del uso indebido de la información.</p>
+                <p class="legal-note">Esta web opera bajo la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales. 
+                Los datos se conservan con fines de interés público según artículo 6.1.e) del RGPD.</p>
             </div>
         </footer>
     </div>
 
     <!-- Modal para detalles -->
-    <div id="detailsModal" class="modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-container">
+    <div id="detailsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDetails">
+        <div class="modal-content">
+            <span class="close-modal" aria-label="Cerrar modal">&times;</span>
             <div class="modal-header">
-                <h3 id="modalTitle">Detalles del Registro</h3>
-                <button class="modal-close" aria-label="Cerrar modal">
-                    <i class="fas fa-times"></i>
-                </button>
+                <h3 id="modalTitle"><i class="fas fa-user"></i> Detalles del Registro</h3>
             </div>
             <div id="modalDetails" class="modal-body">
                 <!-- Contenido dinámico -->
@@ -763,22 +479,16 @@
     </div>
 
     <!-- Modal legal -->
-    <div id="legalModal" class="modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 id="legalTitle">Información Legal</h3>
-                <button class="modal-close" aria-label="Cerrar modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+    <div id="legalModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+        <div class="modal-content">
+            <span class="close-modal" aria-label="Cerrar modal">&times;</span>
             <div id="legalContent" class="modal-body">
                 <!-- Contenido dinámico -->
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts con carga diferida -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
