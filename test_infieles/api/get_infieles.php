@@ -3,13 +3,13 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-require_once 'config/database.php';
+require_once '../config/database.php';
 
 $database = new Database();
 $conn = $database->getConnection();
 
 if (!$conn) {
-    echo json_encode(['infieles' => [], 'error' => 'Error de conexión']);
+    echo json_encode(['infieles' => [], 'error' => 'Error de conexión a la base de datos infielesdb']);
     exit;
 }
 
@@ -47,7 +47,7 @@ try {
             'fechaRegistro' => $row['fecha_registro'],
             'fechaActualizacion' => $row['fecha_actualizacion'],
             'verificado' => (bool)$row['verificado'],
-            'ficticio' => true, // SIEMPRE true
+            'ficticio' => true,
             'total_count' => $row['total_count'],
             'verified_count' => $row['verified_count']
         ];
@@ -55,11 +55,11 @@ try {
     
     echo json_encode([
         'infieles' => $infieles,
-        'disclaimer' => 'TODOS LOS DATOS SON FICTICIOS - Proyecto demostrativo'
+        'disclaimer' => 'TODOS LOS DATOS SON FICTICIOS - Proyecto demostrativo - Base de datos: infielesdb'
     ]);
     
 } catch (PDOException $e) {
     error_log("Error en get_infieles.php: " . $e->getMessage());
-    echo json_encode(['infieles' => [], 'error' => 'Error al obtener datos']);
+    echo json_encode(['infieles' => [], 'error' => 'Error al obtener datos de infielesdb']);
 }
 ?>

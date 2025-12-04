@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once 'config/database.php';
+require_once '../config/database.php';
 
 // Validar que todos los datos sean obligatoriamente ficticios
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -33,13 +33,13 @@ if (!isset($data['aceptoTerminos']) || $data['aceptoTerminos'] !== true) {
 $data['ficticio'] = true;
 $data['ip_reportador'] = $_SERVER['REMOTE_ADDR'] ?? '';
 
-// Conectar a la base de datos
+// Conectar a la base de datos infielesdb
 $database = new Database();
 $conn = $database->getConnection();
 
 if (!$conn) {
     http_response_code(500);
-    echo json_encode(['error' => 'Error de conexión a la base de datos']);
+    echo json_encode(['error' => 'Error de conexión a la base de datos infielesdb']);
     exit;
 }
 
@@ -72,9 +72,9 @@ try {
         ':pruebas_descripcion' => isset($data['pruebasDescripcion']) ? 
                                  htmlspecialchars(strip_tags($data['pruebasDescripcion'])) : '',
         ':verificado' => isset($data['tienePruebas']) ? 1 : 0,
-        ':ficticio' => 1, // SIEMPRE true
+        ':ficticio' => 1,
         ':ip_reportador' => $data['ip_reportador'],
-        ':consentimiento_legal' => 1 // Confirmado como datos ficticios
+        ':consentimiento_legal' => 1
     ]);
     
     $infiel_id = $conn->lastInsertId();
@@ -97,24 +97,24 @@ try {
     
     $conn->commit();
     
-    // Registrar en log (opcional)
-    error_log("Nuevo registro ficticio insertado - IP: " . $data['ip_reportador']);
+    // Registrar en log
+    error_log("Nuevo registro ficticio insertado en infielesdb - IP: " . $data['ip_reportador']);
     
     echo json_encode([
         'success' => true,
-        'message' => 'Datos ficticios registrados correctamente',
+        'message' => 'Datos ficticios registrados correctamente en infielesdb',
         'id' => $infiel_id,
-        'warning' => 'ESTOS DATOS SON COMPLETAMENTE FICTICIOS - Solo demostración técnica'
+        'warning' => 'ESTOS DATOS SON COMPLETAMENTE FICTICIOS - Solo demostración técnica - Base de datos: infielesdb'
     ]);
     
 } catch (PDOException $e) {
     $conn->rollBack();
-    error_log("Error en add_infiel.php: " . $e->getMessage());
+    error_log("Error en add_infiel.php para infielesdb: " . $e->getMessage());
     
     http_response_code(500);
     echo json_encode([
-        'error' => 'Error al registrar datos ficticios',
-        'debug' => (ENVIRONMENT === 'development') ? $e->getMessage() : null
+        'error' => 'Error al registrar datos ficticios en infielesdb',
+        'debug' => (isset($_ENV['ENVIRONMENT']) && $_ENV['ENVIRONMENT'] === 'development') ? $e->getMessage() : null
     ]);
 }
 ?>

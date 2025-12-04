@@ -2,7 +2,7 @@
 // config/database.php
 class Database {
     private $host = "localhost";
-    private $db_name = "infieles_db";
+    private $db_name = "infielesdb";
     private $username = "tu_usuario";
     private $password = "tu_password";
     private $conn;
