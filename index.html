@@ -3,226 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eduardo Olivares | Soporte IT & Ciberseguridad | eduolihez - Badalona</title>
-    
-    <!-- Meta tags SEO optimizados -->
-    <meta name="description" content="Eduardo Olivares (eduolihez) - Especialista en Soporte IT, Administrador de Sistemas Junior y Ciberseguridad en Badalona. Certificado Python IT Specialist, IC3 Digital Literacy y B2 First Certificate. Contacto para servicios IT.">
-    <meta name="keywords" content="Eduardo Olivares, eduolihez, Soporte IT Badalona, Administrador de Sistemas Barcelona, Ciberseguridad Cataluña, Python IT Specialist, Soporte técnico informático, Mantenimiento sistemas, Desarrollo Python">
-    <meta name="author" content="Eduardo Olivares (eduolihez)">
-    <meta name="robots" content="index, follow">
-    <meta name="geo.region" content="ES-CT">
-    <meta name="geo.placename" content="Badalona">
-    <meta name="geo.position" content="41.450037;2.247412">
-    <meta name="ICBM" content="41.450037, 2.247412">
-    
-    <!-- Preconnect y DNS prefetch para mejor performance -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link rel="preload" href="/src/eduolihez_pfp.JPG" as="image">
-    
-    <!-- Open Graph optimizado -->
-    <meta property="og:type" content="profile">
-    <meta property="og:url" content="https://eduolihez.com/">
-    <meta property="og:title" content="Eduardo Olivares | Soporte IT & Ciberseguridad | eduolihez">
-    <meta property="og:description" content="Especialista en Soporte IT, Administrador de Sistemas Junior y Ciberseguridad en Badalona. Certificaciones Python IT Specialist e IC3 Digital Literacy.">
-    <meta property="og:image" content="https://eduolihez.com/src/eduolihez_pfp.JPG">
-    <meta property="og:image:alt" content="Eduardo Olivares - Especialista en Soporte IT">
-    <meta property="og:locale" content="es_ES">
-    <meta property="og:site_name" content="Eduardo Olivares - eduolihez">
-    
-    <!-- Twitter Card optimizado -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://eduolihez.com/">
-    <meta property="twitter:title" content="Eduardo Olivares | Soporte IT & Ciberseguridad">
-    <meta property="twitter:description" content="Especialista en Soporte IT, Administrador de Sistemas Junior y Ciberseguridad en Badalona. Certificaciones IT Specialist Python.">
-    <meta property="twitter:image" content="https://eduolihez.com/src/eduolihez_pfp.JPG">
-    <meta property="twitter:creator" content="@eduolihez">
-    
-    <!-- Schema.org markup optimizado -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Eduardo Olivares",
-      "alternateName": "eduolihez",
-      "url": "https://eduolihez.com/",
-      "image": "https://eduolihez.com/src/eduolihez_pfp.JPG",
-      "jobTitle": "Soporte IT & Administrador de Sistemas Junior",
-      "description": "Especialista en Soporte IT, Administrador de Sistemas Junior y Ciberseguridad en Badalona, Cataluña",
-      "email": "mailto:eduolihez@gmail.com",
-      "telephone": "+34",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Badalona",
-        "addressLocality": "Badalona",
-        "addressRegion": "Cataluña",
-        "postalCode": "08911",
-        "addressCountry": "ES"
-      },
-      "sameAs": [
-        "https://www.linkedin.com/in/eduolihez",
-        "https://github.com/eduolihez",
-        "https://www.instagram.com/eduolihez/"
-      ],
-      "knowsAbout": [
-        "Soporte IT",
-        "Administración de Sistemas", 
-        "Ciberseguridad",
-        "Python",
-        "Digital Literacy",
-        "IT Support",
-        "System Administration"
-      ],
-      "hasCredential": [
-        {
-          "@type": "Certification",
-          "name": "IT Specialist - Python",
-          "url": "https://www.credly.com/badges/6ea9eebb-bf6b-4369-82ee-845195fc8652/public_url"
-        },
-        {
-          "@type": "Certification", 
-          "name": "IC3 Digital Literacy",
-          "url": "https://www.credly.com/badges/cc7885f6-f69b-473a-ab89-e3a07f7a49a3/public_url"
-        },
-        {
-          "@type": "Certification",
-          "name": "B2 First Certificate",
-          "url": "https://eduolihez.com/src/First_Certificate.jpg"
-        }
-      ]
-    }
-    </script>
-    
-    <!-- Preload crítico -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/src/favicon.ico">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>Eduardo Olivares | Terminal Portfolio</title>
+    <link rel="stylesheet" href="style.css"> 
 </head>
-<body itemscope itemtype="https://schema.org/Person">
-    <!-- Canvas para partículas interactivas -->
-    <canvas id="particles-canvas"></canvas>
+<body>
+    <div id="main-layout"> 
+        <div id="terminal"> 
+            <div id="output"></div> 
+            <div id="input-line">
+                <span id="prompt"></span> 
+                <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false">
+                </div>
+        </div>
+        
+        <div id="sidebar">
+            </div>
+    </div>
     
-    <!-- Cursor personalizado elegante -->
-    <div class="custom-cursor" aria-hidden="true"></div>
-    <div class="cursor-follower" aria-hidden="true"></div>
-    
-    <!-- Control de sonido (toggle) -->
-    <button class="sound-toggle" aria-label="Activar/desactivar efectos de sonido">
-        <i class="fas fa-volume-up sound-on"></i>
-        <i class="fas fa-volume-mute sound-off"></i>
-    </button>
-    
-    <main class="container" role="main" aria-label="Portfolio profesional de Eduardo Olivares">
-        <!-- Screen reader only heading for better accessibility -->
-        <h1 class="sr-only">Eduardo Olivares - Portfolio Profesional</h1>
-        
-        <section class="profile-section" aria-labelledby="profile-heading">
-            <h2 id="profile-heading" class="sr-only">Información Personal</h2>
-            <div class="img-container">
-                <img src="/src/eduolihez_pfp.JPG" alt="Eduardo Olivares - Especialista en Soporte IT y Ciberseguridad en Badalona" class="profile-img" itemprop="image" width="150" height="150" loading="eager">
-                <div class="img-overlay"></div>
-            </div>
-            
-            <h2 itemprop="name">Eduardo Olivares</h2>
-            <p class="alias">(alias: <span itemprop="alternateName">eduolihez</span>)</p>
-            
-            <div class="subtitle">
-                <span class="typewriter-text" id="typewriter" itemprop="jobTitle"></span>
-            </div>
-            
-            <div class="location" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                <span itemprop="addressLocality">Badalona</span>, 
-                <span itemprop="addressRegion">Cataluña</span>, 
-                <span itemprop="addressCountry">España</span>
-            </div>
-        </section>
-        
-        <nav class="links" aria-label="Enlaces de contacto y redes sociales">
-            <a href="mailto:eduolihez@gmail.com" class="link" aria-label="Enviar correo electrónico a Eduardo Olivares" itemprop="email">
-                <i class="fas fa-envelope" aria-hidden="true"></i>
-                <span>Contáctame por correo</span>
-            </a>
-            
-            <a href="https://www.linkedin.com/in/eduolihez" target="_blank" rel="noopener noreferrer" class="link" aria-label="Visitar perfil profesional en LinkedIn">
-                <i class="fab fa-linkedin" aria-hidden="true"></i>
-                <span>Conecta en LinkedIn</span>
-            </a>
-            
-            <a href="https://github.com/eduolihez" target="_blank" rel="noopener noreferrer" class="link" aria-label="Ver proyectos de código en GitHub">
-                <i class="fab fa-github" aria-hidden="true"></i>
-                <span>Mira mi código en GitHub</span>
-            </a>
-            
-            <a href="https://www.instagram.com/eduolihez/" target="_blank" rel="noopener noreferrer" class="link" aria-label="Seguir en Instagram">
-                <i class="fab fa-instagram" aria-hidden="true"></i>
-                <span>Sígueme en Instagram</span>
-            </a>
-            
-            <a href="/src/Edu_Olivares_CV.pdf" class="link" aria-label="Descargar currículum vitae en PDF">
-                <i class="fas fa-file-pdf" aria-hidden="true"></i>
-                <span>Descarga mi CV</span>
-            </a>
-        </nav>
-        
-        <section class="certifications" aria-labelledby="certifications-heading">
-            <h2 id="certifications-heading">Certificaciones Principales</h2>
-            <div class="cert-badges">
-                <a href="https://www.credly.com/badges/6ea9eebb-bf6b-4369-82ee-845195fc8652/public_url" target="_blank" rel="noopener noreferrer" class="cert-badge" aria-label="Certificación IT Specialist Python">
-                    <i class="fab fa-python" aria-hidden="true"></i>
-                    <span>IT Specialist - Python</span>
-                </a>
-                <a href="https://www.credly.com/badges/cc7885f6-f69b-473a-ab89-e3a07f7a49a3/public_url" target="_blank" rel="noopener noreferrer" class="cert-badge" aria-label="Certificación IC3 Digital Literacy">
-                    <i class="fas fa-globe" aria-hidden="true"></i>
-                    <span>IC3 Digital Literacy</span>
-                </a>
-                <a href="/src/First_Certificate.jpg" target="_blank" rel="noopener noreferrer" class="cert-badge" aria-label="Certificación B2 First Certificate de inglés" loading="lazy">
-                    <i class="fas fa-language" aria-hidden="true"></i>
-                    <span>B2 First Certificate</span>
-                </a>
-            </div>
-        </section>
-        
-        <section class="projects" aria-labelledby="projects-heading">
-            <h2 id="projects-heading">Proyectos Destacados</h2>
-            <div class="project-links">
-                <a href="https://followguard.eduolihez.com" class="project-link" aria-label="Proyecto FollowGuard - Analizador de seguidores de Instagram">
-                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                    <span>FollowGuard - Instagram Unfollowers</span>
-                </a>
-                <a href="https://passwdcentinel.eduolihez.com" class="project-link" aria-label="Password Centinel - Google Chrome Extension">
-                    <i class="fa-solid fa-key" aria-hidden="true"></i>
-                    <span>Password Centinel - Google Chrome Extension</span>
-                </a>
-                <a href="https://infieles.eduolihez.com" class="project-link" aria-label="Base de Datos de Infieles España - Proyecto de Ciberseguridad">
-                    <i class="fa-solid fa-database" aria-hidden="true"></i>
-                    <span>Base de Datos de Personas Infieles España</span>
-                </a>
-            </div>
-        </section>
-        
-        <footer class="social-icons" role="contentinfo">
-            <a href="mailto:eduolihez@gmail.com" class="social-icon" aria-label="Enviar email">
-                <i class="fas fa-envelope" aria-hidden="true"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/eduolihez" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
-                <i class="fab fa-linkedin" aria-hidden="true"></i>
-            </a>
-            <a href="https://github.com/eduolihez" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
-                <i class="fab fa-github" aria-hidden="true"></i>
-            </a>
-            <a href="https://www.instagram.com/eduolihez/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
-                <i class="fab fa-instagram" aria-hidden="true"></i>
-            </a>
-        </footer>
-    </main>
+    <audio id="sound-key" src="audio/keypress.mp3" preload="auto"></audio>
+    <audio id="sound-success" src="audio/success.mp3" preload="auto"></audio>
+    <audio id="sound-error" src="audio/error.mp3" preload="auto"></audio>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> 
 </body>
 </html>

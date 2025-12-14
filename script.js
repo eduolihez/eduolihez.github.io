@@ -1,718 +1,599 @@
-// Configuración centralizada para mejor mantenibilidad
-const CONFIG = {
-    PARTICLES: {
-        COUNT: 60,
-        CONNECTION_DISTANCE: 120,
-        MOUSE_RADIUS: 100
+// script.js
+
+// --- 1. DATOS DEL PORTFOLIO & COMANDOS ---
+
+const portfolioData = {
+    user: "Eduardo Olivares",
+    alias: "eduolihez",
+    location: "Badalona, Barcelona",
+    role: "Técnico de Sistemas, SysAdmin & Ciberseguridad",
+    summary: "Técnico de Sistemas con experiencia en Soporte IT Nivel 1 y 2. Enfocado en Ciberseguridad (SecOps) y automatización con Python. Logré una reducción de más del 15% en los tiempos de respuesta de tickets (SLA).", 
+    skills: {
+        'Desarrollo & Scripting': [
+            'Python (Automatización, TDD, APIs)', 
+            'JavaScript (Frontend, DOM)', 
+            'PHP (Backend, MVC)', 
+            'Bash (Scripting y SysAdmin)', 
+            'HTML5 / CSS3 (Diseño Responsivo)'
+        ],
+        'Sistemas & Infraestructura': [
+            'Linux Server (Admin, SSH, LAMP)', 
+            'Windows Server (Active Directory, GPOs)', 
+            'MySQL (Bases de Datos, Queries)',
+            'Git (Control de Versiones, CI/CD Básico)'
+        ],
+        'IoT & Hardware': [
+            'Raspberry Pi (Home Lab, Servidor Local)', 
+            'Arduino (Robótica Básica)'
+        ]
     },
-    ANIMATION: {
-        DURATIONS: {
-            PAGE_LOAD: 1000,
-            STAGGER: 100
+    certs: [ 
+        { name: "IT Specialist: Python Programming", link: "https://www.credly.com/badges/6ea9eebb-bf6b-4369-82ee-845195fc8652/public_url" },
+        { name: "IC3 Digital Literacy", link: "https://www.credly.com/badges/cc7885f6-f69b-473a-ab89-e3a07f7a49a3/public_url" },
+        { name: "B2 First Certificate (Cambridge)", link: "src/First_Certificate.jpg" }
+    ],
+    projects: [
+        { 
+            id: 1, 
+            slug: "mes-badalona", 
+            title: "Més Badalona", 
+            desc: "Plataforma de reporte de incidencias ciudadanas.", 
+            longDesc: "Plataforma completa de participación ciudadana diseñada para permitir a los usuarios reportar incidencias (baches, problemas de iluminación, etc.) en su área. Incluye un backend robusto basado en PHP para la gestión de la base de datos MySQL, un sistema de autenticación de administradores, y paneles para visualizar estadísticas de reportes en tiempo real. **Arquitectura:** Cliente/Servidor, API RESTful.",
+            tags: "PHP, MySQL, HTML, CSS", 
+            link: "https://mesbadalona.eduolihez.com", 
+            repo: "N/A" 
+        }, 
+        { 
+            id: 2, 
+            slug: "followguard", 
+            title: "FollowGuard", 
+            desc: "Herramienta de análisis y gestión de comunidad en Instagram.", 
+            longDesc: "Aplicación de análisis social enfocada en Instagram. Su principal funcionalidad es identificar 'unfollowers' y proporcionar métricas avanzadas sobre el crecimiento y la interacción de la comunidad. El proyecto maneja grandes volúmenes de datos a través de APIs, y está desarrollado en dos versiones (Standard y Orion) para demostrar diferentes enfoques de diseño y rendimiento.",
+            tags: "API, Analytics, Seguridad, JS", 
+            link: "https://followguard.eduolihez.com", 
+            repo: "N/A" 
+        }, 
+        { 
+            id: 3, 
+            slug: "passwd-centinel", 
+            title: "Passwd Centinel", 
+            desc: "Extensión de Chrome para auditoría de contraseñas.", 
+            longDesc: "Extensión ligera para el navegador Google Chrome con foco en la ciberseguridad personal. Realiza una auditoría local de las contraseñas guardadas para detectar patrones débiles o repeticiones, y ofrece consejos de seguridad en tiempo real. Utiliza las API de Chrome para la gestión de datos sensibles, asegurando que la información nunca salga del dispositivo del usuario.",
+            tags: "JS, Sec, Chrome API", 
+            link: "https://passwdcentinel.eduolihez.com", 
+            repo: "N/A" 
+        },
+        { 
+            id: 4, 
+            slug: "guardianes-digitales", 
+            title: "Guardianes Digitales", 
+            desc: "Curso interactivo de concienciación sobre ciberseguridad.", 
+            longDesc: "Proyecto educativo diseñado para concienciar sobre las amenazas digitales comunes. El curso se estructura en 6 módulos interactivos que cubren temas desde el phishing hasta la seguridad en redes sociales. Incorpora JavaScript para la interactividad y pruebas de conocimiento, proporcionando una experiencia de aprendizaje gamificada.",
+            tags: "Educación, JS, Ciberseguridad", 
+            link: "https://eduolihez.com/guardianes-digitales/index.html", 
+            repo: "N/A" 
         }
-    },
-    SOUND: {
-        VOLUME: 0.1,
-        FREQUENCIES: {
-            HOVER: 600,
-            CLICK: 800,
-            SUCCESS: 1000,
-            TRANSITION: 400
-        }
-    },
-    PERFORMANCE: {
-        THROTTLE_DELAY: 16, // ~60fps
-        LAZY_LOAD_THRESHOLD: 0.1
+    ],
+    cv_link: "src/Edu_Olivares_CV.pdf",
+    contact: { 
+        Email: "eduolihez@gmail.com",
+        LinkedIn: "https://www.linkedin.com/in/eduolihez",
+        GitHub: "https://github.com/eduolihez",
+        Medium: "https://medium.com/@eduolihez",
+        Twitter: "https://twitter.com/eduolihez" 
     }
 };
 
-// Esperar a que el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar todas las funcionalidades
-    initCustomCursor();
-    initTypewriterEffect();
-    initAnimations();
-    initParticles();
-    initSoundSystem();
-    initPerformanceOptimizations();
-    initInteractionEffects();
-    initEnhancedAnalytics();
-    initOptimizedEventListeners();
-    initScrollAnimations();
+const commandsList = [
+    { command: 'whoami', desc: 'Muestra mi perfil, rol y experiencia.' },
+    { command: 'skills', desc: 'Lista mi stack tecnológico. (Soporta | grep)' },
+    { command: 'projects', desc: 'Muestra mis proyectos. (Soporta | grep y -i <id>)' },
+    { command: 'certs', desc: 'Muestra mis certificaciones y logros.' },
+    { command: 'contact', desc: 'Muestra mis redes sociales y email de contacto.' },
+    { command: 'cv', desc: 'Descarga/Ver CV (PDF).' }, 
+    { command: 'help', desc: 'Muestra este manual de comandos.' },
+    { command: 'clear', desc: 'Limpia la pantalla.' },
+];
+const validCommands = commandsList.map(c => c.command);
+
+
+// --- 2. LÓGICA DEL TERMINAL & ESTADO ---
+
+const input = document.getElementById('command-input');
+const output = document.getElementById('output');
+const terminal = document.getElementById('terminal'); 
+const sidebar = document.getElementById('sidebar'); 
+const promptElement = document.getElementById('prompt');
+
+// Elementos de Audio
+const soundKey = document.getElementById('sound-key');
+const soundSuccess = document.getElementById('sound-success');
+const soundError = document.getElementById('sound-error');
+
+// Estilo de Error
+const ERROR_STYLE = `style="color:var(--color-error, #ff3232); font-weight: bold;"`;
+
+
+// Estado y Persistencia
+let history = [];
+let historyIndex = -1;
+const HISTORY_STORAGE_KEY = 'terminalHistory';
+
+
+function updatePrompt() {
+    promptElement.innerHTML = `eduolihez@github:~$ `; 
+}
+
+function loadHistory() {
+    const storedHistory = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (storedHistory) {
+        history = JSON.parse(storedHistory);
+    }
+}
+
+function saveHistory() {
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+}
+
+function playSound(soundElement) {
+    if (soundElement) {
+        soundElement.currentTime = 0; 
+        soundElement.play().catch(e => {}); 
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadHistory();
+    input.focus();
+    updatePrompt();
+    printWelcomeMessage();
+    renderSidebarMenu(); 
 });
 
-// Sistema de partículas interactivo
-function initParticles() {
-    const canvas = document.getElementById('particles-canvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    
-    // Configuración de partículas
-    let particlesArray = [];
-    const { COUNT, CONNECTION_DISTANCE, MOUSE_RADIUS } = CONFIG.PARTICLES;
-    
-    // Ajustar tamaño del canvas
-    function handleResize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticlesArray();
-    }
-    
-    // Inicializar array de partículas
-    function initParticlesArray() {
-        particlesArray = [];
-        for (let i = 0; i < COUNT; i++) {
-            const size = Math.random() * 2 + 1;
-            const x = Math.random() * (canvas.width - size * 2) + size;
-            const y = Math.random() * (canvas.height - size * 2) + size;
-            const directionX = (Math.random() * 0.4) - 0.2;
-            const directionY = (Math.random() * 0.4) - 0.2;
-            
-            particlesArray.push({
-                x, y, directionX, directionY, size,
-                color: `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`
-            });
-        }
-    }
-    
-    // Dibujar partículas
-    function drawParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Dibujar conexiones primero
-        drawConnections();
-        
-        // Dibujar partículas
-        for (let i = 0; i < particlesArray.length; i++) {
-            ctx.beginPath();
-            ctx.arc(
-                particlesArray[i].x,
-                particlesArray[i].y,
-                particlesArray[i].size,
-                0, Math.PI * 2
-            );
-            ctx.closePath();
-            ctx.fillStyle = particlesArray[i].color;
-            ctx.fill();
-        }
-    }
-    
-    // Dibujar conexiones entre partículas
-    function drawConnections() {
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a; b < particlesArray.length; b++) {
-                const distance = Math.hypot(
-                    particlesArray[a].x - particlesArray[b].x,
-                    particlesArray[a].y - particlesArray[b].y
-                );
-                
-                if (distance < CONNECTION_DISTANCE) {
-                    const opacity = 1 - (distance / CONNECTION_DISTANCE);
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.1})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-    
-    // Actualizar posición de partículas
-    function updateParticles() {
-        for (let i = 0; i < particlesArray.length; i++) {
-            // Rebotar en los bordes
-            if (particlesArray[i].x <= 0 || particlesArray[i].x >= canvas.width) {
-                particlesArray[i].directionX = -particlesArray[i].directionX;
-            }
-            if (particlesArray[i].y <= 0 || particlesArray[i].y >= canvas.height) {
-                particlesArray[i].directionY = -particlesArray[i].directionY;
-            }
-            
-            // Mover partículas
-            particlesArray[i].x += particlesArray[i].directionX;
-            particlesArray[i].y += particlesArray[i].directionY;
-        }
-    }
-    
-    // Animación loop
-    function animateParticles() {
-        updateParticles();
-        drawParticles();
-        requestAnimationFrame(animateParticles);
-    }
-    
-    // Interacción con el mouse
-    let mouse = { x: null, y: null, radius: MOUSE_RADIUS };
-    
-    const handleMouseMove = throttle((event) => {
-        mouse.x = event.x;
-        mouse.y = event.y;
-        
-        // Efecto de repulsión en partículas cercanas
-        for (let i = 0; i < particlesArray.length; i++) {
-            const dx = mouse.x - particlesArray[i].x;
-            const dy = mouse.y - particlesArray[i].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < mouse.radius) {
-                const force = (mouse.radius - distance) / mouse.radius;
-                const angle = Math.atan2(dy, dx);
-                
-                particlesArray[i].x -= Math.cos(angle) * force * 3;
-                particlesArray[i].y -= Math.sin(angle) * force * 3;
-            }
-        }
-    }, CONFIG.PERFORMANCE.THROTTLE_DELAY);
-    
-    function handleMouseLeave() {
-        mouse.x = undefined;
-        mouse.y = undefined;
-    }
-    
-    // Inicializar
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
-    
-    animateParticles();
+
+function getCandidates(parts, lastPart) {
+    const isFirstWord = parts.length === 1 && lastPart;
+    let candidates = [];
+
+    if (isFirstWord) {
+        candidates = validCommands.filter(cmd => cmd.startsWith(lastPart));
+    } 
+    return candidates;
 }
 
-// Sistema de sonidos sútiles
-function initSoundSystem() {
-    // Verificar soporte de AudioContext
-    if (!(window.AudioContext || window.webkitAudioContext)) {
-        console.log('AudioContext no soportado');
-        document.querySelector('.sound-toggle').style.display = 'none';
-        return;
+
+input.addEventListener('keydown', (e) => {
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Tab') {
+        playSound(soundKey);
     }
 
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    let isSoundEnabled = true;
-    const soundToggle = document.querySelector('.sound-toggle');
-    
-    if (!soundToggle) return;
-    
-    // Crear oscilador para sonidos
-    function createTone(frequency, duration, volume = CONFIG.SOUND.VOLUME) {
-        if (!isSoundEnabled || audioContext.state !== 'running') return;
-        
-        try {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.value = volume;
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
-        } catch (error) {
-            console.log('Error creando tono:', error);
+    if (e.key === 'Enter') {
+        const command = input.value.trim();
+        if (command) {
+            executeCommand(command);
+            history.unshift(command);
+            saveHistory(); 
+            historyIndex = -1; 
         }
-    }
-    
-    // Sonidos específicos
-    const sounds = {
-        hover: () => createTone(CONFIG.SOUND.FREQUENCIES.HOVER, 0.1, 0.08),
-        click: () => createTone(CONFIG.SOUND.FREQUENCIES.CLICK, 0.15, 0.1),
-        success: () => createTone(CONFIG.SOUND.FREQUENCIES.SUCCESS, 0.2, 0.12),
-        transition: () => createTone(CONFIG.SOUND.FREQUENCIES.TRANSITION, 0.3, 0.05)
-    };
-    
-    // Toggle de sonido
-    function toggleSound() {
-        isSoundEnabled = !isSoundEnabled;
-        soundToggle.classList.toggle('muted', !isSoundEnabled);
+        input.value = '';
+        e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        navigateHistory(1);
+    } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        navigateHistory(-1);
+    } else if (e.key === 'Tab') { 
+        e.preventDefault();
+        const inputVal = input.value;
+        const parts = inputVal.split(/\s+/);
+        const lastPart = parts[parts.length - 1].toLowerCase();
         
-        // Guardar preferencia en localStorage
-        try {
-            localStorage.setItem('soundEnabled', isSoundEnabled);
-        } catch (error) {
-            console.log('Error guardando preferencia de sonido:', error);
-        }
-        
-        // Sonido de confirmación
-        if (isSoundEnabled) {
-            createTone(1200, 0.1, 0.15);
-        }
-    }
-    
-    // Cargar preferencia guardada
-    try {
-        const savedSoundPreference = localStorage.getItem('soundEnabled');
-        if (savedSoundPreference !== null) {
-            isSoundEnabled = JSON.parse(savedSoundPreference);
-            soundToggle.classList.toggle('muted', !isSoundEnabled);
-        }
-    } catch (error) {
-        console.log('Error cargando preferencia de sonido:', error);
-    }
-    
-    // Aplicar sonidos a elementos interactivos
-    function applySoundEffects() {
-        const interactiveElements = document.querySelectorAll(
-            '.link, .project-link, .cert-badge, .social-icon, .sound-toggle'
-        );
-        
-        interactiveElements.forEach(element => {
-            // Sonido al hover
-            element.addEventListener('mouseenter', () => {
-                if (element !== soundToggle && isSoundEnabled) {
-                    sounds.hover();
-                }
-            });
-            
-            // Sonido al click
-            element.addEventListener('click', (e) => {
-                if (element !== soundToggle && isSoundEnabled) {
-                    sounds.click();
-                }
-            });
-        });
-        
-        // Sonido especial para el toggle de sonido
-        soundToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSound();
-        });
-    }
-    
-    // Inicializar sistema de audio después de interacción del usuario
-    function initAudioContext() {
-        if (audioContext.state === 'suspended') {
-            audioContext.resume().then(() => {
-                console.log('AudioContext activado');
-            }).catch(error => {
-                console.log('Error activando AudioContext:', error);
-            });
-        }
-    }
-    
-    // Eventos para activar el audio context
-    document.addEventListener('click', initAudioContext, { once: true });
-    document.addEventListener('touchstart', initAudioContext, { once: true });
-    
-    applySoundEffects();
-}
+        const candidates = getCandidates(parts, lastPart);
 
-// Cursor personalizado ultra suave y elegante
-function initCustomCursor() {
-    const cursor = document.querySelector('.custom-cursor');
-    const follower = document.querySelector('.cursor-follower');
-    
-    if (!cursor || !follower) return;
-    
-    // Variables para suavizado
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
-    
-    // Solo activar en dispositivos de escritorio
-    if (window.matchMedia("(min-width: 481px)").matches && 
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        
-        const handleMouseMove = throttle((e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        if (candidates.length === 1) {
+            const completedPart = candidates[0];
+            input.value = completedPart + ' '; 
+        } else if (candidates.length > 1) {
+            const matchesText = `<span style="color:var(--color-link);">Múltiples coincidencias:</span>\n` + candidates.join('\t');
             
-            // Cursor principal - sin delay
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
-        }, CONFIG.PERFORMANCE.THROTTLE_DELAY);
-        
-        // Seguimiento suavizado del cursor
-        document.addEventListener('mousemove', handleMouseMove);
-        
-        // Animación suavizada para el follower
-        function animateFollower() {
-            // Suavizado más agresivo para mayor elegancia
-            followerX += (mouseX - followerX - (follower.offsetWidth / 2)) * 0.1;
-            followerY += (mouseY - followerY - (follower.offsetHeight / 2)) * 0.1;
+            const commandLine = document.createElement('div');
+            commandLine.innerHTML = `<span id="prompt">${promptElement.innerHTML}</span>${inputVal}`;
+            output.appendChild(commandLine);
             
-            follower.style.left = followerX + 'px';
-            follower.style.top = followerY + 'px';
+            const result = document.createElement('div');
+            result.classList.add('output-section');
+            result.innerHTML = matchesText.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'); 
+            output.appendChild(result);
             
-            requestAnimationFrame(animateFollower);
+            terminal.scrollTop = terminal.scrollHeight;
+            input.focus(); 
         }
-        
-        animateFollower();
-        
-        // Efectos al hacer hover en elementos interactivos
-        const interactiveElements = document.querySelectorAll('a, button, .link, .project-link, .cert-badge, .social-icon');
-        
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'scale(1.4)';
-                cursor.style.background = 'linear-gradient(45deg, #ffffff, #e3f2fd)';
-                follower.style.transform = 'scale(1.6)';
-                follower.style.borderColor = 'rgba(255, 255, 255, 0.6)';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'scale(1)';
-                cursor.style.background = 'linear-gradient(45deg, #ffffff, #e3f2fd)';
-                follower.style.transform = 'scale(1)';
-                follower.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-            });
-        });
+    }
+});
+
+function navigateHistory(direction) {
+    if (history.length === 0) return;
+
+    historyIndex = Math.min(history.length - 1, Math.max(-1, historyIndex + direction));
+
+    if (historyIndex === -1) {
+        input.value = ''; 
     } else {
-        // Ocultar cursores personalizados en dispositivos no compatibles
-        cursor.style.display = 'none';
-        follower.style.display = 'none';
+        input.value = history[historyIndex];
     }
 }
 
-// Efecto máquina de escribir para el subtítulo
-function initTypewriterEffect() {
-    const typewriterElement = document.getElementById('typewriter');
-    if (!typewriterElement) return;
-    
-    const texts = [
-        "Soporte IT & Administrador de Sistemas Junior",
-        "Especialista en Ciberseguridad",
-        "Desarrollador Python",
-        "IT Support Specialist"
-    ];
-    
-    let textIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 100;
-    
-    function typeWriter() {
-        const currentText = texts[textIndex];
-        
-        if (isDeleting) {
-            // Borrando texto
-            typewriterElement.textContent = currentText.substring(0, charIndex - 1);
-            charIndex--;
-            typingSpeed = 50;
-        } else {
-            // Escribiendo texto
-            typewriterElement.textContent = currentText.substring(0, charIndex + 1);
-            charIndex++;
-            typingSpeed = 100;
-        }
-        
-        // Cambiar entre escribir y borrar
-        if (!isDeleting && charIndex === currentText.length) {
-            // Esperar al final del texto
-            isDeleting = true;
-            typingSpeed = 1500;
-        } else if (isDeleting && charIndex === 0) {
-            // Cambiar al siguiente texto
-            isDeleting = false;
-            textIndex = (textIndex + 1) % texts.length;
-            typingSpeed = 500;
-        }
-        
-        setTimeout(typeWriter, typingSpeed);
-    }
-    
-    // Iniciar el efecto después de un pequeño delay
-    setTimeout(typeWriter, 1000);
-}
 
-// Animaciones de entrada mejoradas
-function initAnimations() {
-    const container = document.querySelector('.container');
-    if (!container) return;
-    
-    // Pequeño delay para asegurar que todo está cargado
-    setTimeout(() => {
-        container.classList.add('loaded');
-    }, 200);
-}
+function typeOut(targetElement, text) {
+    return new Promise(resolve => {
+        let i = 0;
+        const speed = 15; 
+        
+        const lines = text.split('\n');
+        
+        function writeLine() {
+            if (i < lines.length) {
+                const line = lines[i];
+                let j = 0;
+                
+                const lineSpan = document.createElement('span');
+                targetElement.appendChild(lineSpan);
+                targetElement.appendChild(document.createElement('br')); 
 
-// Efectos de interacción mejorados
-function initInteractionEffects() {
-    // Efecto de ripple en los enlaces
-    const links = document.querySelectorAll('.link, .project-link');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Crear efecto de ripple mejorado
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
-                transform: scale(0);
-                animation: ripple-animation 0.6s ease-out;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-                pointer-events: none;
-                z-index: 1;
-            `;
-            
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-    
-    // Añadir estilos para la animación ripple mejorada
-    if (!document.querySelector('#ripple-styles')) {
-        const style = document.createElement('style');
-        style.id = 'ripple-styles';
-        style.textContent = `
-            @keyframes ripple-animation {
-                0% {
-                    transform: scale(0);
-                    opacity: 1;
-                }
-                100% {
-                    transform: scale(3);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // Efecto de tilt MUY sutil en la tarjeta principal (solo escritorio)
-    if (window.matchMedia("(min-width: 1025px)").matches) {
-        const container = document.querySelector('.container');
-        if (!container) return;
-        
-        let isHovering = false;
-        
-        container.addEventListener('mouseenter', () => {
-            isHovering = true;
-        });
-        
-        container.addEventListener('mouseleave', () => {
-            isHovering = false;
-            // Reset suave al salir
-            container.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-            container.style.transition = 'transform 0.4s ease';
-            
-            setTimeout(() => {
-                container.style.transition = '';
-            }, 400);
-        });
-        
-        const handleTiltMove = throttle((e) => {
-            if (!isHovering) return;
-            
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            // Efecto MUY sutil - reducido a 1/4 de la intensidad original
-            const rotateY = (x - centerX) / 80; // Muy reducido
-            const rotateX = (centerY - y) / 80; // Muy reducido
-            
-            container.style.transform = `
-                perspective(1000px)
-                rotateX(${rotateX}deg)
-                rotateY(${rotateY}deg)
-                translateZ(2px) // Muy sutil
-            `;
-            container.style.transition = 'transform 0.1s linear'; // Transición muy rápida
-        }, CONFIG.PERFORMANCE.THROTTLE_DELAY);
-        
-        container.addEventListener('mousemove', handleTiltMove);
-    }
-}
-
-// Optimizaciones de rendimiento avanzadas
-function initPerformanceOptimizations() {
-    // Precarga de imágenes críticas con callback
-    const criticalImages = [
-        '/src/eduolihez_pfp.jpg'
-    ];
-    
-    let loadedImages = 0;
-    const totalImages = criticalImages.length;
-    
-    criticalImages.forEach(src => {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-            loadedImages++;
-            if (loadedImages === totalImages) {
-                // Todas las imágenes críticas cargadas
-                document.body.classList.add('images-loaded');
-            }
-        };
-        img.onerror = () => {
-            loadedImages++;
-            console.log(`Error cargando imagen: ${src}`);
-        };
-    });
-    
-    // Observador de intersección para elementos fuera de vista
-    const observerOptions = {
-        root: null,
-        rootMargin: '50px',
-        threshold: CONFIG.PERFORMANCE.LAZY_LOAD_THRESHOLD
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('in-view');
-                // Cargar imágenes lazy si existen
-                const lazyImages = entry.target.querySelectorAll('img[loading="lazy"]');
-                lazyImages.forEach(img => {
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
+                const interval = setInterval(() => {
+                    if (j < line.length) {
+                        lineSpan.textContent += line.charAt(j);
+                        terminal.scrollTop = terminal.scrollHeight;
+                        j++;
+                    } else {
+                        clearInterval(interval);
+                        i++;
+                        writeLine(); 
                     }
-                });
+                }, speed);
+            } else {
+                resolve(); 
             }
-        });
-    }, observerOptions);
+        }
+        writeLine();
+    });
+}
+
+
+function applyGrep(content, term) {
+    if (!term) return content;
     
-    // Observar elementos que pueden beneficiarse del lazy loading
-    const elementsToObserve = document.querySelectorAll('.cert-badge, .project-link');
-    elementsToObserve.forEach(el => observer.observe(el));
-    
-    // Optimización del fondo animado
-    let isTabActive = true;
-    
-    function handleVisibilityChange() {
-        isTabActive = !document.hidden;
-        // Aquí podrías pausar/continuar animaciones si es necesario
+    const lines = content.split('\n');
+    const filteredLines = lines.filter(line => 
+        line.toLowerCase().includes(term.toLowerCase())
+    );
+
+    if (filteredLines.length === 0) {
+        playSound(soundError);
+        return createErrorOutput(
+            `No se encontraron coincidencias para la búsqueda "${term}".`,
+            `La búsqueda de GREP no arrojó resultados en el contenido.`
+        );
     }
     
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return `<span style="color:var(--color-link);">(Filtro: grep "${term}")</span>\n` + filteredLines.join('\n');
 }
 
-// Analytics y métricas de rendimiento mejoradas
-function initEnhancedAnalytics() {
-    // Registrar métricas de rendimiento
-    const perfData = performance.timing;
-    const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+/**
+ * Función auxiliar para generar bloques de error consistentes y bien espaciados.
+ */
+function createErrorOutput(errorTitle, errorHint = '') {
+    let output = `<span ${ERROR_STYLE}>ERROR: ${errorTitle}`;
     
-    console.log(`🚀 Tiempo de carga total: ${loadTime}ms`);
+    if (errorHint) {
+        output += `\n\n>> ${errorHint}`;
+    }
+    output += `</span>`;
+    return output;
+}
+
+
+function applyTextFormatting(text) {
+    // 1. Bold: **TEXTO** -> <span class="bold-style">TEXTO</span>
+    text = text.replace(/\*\*(.*?)\*\*/g, '<span class="bold-style">$1</span>');
+
+    // 2. Italic: *TEXTO* -> <span class="italic-style">$1</span>
+    text = text.replace(/\*(.*?)\*/g, '<span class="italic-style">$1</span>');
     
-    // Track tiempo en página
-    let timeStart = Date.now();
-    let goals = {
-        'cv_download': false,
-        'email_click': false,
-        'project_visit': false,
-        'certification_view': false
-    };
+    return text;
+}
+
+
+async function executeCommand(command) {
+    // 1. Preparación para Grep
+    const grepIndex = command.indexOf('| grep ');
+    let grepTerm = '';
+    let baseCommand = command.trim();
+
+    if (grepIndex !== -1) {
+        baseCommand = command.substring(0, grepIndex).trim();
+        grepTerm = command.substring(grepIndex + 7).trim().toLowerCase().replace(/['"]/g, '');
+    }
+
+    // 2. Mostrar el comando introducido
+    const commandLine = document.createElement('div');
+    commandLine.innerHTML = `<span id="prompt">${promptElement.innerHTML}</span>${command}`;
+    output.appendChild(commandLine);
+
+    // 3. Procesamiento del comando
+    const baseParts = baseCommand.toLowerCase().split(/\s+/);
+    const mainCommand = baseParts[0];
+    const args = baseParts.slice(1);
+    let outputContent = '';
+    let commandSuccess = true;
+
+    const result = document.createElement('div');
+    result.classList.add('output-section');
+    output.appendChild(result);
+
+    switch (mainCommand) {
+        case 'whoami':
+            outputContent = renderWhoami();
+            break;
+        case 'skills':
+            outputContent = renderSkills();
+            break;
+        case 'projects':
+            if (args[0] === '-i' && args[1]) {
+                outputContent = renderProjectDetails(args[1]);
+                if (outputContent.includes('ERROR:')) commandSuccess = false;
+            } else if (args.length > 0) {
+                // Genera error usando la nueva función
+                outputContent = createErrorOutput(
+                    `Argumento desconocido para projects: ${args.join(' ')}`,
+                    `Argumentos válidos: '-i <id>' (Ver detalles del proyecto).`
+                );
+                commandSuccess = false;
+            } else {
+                outputContent = renderProjects();
+            }
+            break;
+        case 'certs':
+            outputContent = renderCerts();
+            break;
+        case 'contact':
+            outputContent = renderContact();
+            break;
+        case 'cv':
+            outputContent = renderCV();
+            break;
+        case 'help':
+            outputContent = renderHelp(); 
+            break;
+        case 'clear':
+            output.innerHTML = '';
+            printWelcomeMessage(false); 
+            terminal.scrollTop = terminal.scrollHeight;
+            return; 
+        case '': 
+            outputContent = '';
+            commandSuccess = true;
+            break;
+        default:
+            // Genera error usando la nueva función
+            outputContent = createErrorOutput(
+                `Comando no encontrado: ${mainCommand}`,
+                `Comandos disponibles en el menú lateral. Escribe 'help'.`
+            );
+            commandSuccess = false;
+    }
+
+    // 4. Aplicar formato de texto (Bold/Italic)
+    outputContent = applyTextFormatting(outputContent);
     
-    function trackGoal(goalName) {
-        if (!goals[goalName]) {
-            goals[goalName] = true;
-            console.log(`🎯 Goal completado: ${goalName}`);
-            // Aquí integrar con Google Analytics
+    // 5. Aplicar Grep (si aplica)
+    if (grepTerm) {
+        const contentWithoutHtml = outputContent.replace(/<a[^>]*>.*?<\/a>/g, '').replace(/<[^>]*>/g, '');
+        const filtered = applyGrep(contentWithoutHtml, grepTerm); 
+        
+        if (filtered.includes('ERROR:')) {
+            outputContent = filtered;
+            commandSuccess = false;
+        } else {
+            outputContent = filtered;
         }
     }
     
-    window.addEventListener('beforeunload', () => {
-        const timeSpent = Date.now() - timeStart;
-        console.log(`⏱️ Tiempo en página: ${Math.round(timeSpent/1000)}s`);
-    });
-    
-    // Trackear interacciones importantes
-    const trackableElements = document.querySelectorAll('a[href^="http"], .link, .project-link, .cert-badge');
-    
-    trackableElements.forEach(element => {
-        element.addEventListener('click', function(e) {
-            const linkText = this.textContent.trim().substring(0, 30);
-            const href = this.href;
-            
-            console.log(`🔗 Clic en: ${linkText} (${href})`);
-            
-            // Track goals específicos
-            if (href.includes('/src/Edu_Olivares_CV.pdf')) {
-                trackGoal('cv_download');
-            } else if (href.includes('mailto:')) {
-                trackGoal('email_click');
-            } else if (href.includes('/followguard/')) {
-                trackGoal('project_visit');
-            } else if (href.includes('credly.com') || href.includes('First_Certificate')) {
-                trackGoal('certification_view');
-            }
-        });
-    });
-}
+    // 6. Animación y Renderizado
+    const isSimpleText = !/<a|<span class="command-title">/i.test(outputContent); 
 
-// Event listeners optimizados con delegación
-function initOptimizedEventListeners() {
-    const interactiveSelectors = '.link, .project-link, .cert-badge, .social-icon, .sound-toggle';
-    
-    // Delegación de eventos para mejor performance
-    document.addEventListener('mouseenter', function(e) {
-        if (e.target.matches(interactiveSelectors)) {
-            // Podrías añadir efectos hover globales aquí
-        }
-    }, true);
-    
-    document.addEventListener('click', function(e) {
-        if (e.target.matches(interactiveSelectors)) {
-            // Efectos click globales
-        }
-    }, true);
-}
-
-// Animaciones de scroll mejoradas
-function initScrollAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { 
-        threshold: CONFIG.PERFORMANCE.LAZY_LOAD_THRESHOLD,
-        rootMargin: '50px' 
-    });
-    
-    // Observar elementos que se animan al entrar en vista
-    document.querySelectorAll('.link, .cert-badge, .project-link').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-// Utilidad throttle para optimizar eventos
-function throttle(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
+    if (outputContent) {
+        if (isSimpleText && outputContent.length < 500 && !grepTerm && !outputContent.includes('ERROR:')) { 
+            await typeOut(result, outputContent);
+        } else {
+            result.innerHTML = outputContent.replace(/\n/g, '<br>');
         }
     }
+    
+    // 7. Sonido de Resultado
+    if (commandSuccess && mainCommand !== '') {
+        playSound(soundSuccess);
+    } else if (!commandSuccess && mainCommand !== '') {
+        playSound(soundError);
+    }
+
+    // 8. Scroll final
+    updatePrompt();
+    terminal.scrollTop = terminal.scrollHeight;
+    input.focus(); 
 }
 
-// Manejo de errores global
-window.addEventListener('error', function(e) {
-    console.error('Error global capturado:', e.error);
-});
+// --- 4. FUNCIONES DE RENDERIZADO MEJORADAS ---
 
-// Exportar configuración para debugging (solo en desarrollo)
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    window.CONFIG = CONFIG;
+function renderSidebarMenu() {
+    if (!sidebar) return;
+
+    let menuHtml = '<span class="menu-title">Manual de Comandos (help)</span>';
+    
+    commandsList.forEach(cmd => {
+        menuHtml += `<div class="menu-item">`;
+        menuHtml += `<span class="menu-command">${cmd.command}</span>`;
+        menuHtml += `<br>${cmd.desc}`;
+        menuHtml += `</div>`;
+    });
+    
+    sidebar.innerHTML = menuHtml;
+}
+
+function printWelcomeMessage(showTip = true) {
+    const promptColor = `style="color:var(--color-prompt);"`;
+    const titleColor = `style="color:var(--color-title);"`;
+    
+    let welcome = `
+<span ${titleColor}>//============================================\\</span>
+<span ${titleColor}>| ${portfolioData.user} | Terminal Portfolio v4.0 |</span>
+<span ${titleColor}>\\============================================//</span>
+
+<span ${promptColor}>${portfolioData.role}</span>
+Ubicación: ${portfolioData.location}
+
+Escribe un comando para empezar.
+La lista completa está en el menú lateral o escribe '<span ${promptColor}>help</span>'.
+${showTip ? `Tip: Usa flecha Arriba/Abajo para navegar por el historial.` : ''}
+`;
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.innerHTML = welcome.replace(/\n/g, '<br>'); 
+    output.appendChild(welcomeDiv);
+}
+
+function renderHelp() {
+    return `
+<span class="command-title">Ayuda</span>
+-----------------------------------
+La lista completa de comandos está visible en el panel lateral derecho.
+
+Comandos de Información:
+\t- whoami:\tPerfil profesional y resumen.
+\t- skills:\tListado de tecnologías y stack.
+\t- projects:\tProyectos destacados.
+\t- certs:\tCertificaciones obtenidas.
+\t- contact:\tEnlaces a redes y email.
+\t- cv:\t\tDescarga tu CV (PDF).
+
+Funcionalidades Avanzadas:
+\t- FILTRO GREP:\tskills | grep Python
+\t- DETALLES:\tprojects -i <ID>
+`;
+}
+
+function renderCV() {
+    return `
+<span class="command-title">Curriculum Vitae</span>
+-----------------------------------
+Descargando CV...
+
+Enlace:\t<a href="${portfolioData.cv_link}" target="_blank" class="command-link">${portfolioData.cv_link}</a>
+`;
+}
+
+function renderProjectDetails(id) {
+    const project = portfolioData.projects.find(p => p.id == id || p.slug === id);
+    if (!project) {
+        return createErrorOutput(
+            `Proyecto ID o slug no encontrado.`,
+            `Por favor, usa 'projects' para listar los IDs válidos.`
+        );
+    }
+
+    const linkHtml = `<a href="${project.link}" target="_blank" class="command-link">${project.link}</a>`;
+
+    return `
+<span class="command-title">Detalles del Proyecto: ${project.title}</span>
+-----------------------------------
+Título:\t\t**${project.title}**
+Descripción:\t${project.longDesc}
+
+<span class="command-title">Ficha Técnica</span>
+-----------------------------------
+Stack Principal:\t*${project.tags}*
+URL del Proyecto:\t${linkHtml}
+`;
+}
+
+function renderWhoami() {
+    return `
+<span class="command-title">Perfil: ${portfolioData.user}</span>
+-----------------------------------
+**Nombre:**\t${portfolioData.user}
+**Alias:**\t${portfolioData.alias}
+**Rol Principal:**\t**${portfolioData.role}**
+**Ubicación:**\t${portfolioData.location}
+
+<span class="command-title">Resumen Profesional</span>
+-----------------------------------
+${portfolioData.summary}
+
+<span class="command-title">Logros Destacados (KPI)</span>
+-----------------------------------
+>> **Reducción de >15% en SLA** (*Tiempo de respuesta*)
+>> **Liderazgo y Soporte** a >100 usuarios
+>> **4 certificaciones** completadas en el *último año*
+`;
+}
+
+function renderSkills() {
+    let outputHtml = '<span class="command-title">Stack Tecnológico (skills)</span>\n-----------------------------------';
+    
+    for (const category in portfolioData.skills) {
+        outputHtml += `\n\n<span style="color:var(--color-title);font-weight:bold;">[ ${category.toUpperCase()} ]</span>`;
+        portfolioData.skills[category].forEach(skill => {
+            outputHtml += `\n\t-- **${skill.split('(')[0].trim()}** (*${skill.split('(')[1].replace(')', '').trim()}*)`;
+        });
+    }
+
+    return outputHtml;
+}
+
+function renderProjects() {
+    let outputHtml = '<span class="command-title">Proyectos Destacados (projects)</span>\n-----------------------------------';
+
+    portfolioData.projects.forEach(p => {
+        const linkHtml = `<a href="${p.link}" target="_blank" class="command-link">${p.link}</a>`;
+        outputHtml += `\n\n[ ID: ${p.id} ] - **${p.title}**`;
+        outputHtml += `\n\tDescripción:\t${p.desc}`; 
+        outputHtml += `\n\tStack:\t\t*${p.tags}*`;    
+        outputHtml += `\n\tEnlace:\t\t${linkHtml}`;
+        outputHtml += `\n\t(Detalles: projects -i ${p.id})`; 
+    });
+    
+    return outputHtml;
+}
+
+function renderCerts() {
+    let outputHtml = '<span class="command-title">Certificaciones (certs)</span>\n-----------------------------------';
+    
+    portfolioData.certs.forEach(cert => {
+        const linkHtml = `<a href="${cert.link}" target="_blank" class="command-link">Ver Credencial</a>`;
+        outputHtml += `\n>> **${cert.name}**`;
+        outputHtml += `\n\tEnlace:\t${linkHtml}`; 
+    });
+
+    return outputHtml;
+}
+
+function renderContact() {
+    let outputHtml = '<span class="command-title">Contacto (contact)</span>\n-----------------------------------';
+    
+    outputHtml += '\n**¡Siempre abierto a conectar y discutir nuevas oportunidades!**';
+    outputHtml += '\n\n**Opciones de Contacto Directo:**';
+    
+    for (const platform in portfolioData.contact) {
+        const link = portfolioData.contact[platform];
+        const url = platform === 'Email' ? `mailto:${link}` : link;
+        const linkHtml = `<a href="${url}" target="_blank" class="command-link">${link}</a>`;
+        
+        const platformDisplay = platform.padEnd(10, ' ');
+        
+        outputHtml += `\n\t>> **${platformDisplay}**:\t${linkHtml}`;
+    }
+    
+    outputHtml += '\n\n*Nota: Para solicitar el CV directamente, usa el comando "cv".*';
+
+    return outputHtml;
 }
