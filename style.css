@@ -1,4 +1,4 @@
-/* style.css - Estilos Pulidos y Modernos (v3.7) */
+/* style.css - Estilos Pulidos y Modernos (v4.1) */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 
 :root {
@@ -8,9 +8,9 @@
     --color-prompt: #32cd32; 
     --color-title: #00bfff; 
     --color-link: #ffcc00; 
-    --color-error: #ff3232; /* Rojo para errores */
-    --color-bold-text: #ffcc00; /* Color del link para destacar negritas */
-    --color-italic-text: #aaa;  /* Gris sutil para cursivas */
+    --color-error: #ff3232; 
+    --color-bold-text: #ffcc00; 
+    --color-italic-text: #aaa;  
     --sidebar-width: 300px; 
 }
 
@@ -97,7 +97,7 @@ body {
     text-decoration: underline;
 }
 
-/* --- Nuevos Estilos de Formato de Texto --- */
+/* --- Estilos de Formato de Texto --- */
 
 .bold-style {
     color: var(--color-bold-text); 
@@ -152,4 +152,81 @@ body {
 @media (max-width: 900px) {
     #sidebar { display: none; }
     #terminal { max-width: 100%; }
+}
+
+/* --- MODAL DISCLAIMER STYLES --- */
+#disclaimer-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95); /* Más oscuro para bloquear la terminal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#disclaimer-modal-overlay.hidden {
+    display: none;
+}
+
+#disclaimer-modal {
+    background-color: var(--color-bg-sidebar); 
+    color: var(--color-text);
+    border: 1px solid var(--color-title);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+    padding: 30px;
+    width: 90%;
+    max-width: 550px; /* Un poco más grande para el texto */
+    font-family: 'Roboto Mono', monospace;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#modal-title {
+    color: var(--color-error); /* Usamos el color de error para la advertencia */
+    border-bottom: 1px dashed var(--color-prompt);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+#modal-content p {
+    margin: 15px 0;
+}
+
+#modal-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#modal-buttons button {
+    font-family: inherit;
+    font-size: 0.9em;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 2px solid var(--color-prompt);
+    background-color: transparent;
+    color: var(--color-prompt);
+    transition: background-color 0.2s;
+}
+
+#modal-buttons button:hover {
+    background-color: rgba(50, 205, 50, 0.1);
+}
+
+#modal-buttons .secondary-button {
+    border-color: var(--color-title);
+    color: var(--color-title);
+}
+
+#modal-buttons .secondary-button:hover {
+    background-color: rgba(0, 191, 255, 0.1);
 }

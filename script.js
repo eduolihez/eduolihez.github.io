@@ -2,6 +2,8 @@
 
 // --- 1. DATOS DEL PORTFOLIO & COMANDOS ---
 
+const LAST_UPDATE_DATE = "14 de Diciembre de 2025"; 
+
 const portfolioData = {
     user: "Eduardo Olivares",
     alias: "eduolihez",
@@ -119,6 +121,13 @@ let history = [];
 let historyIndex = -1;
 const HISTORY_STORAGE_KEY = 'terminalHistory';
 
+// Nuevo: Elementos del Modal
+const modalOverlay = document.getElementById('disclaimer-modal-overlay');
+const modalTitle = document.getElementById('modal-title');
+const modalContentDiv = document.getElementById('modal-content');
+const btnVisitOfficial = document.getElementById('visit-official');
+const btnCloseModal = document.getElementById('close-modal');
+
 
 function updatePrompt() {
     promptElement.innerHTML = `eduolihez@github:~$ `; 
@@ -142,12 +151,64 @@ function playSound(soundElement) {
     }
 }
 
+/**
+ * Muestra el modal de advertencia al inicio. Usa sessionStorage para mostrarlo solo una vez por sesión.
+ */
+function showDisclaimerModal() {
+    if (sessionStorage.getItem('disclaimerSeen')) {
+        input.focus();
+        return;
+    }
+
+    // 1. Rellenar contenido con formato
+    modalTitle.textContent = "¡Atención! Portfolio Temático";
+
+    let contentHtml = `
+        <p>Este es el *Portfolio Temático de Terminal* de Eduardo Olivares, diseñado para mostrar habilidades de SysAdmin y scripting.</p>
+        <p>El **portfolio oficial y más actualizado** está en: <a href="https://eduolihez.com" target="_blank" class="command-link">eduolihez.com</a></p>
+        <p>Esta versión *puede estar desactualizada o incompleta*.</p>
+        <p>Última actualización de esta versión: **${LAST_UPDATE_DATE}**</p>
+    `;
+    
+    modalContentDiv.innerHTML = applyTextFormatting(contentHtml);
+
+    btnVisitOfficial.textContent = "Ir al Portfolio Oficial";
+    btnCloseModal.textContent = "Ver este Portfolio (Terminal)";
+
+    // 2. Event Listeners y Lógica
+    btnVisitOfficial.onclick = () => {
+        // Redirigir al portfolio oficial en la misma ventana
+        window.open(`https://eduolihez.com`, '_self');
+    };
+
+    const closeModal = () => {
+        modalOverlay.classList.add('hidden');
+        sessionStorage.setItem('disclaimerSeen', 'true');
+        input.focus();
+    };
+    
+    btnCloseModal.onclick = closeModal;
+
+    // Permitir cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+
+    // 3. Mostrar modal
+    modalOverlay.classList.remove('hidden');
+    btnCloseModal.focus(); 
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     loadHistory();
-    input.focus();
+    showDisclaimerModal(); 
     updatePrompt();
     printWelcomeMessage();
     renderSidebarMenu(); 
+    // El foco se maneja dentro de showDisclaimerModal
 });
 
 
@@ -344,7 +405,6 @@ async function executeCommand(command) {
                 outputContent = renderProjectDetails(args[1]);
                 if (outputContent.includes('ERROR:')) commandSuccess = false;
             } else if (args.length > 0) {
-                // Genera error usando la nueva función
                 outputContent = createErrorOutput(
                     `Argumento desconocido para projects: ${args.join(' ')}`,
                     `Argumentos válidos: '-i <id>' (Ver detalles del proyecto).`
@@ -376,7 +436,6 @@ async function executeCommand(command) {
             commandSuccess = true;
             break;
         default:
-            // Genera error usando la nueva función
             outputContent = createErrorOutput(
                 `Comando no encontrado: ${mainCommand}`,
                 `Comandos disponibles en el menú lateral. Escribe 'help'.`
@@ -447,7 +506,7 @@ function printWelcomeMessage(showTip = true) {
     
     let welcome = `
 <span ${titleColor}>//============================================\\</span>
-<span ${titleColor}>| ${portfolioData.user} | Terminal Portfolio v4.0 |</span>
+<span ${titleColor}>| ${portfolioData.user} | Terminal Portfolio v4.1 |</span>
 <span ${titleColor}>\\============================================//</span>
 
 <span ${promptColor}>${portfolioData.role}</span>

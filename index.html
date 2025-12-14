@@ -13,7 +13,7 @@
             <div id="input-line">
                 <span id="prompt"></span> 
                 <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false">
-                </div>
+            </div>
         </div>
         
         <div id="sidebar">
@@ -23,6 +23,17 @@
     <audio id="sound-key" src="audio/keypress.mp3" preload="auto"></audio>
     <audio id="sound-success" src="audio/success.mp3" preload="auto"></audio>
     <audio id="sound-error" src="audio/error.mp3" preload="auto"></audio>
+
+    <div id="disclaimer-modal-overlay" class="hidden">
+        <div id="disclaimer-modal">
+            <h2 id="modal-title"></h2>
+            <div id="modal-content"></div>
+            <div id="modal-buttons">
+                <button id="visit-official"></button>
+                <button id="close-modal" class="secondary-button"></button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script> 
 </body>
