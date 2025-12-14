@@ -152,14 +152,24 @@ function playSound(soundElement) {
 }
 
 /**
- * Muestra el modal de advertencia al inicio. Usa sessionStorage para mostrarlo solo una vez por sesión.
+ * Función que inicializa la terminal (solo se llama después de cerrar el modal).
+ */
+function initializeTerminal() {
+    // Si la terminal ya está inicializada (por ejemplo, después de un CLEAR), salimos.
+    if (terminal.dataset.initialized) return;
+
+    loadHistory();
+    updatePrompt();
+    printWelcomeMessage();
+    renderSidebarMenu(); 
+    input.focus();
+    terminal.dataset.initialized = 'true'; // Marca como inicializada
+}
+
+/**
+ * Muestra el modal de advertencia al inicio de la carga, siempre.
  */
 function showDisclaimerModal() {
-    if (sessionStorage.getItem('disclaimerSeen')) {
-        input.focus();
-        return;
-    }
-
     // 1. Rellenar contenido con formato
     modalTitle.textContent = "¡Atención! Portfolio Temático";
 
@@ -183,8 +193,7 @@ function showDisclaimerModal() {
 
     const closeModal = () => {
         modalOverlay.classList.add('hidden');
-        sessionStorage.setItem('disclaimerSeen', 'true');
-        input.focus();
+        initializeTerminal(); // Inicializa la terminal al cerrar
     };
     
     btnCloseModal.onclick = closeModal;
@@ -203,12 +212,8 @@ function showDisclaimerModal() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadHistory();
+    // La única acción directa es mostrar el modal, que luego se encarga de llamar a initializeTerminal()
     showDisclaimerModal(); 
-    updatePrompt();
-    printWelcomeMessage();
-    renderSidebarMenu(); 
-    // El foco se maneja dentro de showDisclaimerModal
 });
 
 
@@ -341,9 +346,7 @@ function applyGrep(content, term) {
     return `<span style="color:var(--color-link);">(Filtro: grep "${term}")</span>\n` + filteredLines.join('\n');
 }
 
-/**
- * Función auxiliar para generar bloques de error consistentes y bien espaciados.
- */
+
 function createErrorOutput(errorTitle, errorHint = '') {
     let output = `<span ${ERROR_STYLE}>ERROR: ${errorTitle}`;
     
