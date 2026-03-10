@@ -1,0 +1,36 @@
+{
+  "name": "Grup Titus — Badalona",
+  "short_name": "Grup Titus",
+  "description": "Tres espais únics per viure la nit a Badalona. Carpa Titus, Espai Titus i La Boïte Titus.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#F5A623",
+  "lang": "ca",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "food", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Carpa Titus",
+      "url": "/pages/carpa-titus.html",
+      "description": "Discoteca a l'aire lliure · Badalona"
+    },
+    {
+      "name": "Espai Titus",
+      "url": "/pages/espai-titus.html",
+      "description": "Club interior · Badalona"
+    },
+    {
+      "name": "La Boïte Titus",
+      "url": "/pages/la-boite-titus.html",
+      "description": "Cocktail Bar · Badalona"
+    }
+  ]
+}
