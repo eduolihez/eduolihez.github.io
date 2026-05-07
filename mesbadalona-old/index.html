@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Més Badalona</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    </head>
+<body>
+    <nav class="top-bar">
+        <div class="brand"><i class="ri-map-pin-2-fill"></i> Més <strong>Badalona</strong></div>
+        <div class="lang-toggles">
+             <a href="admin.html" class="top-admin-link" title="Accés Administrador"><i class="ri-lock-2-line"></i></a>
+            <span onclick="app.setLang('ca')" class="active-lang">CA</span>
+            <span onclick="app.setLang('es')">ES</span>
+        </div>
+    </nav>
+
+    <div id="map"></div>
+
+    <div class="map-filters">
+        <button class="filter-btn active" data-filter-key="categoria" data-filter-value="all" data-i18n="filter_barri_all" onclick="app.setFilter(this)">Tots</button>
+        <button class="filter-btn" data-filter-key="categoria" data-filter-value="infraestructura" data-i18n="cat_infra" onclick="app.setFilter(this)"><i class="ri-hammer-line"></i> Infraestructura</button>
+        <button class="filter-btn" data-filter-key="categoria" data-filter-value="denuncia" data-i18n="cat_denuncia" onclick="app.setFilter(this)"><i class="ri-alert-line"></i> Denúncia</button>
+        <select id="filter-barri" class="filter-select" data-filter-key="barri" onchange="app.setFilter(this)">
+            <option value="all" data-i18n="filter_barri_all">Tots els Barris</option>
+        </select>
+    </div>
+
+    <div id="map-picker-ui" class="map-floater hidden">
+        <div class="floater-card">
+            <span id="loc-searching-msg" class="text-muted" data-i18n="picker_msg">Mou el mapa per situar la incidència</span>
+            <button class="btn-confirm" onclick="ui.confirmLocation()" data-i18n="btn_confirm">Fixar Ubicació</button>
+        </div>
+    </div>
+    
+    <div id="slide-panel" class="slide-panel closed category-infra">
+        
+        <div class="panel-content">
+            <div class="panel-header">
+                <h2 data-i18n="form_title">Nova Incidència</h2>
+                <button class="close-icon-fixed" onclick="ui.closePanel()"><i class="ri-close-line"></i></button>
+            </div>
+            
+            <form id="incidentForm" enctype="multipart/form-data">
+                
+                <label data-i18n="lbl_category">Categoria</label>
+                <div class="blue-tabs">
+                    <input type="radio" id="cat-infra" name="categoria" value="infraestructura" checked onchange="app.handleCategoryChange('infraestructura')">
+                    <label for="cat-infra" class="tab-item" data-i18n="cat_infra"><i class="ri-hammer-line"></i> Infraestructura</label>
+                    
+                    <div class="tab-divisor"></div>
+
+                    <input type="radio" id="cat-denuncia" name="categoria" value="denuncia" onchange="app.handleCategoryChange('denuncia')">
+                    <label for="cat-denuncia" class="tab-item" data-i18n="cat_denuncia"><i class="ri-alert-line"></i> Denúncia</label>
+                </div>
+                
+                <div class="location-card">
+                    <div class="loc-header">
+                        <label data-i18n="lbl_loc">Ubicació Exacta</label>
+                        <button type="button" class="btn-location-select" onclick="ui.pickLocationMode()" data-i18n="btn_map_select">SELECCIONAR UBICACIÓ AL MAPA</button>
+                    </div>
+
+                    <div class="form-duo">
+                        <input type="text" id="addr_input" name="direccion" class="modern-input" placeholder="Carrer, número..." required data-i18n="ph_addr">
+                        <input type="text" id="cp_input" name="cp" class="modern-input" placeholder="Codi Postal" data-i18n="ph_cp">
+                    </div>
+                    
+                    <label data-i18n="lbl_barri">Barri</label>
+                    <select id="barri_select" name="barri" class="modern-select" onchange="app.updateDistrictFromBarrio(this.value)" required>
+                        <option value="" data-i18n="ph_barri_select">-- Selecciona Barri --</option>
+                        </select>
+                    
+                    <input type="hidden" id="lat_input" name="lat" required>
+                    <input type="hidden" id="lng_input" name="lng" required>
+                    <input type="hidden" id="districte_input" name="districte">
+                    
+                    <p id="loc-searching-msg" class="text-muted" data-i18n="loc_unknown">Adreça desconeguda</p>
+                </div>
+
+                <label data-i18n="lbl_title">Títol</label>
+                <input type="text" name="titulo" class="modern-input" placeholder="Ex: Fanals trencats..." required data-i18n="ph_title">
+                
+                <label data-i18n="lbl_type">Tipus de problema</label>
+                <select id="tipoSelect" name="tipo" class="modern-select" required>
+                    </select>
+                
+                <label data-i18n="lbl_desc">Descripció</label>
+                <textarea name="descripcion" class="modern-textarea" rows="4" placeholder="Explica els detalls..." required data-i18n="ph_desc"></textarea>
+
+                <div class="form-duo">
+                    <div>
+                        <label data-i18n="lbl_urgency">Nivell d'Urgència</label>
+                        <select name="urgencia" class="modern-select">
+                            <option value="baja" data-i18n="urg_low">Baixa</option>
+                            <option value="media" data-i18n="urg_medium">Mitjana</option>
+                            <option value="alta" data-i18n="urg_high">Alta</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-i18n="lbl_impact">A qui afecta?</label>
+                        <select name="afectacion" class="modern-select">
+                            <option value="individual" data-i18n="imp_individual">Només a mi</option>
+                            <option value="col·lectiva" data-i18n="imp_collective">Barri / Comunitat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label data-i18n="lbl_email">Email (Opcional)</label>
+                <input type="email" name="email" class="modern-input" placeholder="nom@exemple.com" data-i18n="ph_email">
+
+                <label data-i18n="lbl_photo">Afegir una foto</label>
+                <div id="img-preview" class="img-preview-box hidden"></div>
+                <input type="file" id="foto-input" name="foto" accept="image/*" class="hidden" onchange="ui.previewImage(this)">
+                <button type="button" onclick="document.getElementById('foto-input').click()" class="file-upload-btn"><i class="ri-image-add-line"></i> <span data-i18n="lbl_photo">Afegir una foto</span></button>
+
+                <button type="submit" class="btn-submit-main" data-i18n="btn_send">Publicar Incidència</button>
+            </form>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+    
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active"><i class="ri-map-2-fill"></i><span data-i18n="nav_map">Mapa</span></a>
+        <a href="guia.html" class="nav-item"><i class="ri-book-open-line"></i><span data-i18n="nav_guide">Guia</span></a>
+        <div class="nav-fab-container"><button class="fab-btn" onclick="ui.startReportFlow()"><i class="ri-add-line"></i></button></div>
+        <a href="stats.html" class="nav-item"><i class="ri-pie-chart-2-fill"></i><span data-i18n="nav_stats">Dades</span></a>
+        <a href="about.html" class="nav-item"><i class="ri-information-line"></i><span data-i18n="nav_about">Sobre</span></a>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Se asegura que app.js se inicie después de cargar Leaflet
+            app.init();
+        });
+    </script>
+</body>
+</html>

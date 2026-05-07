@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Incidència — Més Badalona</title>
+    <meta name="description" content="Detall d'incidència al mapa ciutadà de Badalona.">
+    <meta name="theme-color" content="#2563eb">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Més Badalona">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .incident-detail-wrap {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 16px 16px 100px;
+        }
+        .incident-hero-map {
+            width: 100%;
+            height: 220px;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+        .incident-meta-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .incident-photo {
+            width: 100%;
+            border-radius: 12px;
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+        .incident-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-vote-public {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 9px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-vote-public:hover { background: var(--primary); color: #fff; }
+        .btn-share-public {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 18px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .btn-share-public:hover { border-color: var(--primary); color: var(--primary); }
+        .views-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-left: auto;
+        }
+        #incident-detail-map { width: 100%; height: 100%; }
+        .incident-desc-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .incident-field-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        .incident-field-row:last-child { border-bottom: none; }
+        .incident-field-row span:first-child { color: var(--text-light); }
+        .incident-field-row span:last-child { font-weight: 600; }
+        .skeleton-detail { padding: 20px 0; }
+    </style>
+</head>
+<body>
+    <nav class="top-bar">
+        <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;"><i class="ri-arrow-left-line"></i> Més <strong>Badalona</strong></a></div>
+        <div class="lang-toggles">
+            <span onclick="app.setLang('ca')" class="active-lang">CA</span>
+            <span onclick="app.setLang('es')">ES</span>
+        </div>
+    </nav>
+
+    <main class="incident-detail-wrap">
+        <div id="incident-loading" class="skeleton-detail">
+            <div class="sk-card">
+                <div class="sk-line w-90 skeleton" style="height:20px;margin-bottom:14px;"></div>
+                <div class="sk-line w-50 skeleton"></div>
+                <div class="sk-line w-75 skeleton"></div>
+            </div>
+            <div class="sk-card" style="height:220px;"></div>
+        </div>
+
+        <div id="incident-content" style="display:none;">
+            <div class="incident-meta-row" id="inc-meta-row"></div>
+            <h1 id="inc-title" style="font-size:1.3rem;margin:0 0 12px;"></h1>
+
+            <div class="incident-hero-map">
+                <div id="incident-detail-map"></div>
+            </div>
+
+            <img id="inc-photo" class="incident-photo" style="display:none;" alt="Foto de la incidència">
+
+            <div class="incident-desc-block" id="inc-desc"></div>
+
+            <div class="incident-desc-block" id="inc-fields"></div>
+
+            <div class="incident-actions">
+                <button class="btn-vote-public" id="btn-vote-public" onclick="votePublic()">
+                    <i class="ri-thumb-up-line"></i>
+                    <span id="vote-count">0</span> Suports
+                </button>
+                <button class="btn-share-public" onclick="shareIncident()">
+                    <i class="ri-share-line"></i> Compartir
+                </button>
+                <span class="views-badge" id="views-badge">
+                    <i class="ri-eye-line"></i> <span id="inc-views">0</span>
+                </span>
+            </div>
+        </div>
+
+        <div id="incident-error" style="display:none;" class="empty-state">
+            <i class="ri-error-warning-line"></i>
+            <h3>Incidència no trobada</h3>
+            <p>Aquesta incidència no existeix o ha estat eliminada.</p>
+            <a href="index.html" class="popup-detail-link" style="margin-top:12px;display:inline-block;">Tornar al mapa</a>
+        </div>
+    </main>
+
+    <div id="toast-container"></div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="ri-map-2-fill"></i><span>Mapa</span></a>
+        <a href="guia.html" class="nav-item"><i class="ri-book-open-line"></i><span>Guia</span></a>
+        <div class="nav-fab-container"><button class="fab-btn" onclick="window.location.href='index.html'"><i class="ri-add-line"></i></button></div>
+        <a href="stats.html" class="nav-item"><i class="ri-pie-chart-2-fill"></i><span>Dades</span></a>
+        <a href="about.html" class="nav-item"><i class="ri-information-line"></i><span>Sobre</span></a>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        let incidentMap = null;
+        let currentIncidentId = null;
+        let hasVoted = false;
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        async function loadIncident() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'), 10);
+            if (!id) { showError(); return; }
+            currentIncidentId = id;
+
+            try {
+                const res = await fetch(`api/index.php?action=public_incident&id=${id}`);
+                const json = await res.json();
+                if (json.status !== 'success' || !json.data) { showError(); return; }
+                renderIncident(json.data);
+            } catch(e) {
+                showError();
+            }
+        }
+
+        function renderIncident(inc) {
+            document.getElementById('incident-loading').style.display = 'none';
+            document.getElementById('incident-content').style.display = '';
+
+            document.title = escapeHtml(inc.titulo) + ' — Més Badalona';
+            document.querySelector('meta[property="og:title"]')?.setAttribute('content', inc.titulo);
+
+            document.getElementById('inc-title').textContent = inc.titulo;
+            document.getElementById('inc-views').textContent = inc.views || 0;
+
+            const statusLabel = { pendiente: 'Pendent', proceso: 'En Procés', resuelto: 'Resolt', denegado: 'Denegat' };
+            const urgLabel = { baja: 'Baixa', media: 'Mitjana', alta: 'Alta' };
+
+            const metaRow = document.getElementById('inc-meta-row');
+            metaRow.innerHTML = `
+                <span class="card-status status-${escapeHtml(inc.estado)}">${escapeHtml(statusLabel[inc.estado] || inc.estado)}</span>
+                <span class="urgency-pill urgency-${escapeHtml(inc.urgencia)}">${escapeHtml(urgLabel[inc.urgencia] || inc.urgencia)}</span>
+                <span style="color:var(--text-light);font-size:0.85rem;">${escapeHtml(app.formatDate ? app.formatDate(inc.created_at) : inc.created_at)}</span>
+            `;
+
+            document.getElementById('inc-desc').textContent = inc.descripcion || '';
+
+            const fields = document.getElementById('inc-fields');
+            fields.innerHTML = `
+                <div class="incident-field-row"><span>Barri</span><span>${escapeHtml(inc.barri || '—')}</span></div>
+                <div class="incident-field-row"><span>Adreça</span><span>${escapeHtml(inc.direccion || '—')}</span></div>
+                <div class="incident-field-row"><span>Categoria</span><span>${escapeHtml(inc.categoria === 'infraestructura' ? 'Infraestructura' : 'Denúncia')}</span></div>
+                <div class="incident-field-row"><span>Tipus</span><span>${escapeHtml(inc.tipo || '—')}</span></div>
+                <div class="incident-field-row"><span>Afectació</span><span>${escapeHtml(inc.afectacion || '—')}</span></div>
+            `;
+
+            const voteCount = document.getElementById('vote-count');
+            voteCount.textContent = inc.votos || 0;
+
+            if (inc.foto_url) {
+                const photo = document.getElementById('inc-photo');
+                photo.src = escapeHtml(inc.foto_url);
+                photo.style.display = '';
+            }
+
+            if (inc.lat && inc.lng) {
+                const lat = parseFloat(inc.lat), lng = parseFloat(inc.lng);
+                if (!incidentMap) {
+                    incidentMap = L.map('incident-detail-map', { zoomControl: true, scrollWheelZoom: false });
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(incidentMap);
+                }
+                incidentMap.setView([lat, lng], 16);
+                L.marker([lat, lng]).addTo(incidentMap);
+                setTimeout(() => incidentMap.invalidateSize(), 200);
+            }
+
+            const voted = localStorage.getItem('voted_' + inc.id);
+            if (voted) {
+                hasVoted = true;
+                const btn = document.getElementById('btn-vote-public');
+                btn.classList.add('voted');
+                btn.querySelector('i').className = 'ri-thumb-up-fill';
+            }
+        }
+
+        async function votePublic() {
+            if (hasVoted || !currentIncidentId) return;
+            try {
+                const fd = new FormData();
+                fd.append('id', currentIncidentId);
+                const res = await fetch('api/index.php?action=vote', { method: 'POST', body: fd });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    hasVoted = true;
+                    localStorage.setItem('voted_' + currentIncidentId, '1');
+                    const cnt = document.getElementById('vote-count');
+                    cnt.textContent = parseInt(cnt.textContent) + 1;
+                    const btn = document.getElementById('btn-vote-public');
+                    btn.querySelector('i').className = 'ri-thumb-up-fill';
+                    app.ui.showToast('Vot registrat!', 'success');
+                }
+            } catch(e) {}
+        }
+
+        function shareIncident() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: document.title, url });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    app.ui.showToast('Enllaç copiat!', 'success');
+                });
+            }
+        }
+
+        function showError() {
+            document.getElementById('incident-loading').style.display = 'none';
+            document.getElementById('incident-error').style.display = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            loadIncident();
+        });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>

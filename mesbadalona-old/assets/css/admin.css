@@ -1,0 +1,756 @@
+/*
+ * Més Badalona - Admin Panel Styles (Final Polished Version)
+ * Estilo: Dark Sidebar & Light Content (PC-Centric)
+ */
+
+/* ========================================================================= */
+/* 1. CONFIGURACIÓN Y UTILIDADES ADMIN */
+/* ========================================================================= */
+
+:root {
+    /* Variables de Color Base (Importadas de style.css) */
+    --primary: #2563eb; 
+    --primary-dark: #1e40af; 
+    --primary-light: #dbeafe; 
+    --success: #10b981; 
+    --warning: #f59e0b; 
+    --danger: #ef4444; 
+    --info: #3b82f6; 
+    --text-dark: #1f2937; 
+    --text-light: #6b7280; 
+    --bg-card: #ffffff; 
+    --border: #e5e7eb; 
+
+    /* Variables de Diseño Específicas de Admin */
+    --admin-sidebar-bg: #1f2937; /* Gris Oscuro (Dark Slate) */
+    --admin-sidebar-text: #e5e7eb; /* Gris Claro */
+    --admin-sidebar-hover: #374151; /* Gris Medio */
+    --admin-active-bg: var(--primary); 
+    --admin-header-bg: #ffffff;
+    --admin-content-bg: #f3f4f6; /* Fondo del contenido principal */
+    --admin-topbar-height: 65px;
+    --admin-sidebar-width: 250px;
+}
+
+body {
+    background: var(--admin-content-bg);
+    font-family: 'Inter', system-ui, sans-serif; 
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Base Buttons for Admin (Pulido) */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+.btn-primary { 
+    background: var(--primary); 
+    color: white; 
+    border: 1px solid var(--primary);
+}
+.btn-primary:hover { 
+    background: var(--primary-dark); 
+    border-color: var(--primary-dark);
+}
+.btn-info {
+    background: var(--info);
+    color: white;
+    border: 1px solid var(--info);
+}
+.btn-info:hover {
+    background: #2563eb;
+}
+.btn-del {
+    background: var(--danger);
+    color: white;
+    border: 1px solid var(--danger);
+}
+.btn-del:hover {
+    background: #b91c1c;
+}
+.btn-logout {
+    padding: 8px 15px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.btn-logout:hover {
+    background: #b91c1c;
+}
+
+/* Admin Card & Pill Styles */
+.card-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.status-pendiente { 
+    background: var(--warning); 
+    color: #92400e; 
+} 
+.status-proceso { 
+    background: var(--primary-light); 
+    color: var(--primary-dark); 
+} 
+.status-resuelto { 
+    background: var(--success); 
+    color: #065f46; 
+} 
+
+.urgency-pill {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.urgency-baja { background: #dcfce7; color: #065f46; }
+.urgency-media { background: #fef9c3; color: #a16207; }
+.urgency-alta { background: #fee2e2; color: #b91c1c; }
+
+
+/* ========================================================================= */
+/* 2. LAYOUT PRINCIPAL Y NAVEGACIÓN (PC-Centric) */
+/* ========================================================================= */
+
+/* Sidebar (Navegación Fija - PC) */
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: var(--admin-sidebar-bg);
+    color: var(--admin-sidebar-text);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 2000;
+    padding: 20px 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
+    display: none; 
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 0 20px 20px 20px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--admin-sidebar-text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #374151;
+    margin-bottom: 15px;
+}
+.sidebar-header i {
+    color: var(--primary);
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0 15px;
+}
+
+.admin-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    color: var(--admin-sidebar-text);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.admin-tab-btn:hover {
+    background: var(--admin-sidebar-hover);
+    color: white;
+}
+
+.admin-tab-btn.active {
+    background: var(--admin-active-bg);
+    color: white;
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.admin-tab-btn i {
+    font-size: 1.3rem;
+}
+
+.sidebar-user {
+    padding: 15px 20px;
+    border-top: 1px solid #374151;
+    text-align: center;
+}
+
+/* Main Content Area */
+.main-content-area {
+    flex-grow: 1;
+    padding-top: var(--admin-topbar-height);
+    transition: margin-left 0.3s;
+    margin-left: 0; 
+}
+
+/* Top Bar */
+.top-bar.admin-top-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: var(--admin-topbar-height);
+    background: var(--admin-header-bg);
+    z-index: 1500;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.admin-title { 
+    font-size: 1.8rem; 
+    color: var(--text-dark); 
+    margin: 0; 
+    font-weight: 700;
+}
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.admin-content-wrapper {
+    padding: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Mobile Tabs (Ocultas en PC) */
+.admin-tabs-mobile {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+    position: sticky;
+    top: var(--admin-topbar-height); 
+    z-index: 10;
+    margin: 0 -20px 0; 
+    padding: 0 20px;
+}
+.admin-tabs-mobile .admin-tab-btn {
+    flex-grow: 1;
+    border-radius: 0;
+    padding: 12px 10px;
+    color: var(--text-light);
+    border-bottom: 3px solid transparent;
+}
+.admin-tabs-mobile .admin-tab-btn:hover {
+    background: none;
+}
+.admin-tabs-mobile .admin-tab-btn.active {
+    border-bottom-color: var(--primary);
+    background: none;
+    color: var(--primary);
+}
+
+
+/* ========================================================================= */
+/* 3. LISTADO Y TABLAS (INCIDENTS & USERS) */
+/* ========================================================================= */
+
+.filter-bar-admin {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.filter-bar-admin select, .filter-bar-admin input[type="text"] {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: var(--admin-content-bg); 
+    flex-grow: 1; 
+    min-width: 150px;
+    max-width: 250px;
+}
+
+/* Tablas (Diseño Profesional) */
+.table-wrapper { 
+    background: var(--bg-card); 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+    overflow-x: auto; 
+    margin-top: 10px;
+    border: 1px solid var(--border);
+}
+
+.incident-table {
+    width: 100%; 
+    border-collapse: collapse; 
+    min-width: 1000px; 
+    font-size: 0.9rem;
+}
+
+.incident-table th, .incident-table td {
+    padding: 12px 12px; 
+    text-align: left; 
+    border-bottom: 1px solid #e5e7eb; 
+    vertical-align: middle; 
+}
+
+.incident-table th { 
+    background: #eef2ff; 
+    color: var(--primary-dark); 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    font-size: 0.75rem; 
+}
+
+.incident-table tbody tr:hover {
+    background-color: #f7faff;
+    cursor: pointer;
+}
+/* Ensure no status specific border coloring for rows */
+.incident-table tbody tr.status-pendiente { background: none; }
+.incident-table tbody tr.status-proceso { background: none; }
+.incident-table tbody tr.status-resuelto { background: none; }
+
+
+.incident-table tbody tr td:last-child button {
+    margin-right: 5px;
+}
+
+.incident-table small {
+    color: var(--text-light);
+    font-size: 0.8rem;
+}
+
+/* Mobile Card View (Neutral border color) */
+.mobile-card-view {
+    display: none; /* Oculto en PC */
+}
+
+.incident-card-admin {
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--border); /* Neutral color */
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+.incident-card-admin:hover {
+    background: #fcfcfd;
+}
+/* Ensure no status specific border coloring for mobile cards */
+.incident-card-admin.status-pendiente { border-left-color: var(--border); }
+.incident-card-admin.status-proceso { border-left-color: var(--border); }
+.incident-card-admin.status-resuelto { border-left-color: var(--border); }
+
+
+/* User Management Roles */
+.user-role {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.role-superadmin { background: var(--danger); color: white; }
+.role-admin { background: var(--info); color: white; }
+.role-moderator { background: var(--warning); color: var(--text-dark); }
+
+
+/* ========================================================================= */
+/* 4. DASHBOARD & GRÁFICOS */
+/* ========================================================================= */
+
+.stats-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px; 
+    margin-bottom: 30px; 
+}
+.d-card { 
+    background: var(--bg-card); 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+    border: 1px solid var(--border);
+}
+.d-card p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin: 0 0 5px 0;
+}
+.d-card h3 {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin: 0;
+    font-weight: 800;
+}
+
+.chart-duo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.chart-container {
+    position: relative;
+    height: 350px;
+}
+
+
+/* ========================================================================= */
+/* 5. VISTA DE DETALLE (DETAIL PANEL) */
+/* ========================================================================= */
+
+.detail-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 450px; 
+    height: 100%;
+    background: var(--bg-card);
+    z-index: 3000; 
+    box-shadow: -6px 0 15px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+.detail-panel.open {
+    transform: translateX(0);
+}
+.detail-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Header de Detalle Dinámico */
+.detail-header-admin {
+    padding: 20px;
+    color: white;
+}
+.detail-header-admin.status-pendiente { background: var(--warning); color: var(--text-dark); }
+.detail-header-admin.status-proceso { background: var(--info); }
+.detail-header-admin.status-resuelto { background: var(--success); }
+.detail-header-admin .detail-status-pill {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.7rem;
+}
+.detail-header-admin .detail-id {
+    color: rgba(0,0,0,0.6);
+}
+.detail-header-admin.status-proceso .detail-id {
+    color: rgba(255,255,255,0.7);
+}
+
+
+.detail-section {
+    padding: 20px 0;
+    border-bottom: 1px dashed var(--border);
+}
+.detail-section h3 {
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    margin-top: 0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.detail-section h3 i {
+    font-size: 1.4rem;
+    color: var(--primary);
+}
+.detail-map-container {
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+.detail-image {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.detail-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+.detail-action-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.select-status {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    appearance: none;
+}
+.select-status.status-pendiente { 
+    background: var(--warning); 
+    color: #92400e; 
+} 
+.select-status.status-proceso { 
+    background: var(--primary-light); 
+    color: var(--primary-dark); 
+} 
+.select-status.status-resuelto { 
+    background: var(--success); 
+    color: #065f46; 
+}
+
+
+/* ========================================================================= */
+/* 6. VISTA DE MAPA AVANZADA (ADMIN) */
+/* ========================================================================= */
+
+#map-admin {
+    height: calc(100vh - var(--admin-topbar-height) - 150px); 
+    width: 100%;
+    margin: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.map-filter-panel {
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.map-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 10px;
+}
+.map-filter-grid select {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: var(--admin-content-bg);
+}
+.map-filter-grid button {
+    height: 100%;
+    padding: 8px 10px;
+}
+
+/* Estilo del Popup del Mapa (Leaflet) */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    padding: 0;
+}
+.leaflet-popup-content {
+    margin: 0;
+    padding: 15px;
+    font-family: 'Inter', sans-serif;
+}
+.leaflet-popup-content h4 {
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+}
+.leaflet-popup-content .card-status {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* ========================================================================= */
+/* 7. MODAL DE GESTIÓN DE USUARIOS (NUEVOS ESTILOS AÑADIDOS) */
+/* ========================================================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4000; /* Asegura que esté encima de todo */
+    opacity: 1; /* Necesario si el JS oculta con 'hidden' en lugar de opacidad */
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(1);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #f1f5f9;
+    color: var(--text-dark);
+    border: 1px solid #e2e8f0;
+}
+.btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+/* ========================================================================= */
+/* 8. MEDIA QUERIES (RESPONSIVE) */
+/* ========================================================================= */
+
+@media (min-width: 900px) {
+    /* Layout PC: Sidebar Fija */
+    .admin-sidebar {
+        display: flex;
+    }
+    .main-content-area {
+        margin-left: var(--admin-sidebar-width);
+    }
+    .top-bar.admin-top-bar {
+        left: var(--admin-sidebar-width);
+        width: calc(100% - var(--admin-sidebar-width));
+        padding: 0 20px;
+    }
+    
+    .admin-title {
+        display: none; 
+    }
+    
+    .admin-tabs-mobile {
+        display: none !important;
+    }
+
+    .desktop-table-view {
+        display: block;
+    }
+    .mobile-card-view {
+        display: none;
+    }
+}
+
+@media (max-width: 899px) {
+    /* Layout Móvil: La Top Bar es la navegación principal */
+    .admin-sidebar {
+        display: none;
+    }
+    
+    .top-bar.admin-top-bar {
+        left: 0;
+        width: 100%;
+    }
+    
+    .admin-tabs-mobile {
+        display: flex;
+    }
+    
+    .admin-content-wrapper {
+        padding: 10px;
+    }
+    
+    .desktop-table-view {
+        display: none;
+    }
+    .mobile-card-view {
+        display: block;
+    }
+
+    .filter-bar-admin {
+        padding: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .filter-bar-admin select, .filter-bar-admin input[type="text"] {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .chart-duo {
+        grid-template-columns: 1fr;
+    }
+
+    /* Ajuste de altura de mapa y filtros en móvil */
+    #map-admin {
+        height: 500px;
+    }
+    .map-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-panel {
+        max-width: 100%;
+    }
+    
+    .modal-content {
+        /* En móvil, que el modal ocupe casi todo el ancho */
+        width: 95%;
+        margin: 10px;
+    }
+}
