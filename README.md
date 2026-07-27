@@ -34,6 +34,14 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 * **Ubicación**: [/tools/playbooks](https://eduolihez.github.io/tools/playbooks)
 * **Descripción**: Árboles de decisión interactivos para guiar a los analistas en la resolución de alertas de Phishing, Malware y Fuerza Bruta, proveyendo acciones de mitigación estructuradas y consultas de búsqueda SIEM (Splunk/Sentinel) generadas dinámicamente.
 
+### ⚡ Payload Decoder & Deobfuscator
+* **Ubicación**: [/tools/decoder](https://eduolihez.github.io/tools/decoder)
+* **Descripción**: Decodifica Base64 (UTF-8/UTF-16LE), URL, Hex y desofusca scripts de PowerShell limpiando concatenaciones y backticks de forma local.
+
+### 🌐 OSINT Hub & Enlaces Externos
+* **Ubicación**: [/tools/osint-hub](https://eduolihez.github.io/tools/osint-hub)
+* **Descripción**: Genera consultas rápidas OSINT extrayendo y vinculando IPs, dominios y hashes a motores externos (VirusTotal, AbuseIPDB) con directorio de recursos.
+
 ---
 
 ## 📁 Estructura del Repositorio
@@ -48,6 +56,8 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 │   │       ├── defanger.astro       # IOC Defanger & Extractor
 │   │       ├── email-analyzer.astro # Email Header Analyzer
 │   │       ├── playbooks.astro      # Playbooks Interactivos
+│   │       ├── decoder.astro        # Payload Decoder & Deobfuscator
+│   │       ├── osint-hub.astro      # OSINT Hub & Enlaces Externos
 │   │       └── yara-generator.astro # Generador de Reglas YARA
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
