@@ -1,0 +1,552 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Email Header Analyzer | Blue Team Hub" description="Analiza cabeceras de correo electrónico raw o archivos .eml de forma local. Comprueba SPF, DKIM, DMARC y visualiza los saltos de red con retardos de tiempo.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+    
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+        Email Header Analyzer
+      </h1>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Arrastra un archivo de correo `.eml` o pega las cabeceras en bruto para desglosar la información de autenticación, extraer los metadatos más importantes y mapear la ruta de red hop-by-hop calculando los retrasos de tiempo entre servidores.
+      </p>
+    </div>
+
+    <!-- Workspace Bento Box Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+      
+      <!-- Left Column: Input (4 cols on desktop) -->
+      <div class="lg:col-span-5 bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+        <div class="space-y-6">
+          <div class="flex items-center justify-between border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Cargar Cabeceras
+            </h2>
+          </div>
+
+          <!-- Drag and Drop EML Zone -->
+          <div 
+            id="dropzone" 
+            class="border-2 border-dashed border-neutral-800 hover:border-blue-500/50 bg-neutral-950/20 hover:bg-neutral-950/40 rounded-xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center min-h-[120px]"
+          >
+            <span class="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">✉️</span>
+            <p class="text-xs text-neutral-400 group-hover:text-neutral-200 transition-colors duration-200">
+              Arrastra un archivo <span class="text-blue-400 font-semibold">.eml</span> aquí o haz clic para seleccionar
+            </p>
+            <input type="file" id="fileInput" accept=".eml" class="hidden" />
+          </div>
+
+          <div class="relative">
+            <div class="absolute right-3 top-3 text-[10px] text-neutral-600 font-mono pointer-events-none select-none">
+              RAW HEADERS
+            </div>
+            <textarea 
+              id="headerInput" 
+              rows="12" 
+              class="w-full bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl p-4 text-xs font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+              placeholder="O pega aquí las cabeceras completas de tu correo en bruto (comenzando con 'Received:', 'Delivered-To:', etc.)..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex items-center justify-between pt-4 border-t border-neutral-950/50">
+          <button 
+            id="btnAnalyze" 
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md shadow-blue-500/10 active:scale-95 flex items-center gap-1.5"
+          >
+            🔍 Analizar Cabeceras
+          </button>
+          
+          <button 
+            id="btnClear" 
+            class="px-4 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Results (7 cols on desktop) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Welcome/Placeholder Card -->
+        <div id="resultsPlaceholder" class="bg-neutral-900/10 border border-neutral-900 rounded-2xl p-12 text-center flex flex-col items-center justify-center min-h-[460px]">
+          <span class="text-4xl mb-4 opacity-40">📊</span>
+          <h3 class="text-lg font-bold text-neutral-400 mb-2">Esperando Cabeceras</h3>
+          <p class="text-xs md:text-sm text-neutral-500 max-w-sm leading-relaxed font-light">
+            Carga un correo `.eml` o pega sus cabeceras a la izquierda y presiona "Analizar" para desglosar la información de red y seguridad.
+          </p>
+        </div>
+
+        <!-- Actual Results Panel (hidden by default) -->
+        <div id="resultsPanel" class="space-y-6 hidden">
+          
+          <!-- Box 1: Auth Status (SPF, DKIM, DMARC) -->
+          <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
+            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2 border-b border-neutral-950/60 pb-2">
+              🛡️ Autenticación de Seguridad
+            </h3>
+            
+            <div class="grid grid-cols-3 gap-4">
+              <!-- SPF Card -->
+              <div class="bg-neutral-950/40 border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">SPF</span>
+                <span id="spfBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900 text-neutral-400 border-neutral-800">
+                  NONE
+                </span>
+                <span id="spfDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+              </div>
+
+              <!-- DKIM Card -->
+              <div class="bg-neutral-950/40 border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">DKIM</span>
+                <span id="dkimBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900 text-neutral-400 border-neutral-800">
+                  NONE
+                </span>
+                <span id="dkimDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+              </div>
+
+              <!-- DMARC Card -->
+              <div class="bg-neutral-950/40 border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">DMARC</span>
+                <span id="dmarcBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900 text-neutral-400 border-neutral-800">
+                  NONE
+                </span>
+                <span id="dmarcDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 2: Metadata -->
+          <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
+            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2 border-b border-neutral-950/60 pb-2">
+              ✉️ Datos Generales del Correo
+            </h3>
+            
+            <div class="space-y-3.5 text-xs md:text-sm">
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
+                <span class="sm:col-span-3 text-neutral-500 font-medium">Asunto:</span>
+                <span id="metaSubject" class="sm:col-span-9 text-neutral-200 font-semibold break-all">-</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
+                <span class="sm:col-span-3 text-neutral-500 font-medium">De:</span>
+                <span id="metaFrom" class="sm:col-span-9 text-neutral-200 break-all font-mono">-</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
+                <span class="sm:col-span-3 text-neutral-500 font-medium">Para:</span>
+                <span id="metaTo" class="sm:col-span-9 text-neutral-200 break-all font-mono">-</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
+                <span class="sm:col-span-3 text-neutral-500 font-medium">Fecha:</span>
+                <span id="metaDate" class="sm:col-span-9 text-neutral-200 break-all">-</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
+                <span class="sm:col-span-3 text-neutral-500 font-medium">Message-ID:</span>
+                <span id="metaMessageId" class="sm:col-span-9 text-neutral-400 break-all font-mono">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 3: Hops Timeline -->
+          <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
+            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-6 flex items-center justify-between border-b border-neutral-950/60 pb-2">
+              <span>📡 Análisis de Saltos de Red (Hop-by-Hop)</span>
+              <span id="hopsCount" class="text-[10px] text-neutral-500 font-normal">0 saltos</span>
+            </h3>
+
+            <!-- Timeline wrapper -->
+            <div class="relative pl-6 space-y-8" id="timelineContainer">
+              <!-- Timeline vertical line (dynamic height via relative layout) -->
+              <div class="absolute left-2.5 top-2.5 bottom-2.5 w-[2px] bg-neutral-800"></div>
+
+              <!-- Hops will be rendered dynamically here -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // UI Elements
+  const dropzone = document.getElementById('dropzone') as HTMLDivElement;
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  const headerInput = document.getElementById('headerInput') as HTMLTextAreaElement;
+  const btnAnalyze = document.getElementById('btnAnalyze') as HTMLButtonElement;
+  const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
+  
+  const resultsPlaceholder = document.getElementById('resultsPlaceholder') as HTMLDivElement;
+  const resultsPanel = document.getElementById('resultsPanel') as HTMLDivElement;
+  
+  // Auth Elements
+  const spfBadge = document.getElementById('spfBadge') as HTMLSpanElement;
+  const spfDetails = document.getElementById('spfDetails') as HTMLSpanElement;
+  const dkimBadge = document.getElementById('dkimBadge') as HTMLSpanElement;
+  const dkimDetails = document.getElementById('dkimDetails') as HTMLSpanElement;
+  const dmarcBadge = document.getElementById('dmarcBadge') as HTMLSpanElement;
+  const dmarcDetails = document.getElementById('dmarcDetails') as HTMLSpanElement;
+
+  // Metadata Elements
+  const metaSubject = document.getElementById('metaSubject') as HTMLSpanElement;
+  const metaFrom = document.getElementById('metaFrom') as HTMLSpanElement;
+  const metaTo = document.getElementById('metaTo') as HTMLSpanElement;
+  const metaDate = document.getElementById('metaDate') as HTMLSpanElement;
+  const metaMessageId = document.getElementById('metaMessageId') as HTMLSpanElement;
+
+  // Hop Elements
+  const timelineContainer = document.getElementById('timelineContainer') as HTMLDivElement;
+  const hopsCount = document.getElementById('hopsCount') as HTMLSpanElement;
+
+  // Drag and drop events
+  dropzone.addEventListener('click', () => fileInput.click());
+  
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('border-blue-500', 'bg-neutral-950/40');
+  });
+
+  dropzone.addEventListener('dragleave', () => {
+    dropzone.classList.remove('border-blue-500', 'bg-neutral-950/40');
+  });
+
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('border-blue-500', 'bg-neutral-950/40');
+    
+    if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files.length > 0) {
+      handleFile(fileInput.files[0]);
+    }
+  });
+
+  function handleFile(file: File) {
+    if (!file.name.endsWith('.eml')) {
+      alert('Por favor, selecciona un archivo de correo electrónico válido (.eml)');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      // Extract header part: split at first double newline
+      const headerPart = content.split(/\r?\n\r?\n/)[0];
+      headerInput.value = headerPart;
+      analyzeHeaders(headerPart);
+    };
+    reader.readAsText(file);
+  }
+
+  // Analyzing trigger
+  btnAnalyze.addEventListener('click', () => {
+    const raw = headerInput.value.trim();
+    if (!raw) {
+      alert('Por favor, pega cabeceras de correo o carga un archivo .eml');
+      return;
+    }
+    analyzeHeaders(raw);
+  });
+
+  // Clear workspace
+  btnClear.addEventListener('click', () => {
+    headerInput.value = '';
+    fileInput.value = '';
+    resultsPanel.classList.add('hidden');
+    resultsPlaceholder.classList.remove('hidden');
+  });
+
+  // Extract a field value from header text
+  function getHeaderValue(headers: string, fieldName: string): string {
+    const regex = new RegExp(`^${fieldName}:\\s*([\\s\\S]*?)(?:^\\S|$)`, 'im');
+    const match = headers.match(regex);
+    if (!match) return '-';
+    // Clean folding and consecutive spaces
+    return match[1].replace(/\r?\n\s+/g, ' ').trim();
+  }
+
+  // Parse SPF, DKIM and DMARC status
+  interface AuthResult {
+    status: 'PASS' | 'FAIL' | 'SOFTFAIL' | 'NEUTRAL' | 'NONE';
+    details: string;
+  }
+
+  function parseSecurityAuth(headers: string): { spf: AuthResult, dkim: AuthResult, dmarc: AuthResult } {
+    const authResultsHeader = getHeaderValue(headers, 'Authentication-Results');
+    const receivedSpfHeader = getHeaderValue(headers, 'Received-SPF');
+
+    const result: { spf: AuthResult, dkim: AuthResult, dmarc: AuthResult } = {
+      spf: { status: 'NONE', details: 'No verificado' },
+      dkim: { status: 'NONE', details: 'No verificado' },
+      dmarc: { status: 'NONE', details: 'No verificado' }
+    };
+
+    // 1. Analyze SPF
+    if (receivedSpfHeader !== '-') {
+      const sp = receivedSpfHeader.toLowerCase();
+      if (sp.startsWith('pass')) {
+        result.spf = { status: 'PASS', details: 'SPF verificado correctamente' };
+      } else if (sp.startsWith('fail')) {
+        result.spf = { status: 'FAIL', details: 'Fallo estricto de SPF' };
+      } else if (sp.startsWith('softfail')) {
+        result.spf = { status: 'SOFTFAIL', details: 'Softfail en validación SPF' };
+      } else if (sp.startsWith('none') || sp.startsWith('neutral')) {
+        result.spf = { status: 'NEUTRAL', details: 'Resultado SPF neutral o ninguno' };
+      }
+    }
+
+    // 2. Parse Authentication-Results header (which has comprehensive details)
+    if (authResultsHeader !== '-') {
+      const auth = authResultsHeader.toLowerCase();
+      
+      // Extract spf result if not already parsed
+      if (result.spf.status === 'NONE') {
+        const spfMatch = auth.match(/\bspf=([a-z]+)/);
+        if (spfMatch) {
+          const st = spfMatch[1].toUpperCase();
+          result.spf.status = st as any;
+          result.spf.details = `Auth-Results: spf=${spfMatch[1]}`;
+        }
+      }
+
+      // Extract dkim
+      const dkimMatch = auth.match(/\bdkim=([a-z]+)/);
+      if (dkimMatch) {
+        const st = dkimMatch[1].toUpperCase();
+        result.dkim.status = st as any;
+        result.dkim.details = `Auth-Results: dkim=${dkimMatch[1]}`;
+      }
+
+      // Extract dmarc
+      const dmarcMatch = auth.match(/\bdmarc=([a-z]+)/);
+      if (dmarcMatch) {
+        const st = dmarcMatch[1].toUpperCase();
+        result.dmarc.status = st as any;
+        result.dmarc.details = `Auth-Results: dmarc=${dmarcMatch[1]}`;
+      }
+    }
+
+    return result;
+  }
+
+  // Parse Received lines for Hops
+  interface Hop {
+    hopNumber: number;
+    sender: string;
+    receiver: string;
+    date: Date | null;
+    delay: number; // delay in ms
+  }
+
+  function parseReceivedHops(headers: string): Hop[] {
+    // Received lines can span multiple lines, let's extract them
+    // Each Received: header line starts with "Received:"
+    const lines: string[] = [];
+    const receivedRegex = /^Received:\s*([\s\S]*?)(?=^\S|$)/gim;
+    let match;
+    while ((match = receivedRegex.exec(headers)) !== null) {
+      lines.push(match[1].replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim());
+    }
+
+    // Since Received headers are prepended, the top of the mail is the last hop
+    // Let's reverse to trace from the original sender to the recipient MX
+    lines.reverse();
+
+    const hops: Hop[] = [];
+    let previousDate: Date | null = null;
+
+    lines.forEach((line, index) => {
+      // 1. Extract Date: usually after a semicolon ';' at the end
+      const semiIndex = line.lastIndexOf(';');
+      let hopDate: Date | null = null;
+      if (semiIndex !== -1) {
+        const dateStr = line.substring(semiIndex + 1).trim();
+        const parsedMs = Date.parse(dateStr);
+        if (!isNaN(parsedMs)) {
+          hopDate = new Date(parsedMs);
+        }
+      }
+
+      // 2. Parse Sender (from...) and Receiver (by...)
+      // Standard format: from <sender> by <receiver>
+      let sender = 'Desconocido';
+      let receiver = 'Desconocido';
+      
+      const fromMatch = line.match(/from\s+([^\s\(\)]+)/i);
+      const byMatch = line.match(/by\s+([^\s\(\)]+)/i);
+
+      if (fromMatch) sender = fromMatch[1];
+      if (byMatch) receiver = byMatch[1];
+
+      // Calculate delay from previous hop
+      let delay = 0;
+      if (hopDate && previousDate) {
+        delay = hopDate.getTime() - previousDate.getTime();
+        if (delay < 0) delay = 0; // Ignore negative delays due to unsynced clocks
+      }
+
+      hops.push({
+        hopNumber: index + 1,
+        sender,
+        receiver,
+        date: hopDate,
+        delay
+      });
+
+      if (hopDate) {
+        previousDate = hopDate;
+      }
+    });
+
+    return hops;
+  }
+
+  function getBadgeClasses(status: string): string {
+    switch (status) {
+      case 'PASS':
+        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'FAIL':
+        return 'bg-red-500/10 text-red-400 border-red-500/20';
+      case 'SOFTFAIL':
+      case 'NEUTRAL':
+        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      default:
+        return 'bg-neutral-900 text-neutral-400 border-neutral-800';
+    }
+  }
+
+  function formatDelay(ms: number): string {
+    if (ms === 0) return '0s';
+    const seconds = Math.floor(ms / 1000);
+    if (seconds < 60) return `+${seconds}s`;
+    
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    if (minutes < 60) {
+      return `+${minutes}m ${remainingSeconds}s`;
+    }
+    
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `+${hours}h ${remainingMinutes}m`;
+  }
+
+  // Core Analyzer Function
+  function analyzeHeaders(headersText: string) {
+    // 1. Auth statuses
+    const auth = parseSecurityAuth(headersText);
+    
+    spfBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.spf.status)}`;
+    spfBadge.textContent = auth.spf.status;
+    spfDetails.textContent = auth.spf.details;
+
+    dkimBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dkim.status)}`;
+    dkimBadge.textContent = auth.dkim.status;
+    dkimDetails.textContent = auth.dkim.details;
+
+    dmarcBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dmarc.status)}`;
+    dmarcBadge.textContent = auth.dmarc.status;
+    dmarcDetails.textContent = auth.dmarc.details;
+
+    // 2. Metadata details
+    metaSubject.textContent = getHeaderValue(headersText, 'Subject');
+    metaFrom.textContent = getHeaderValue(headersText, 'From');
+    metaTo.textContent = getHeaderValue(headersText, 'To');
+    metaDate.textContent = getHeaderValue(headersText, 'Date');
+    metaMessageId.textContent = getHeaderValue(headersText, 'Message-ID');
+
+    // 3. Network Hops
+    const hops = parseReceivedHops(headersText);
+    
+    hopsCount.textContent = `${hops.length} saltos`;
+    
+    // Clear old hops
+    timelineContainer.innerHTML = '';
+    // Append the vertical line again
+    const line = document.createElement('div');
+    line.className = 'absolute left-2.5 top-2.5 bottom-2.5 w-[2px] bg-neutral-800';
+    timelineContainer.appendChild(line);
+
+    if (hops.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'text-xs text-neutral-500 font-mono';
+      empty.textContent = 'No se encontraron cabeceras "Received" válidas.';
+      timelineContainer.appendChild(empty);
+    } else {
+      hops.forEach((hop) => {
+        const hopDiv = document.createElement('div');
+        hopDiv.className = 'relative pl-8 group';
+        
+        // Node Dot
+        const dot = document.createElement('div');
+        dot.className = 'absolute left-0 top-1 w-6 h-6 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-[10px] font-mono font-bold text-neutral-400 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-colors duration-200';
+        dot.textContent = hop.hopNumber.toString();
+        hopDiv.appendChild(dot);
+
+        // Content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'bg-neutral-950/40 border border-white/5 rounded-xl p-4 transition-all duration-200 hover:border-white/10 hover:bg-neutral-950/60';
+        
+        // Hop Title (Sender -> Receiver)
+        const title = document.createElement('div');
+        title.className = 'flex flex-wrap items-center justify-between gap-2 mb-2';
+        
+        const path = document.createElement('span');
+        path.className = 'font-bold text-xs md:text-sm text-neutral-300';
+        path.innerHTML = `De <span class="text-neutral-100 font-mono">${hop.sender}</span> → <span class="text-neutral-100 font-mono">${hop.receiver}</span>`;
+        title.appendChild(path);
+
+        if (hop.hopNumber > 1) {
+          const delayBadge = document.createElement('span');
+          delayBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20';
+          delayBadge.textContent = formatDelay(hop.delay);
+          title.appendChild(delayBadge);
+        } else {
+          const originBadge = document.createElement('span');
+          originBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20';
+          originBadge.textContent = 'ORIGEN';
+          title.appendChild(originBadge);
+        }
+        contentDiv.appendChild(title);
+
+        // Hop Date
+        const dateSpan = document.createElement('div');
+        dateSpan.className = 'text-[10px] text-neutral-500 font-mono';
+        dateSpan.textContent = hop.date ? hop.date.toLocaleString() : 'Fecha no especificada o inválida';
+        contentDiv.appendChild(dateSpan);
+
+        hopDiv.appendChild(contentDiv);
+        timelineContainer.appendChild(hopDiv);
+      });
+    }
+
+    // Toggle panels
+    resultsPlaceholder.classList.add('hidden');
+    resultsPanel.classList.remove('hidden');
+  }
+</script>
