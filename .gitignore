@@ -1,0 +1,27 @@
+# IDE / Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# System files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary / Agent / Tooling files
+.gemini/
+.agents/
+.temp/
+*.log
+
+# Node / Build files (in case they are added later)
+node_modules/
+dist/
+build/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
