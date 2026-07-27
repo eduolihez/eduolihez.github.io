@@ -1,0 +1,319 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Payload Decoder & Deobfuscator | Blue Team Hub" description="Decodifica Base64 (UTF-8/UTF-16LE), URL, Hexadecimal y desofusca comandos de PowerShell de forma local en tu navegador.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+    
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+        Payload Decoder & Deobfuscator
+      </h1>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Una herramienta táctica para analizar comandos u ofuscaciones habituales que usan los atacantes en sus scripts. Descodifica Base64 (con detección inteligente de UTF-16LE de PowerShell), limpia URLs, convierte cadenas Hex e incorpora un desofuscador de PowerShell (limpieza de backticks y concatenaciones). Todo en local.
+      </p>
+    </div>
+
+    <!-- Bento Workspace Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+      
+      <!-- Panel 1: Input -->
+      <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Payload Obscurecido
+            </h2>
+            <span class="text-[10px] text-neutral-500 font-mono" id="charCountInput">0 caracteres</span>
+          </div>
+
+          <div class="relative">
+            <textarea 
+              id="payloadInput" 
+              rows="12" 
+              class="w-full bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+              placeholder="Pega aquí el comando ofuscado o cadena (ej: aGVsbG8gd29ybGQ=, %20, 68656c6c6f, o un script de PowerShell con backticks)..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex flex-wrap items-center gap-2 pt-4 border-t border-neutral-950/50">
+          <button 
+            id="btnB64" 
+            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md active:scale-95"
+          >
+            🔓 Base64 Decode
+          </button>
+          
+          <button 
+            id="btnUrl" 
+            class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            🔗 URL Decode
+          </button>
+
+          <button 
+            id="btnHex" 
+            class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            🔢 Hex to Str
+          </button>
+
+          <button 
+            id="btnPs" 
+            class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            ⚡ Deobfuscate PS
+          </button>
+          
+          <button 
+            id="btnClear" 
+            class="px-3 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer ml-auto active:scale-95"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Panel 2: Output -->
+      <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+        
+        <div>
+          <!-- Header with copy action -->
+          <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500" id="statusDot"></span>
+              <span id="outputTitle">Resultado</span>
+            </h2>
+            
+            <button 
+              id="btnCopy" 
+              class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              disabled
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+
+          <!-- Output Box -->
+          <div class="relative">
+            <textarea 
+              id="payloadOutput" 
+              rows="12" 
+              readonly
+              class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-400 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+              placeholder="El resultado procesado se mostrará aquí..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Extra details/stats -->
+        <div class="mt-6 pt-4 border-t border-neutral-950/50 flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+          <span>Modo de procesado local seguro</span>
+          <span id="charCountOutput">0 caracteres</span>
+        </div>
+      </div>
+      
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // UI Elements
+  const inputElement = document.getElementById('payloadInput') as HTMLTextAreaElement;
+  const outputElement = document.getElementById('payloadOutput') as HTMLTextAreaElement;
+  const outputTitle = document.getElementById('outputTitle') as HTMLSpanElement;
+  const charCountInput = document.getElementById('charCountInput') as HTMLSpanElement;
+  const charCountOutput = document.getElementById('charCountOutput') as HTMLSpanElement;
+  const statusDot = document.getElementById('statusDot') as HTMLSpanElement;
+  
+  const btnB64 = document.getElementById('btnB64') as HTMLButtonElement;
+  const btnUrl = document.getElementById('btnUrl') as HTMLButtonElement;
+  const btnHex = document.getElementById('btnHex') as HTMLButtonElement;
+  const btnPs = document.getElementById('btnPs') as HTMLButtonElement;
+  const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
+  const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+
+  inputElement.addEventListener('input', () => {
+    charCountInput.textContent = `${inputElement.value.length} caracteres`;
+  });
+
+  function updateOutput(text: string, operationTitle: string) {
+    outputElement.value = text;
+    outputTitle.textContent = `Resultado: ${operationTitle}`;
+    charCountOutput.textContent = `${text.length} caracteres`;
+    btnCopy.disabled = !text;
+    statusDot.className = text ? 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse' : 'w-2 h-2 rounded-full bg-blue-500';
+  }
+
+  // Base64 Decode with UTF-16LE / UTF-8 auto-detection
+  function decodeBase64(str: string): string {
+    try {
+      // Clean string from whitespace/newlines
+      const cleaned = str.replace(/\s/g, '');
+      
+      // Decode into raw binary string
+      const binaryString = atob(cleaned);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Detect if UTF-16LE (typically PowerShell EncodedCommand has 0x00 at every other byte)
+      let isUtf16Le = false;
+      if (len >= 2) {
+        let nulls = 0;
+        for (let i = 1; i < len; i += 2) {
+          if (bytes[i] === 0) nulls++;
+        }
+        // If more than 35% of alternate bytes are nulls, it's highly likely UTF-16LE
+        const ratio = nulls / (len / 2);
+        if (ratio > 0.35) {
+          isUtf16Le = true;
+        }
+      }
+
+      if (isUtf16Le) {
+        const decoder = new TextDecoder('utf-16le');
+        return decoder.decode(bytes);
+      } else {
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(bytes);
+      }
+    } catch (e: any) {
+      return `[Error al decodificar Base64: ${e.message}]`;
+    }
+  }
+
+  // PowerShell Deobfuscator
+  function deobfuscatePowerShell(code: string): string {
+    let result = code;
+
+    // 1. Remove PowerShell Backticks escape characters
+    // e.g. d`o`w`n`l`o`a`d -> download
+    result = result.replace(/`/g, '');
+
+    // 2. Resolve string concatenations: 'a'+'b' or "c"+"d"
+    // Run in a loop to handle multiple consecutive joins (like 'a' + 'b' + 'c')
+    let previousResult;
+    let iterations = 0;
+    do {
+      previousResult = result;
+      // Single quotes concatenation
+      result = result.replace(/'([^']*)'\s*\+\s*'([^']*)'/g, "'$1$2'");
+      // Double quotes concatenation
+      result = result.replace(/"([^"]*)"\s*\+\s*"([^"]*)"/g, '"$1$2"');
+      iterations++;
+    } while (result !== previousResult && iterations < 20);
+
+    return result;
+  }
+
+  // URL Decode
+  function decodeUrl(str: string): string {
+    try {
+      return decodeURIComponent(str.replace(/\+/g, ' '));
+    } catch (e: any) {
+      return `[Error al decodificar URL: ${e.message}]`;
+    }
+  }
+
+  // Hex to string
+  function decodeHex(str: string): string {
+    try {
+      // Remove prefixes like 0x or spaces
+      const clean = str.replace(/0x/g, '').replace(/[\s,:]/g, '');
+      if (clean.length % 2 !== 0) {
+        return '[Error: La longitud de la cadena hexadecimal debe ser par]';
+      }
+      
+      const bytes = new Uint8Array(clean.length / 2);
+      for (let i = 0; i < clean.length; i += 2) {
+        bytes[i / 2] = parseInt(clean.substring(i, i + 2), 16);
+      }
+      
+      const decoder = new TextDecoder('utf-8');
+      return decoder.decode(bytes);
+    } catch (e: any) {
+      return `[Error al decodificar Hexadecimal: ${e.message}]`;
+    }
+  }
+
+  // Buttons triggers
+  btnB64.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    const decoded = decodeBase64(val);
+    updateOutput(decoded, "Base64 Decoded");
+  });
+
+  btnUrl.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    const decoded = decodeUrl(val);
+    updateOutput(decoded, "URL Decoded");
+  });
+
+  btnHex.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    const decoded = decodeHex(val);
+    updateOutput(decoded, "Hex decoded to String");
+  });
+
+  btnPs.addEventListener('click', () => {
+    const val = inputElement.value; // Keep original spacing
+    if (!val.trim()) return;
+    const deobfuscated = deobfuscatePowerShell(val);
+    updateOutput(deobfuscated, "PowerShell Deobfuscated");
+  });
+
+  btnClear.addEventListener('click', () => {
+    inputElement.value = '';
+    outputElement.value = '';
+    charCountInput.textContent = '0 caracteres';
+    charCountOutput.textContent = '0 caracteres';
+    updateOutput('', 'Resultado');
+  });
+
+  btnCopy.addEventListener('click', () => {
+    const content = outputElement.value;
+    if (!content) return;
+
+    navigator.clipboard.writeText(content).then(() => {
+      const originalHtml = btnCopy.innerHTML;
+      btnCopy.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-emerald-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <span class="text-emerald-400">Copiado!</span>
+      `;
+      btnCopy.classList.add('border-emerald-500/30', 'bg-emerald-500/5');
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalHtml;
+        btnCopy.classList.remove('border-emerald-500/30', 'bg-emerald-500/5');
+      }, 2000);
+    });
+  });
+</script>
