@@ -1,0 +1,894 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Playbooks Interactivos de Respuesta a Incidentes | Blue Team Hub" description="Guías paso a paso e interactivas para gestionar incidentes de ciberseguridad: Phishing, Malware y Fuerza Bruta, con generación de queries SIEM automáticas.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+    
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+        Playbooks Interactivos de Respuesta
+      </h1>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Selecciona un playbook y sigue el cuestionario interactivo para diagnosticar un incidente. Al finalizar el flujo, obtendrás recomendaciones detalladas de mitigación (Contención, Erradicación y Recuperación) junto con comandos y consultas SIEM (Splunk/Sentinel) personalizadas para tu investigación.
+      </p>
+    </div>
+
+    <!-- MAIN PLAYBOOK WRAPPER -->
+    <div class="mt-8">
+      
+      <!-- State 1: Playbook Selector -->
+      <div id="selectorState" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Playbook Phishing -->
+        <div class="playbook-card bg-neutral-900/30 border border-white/5 hover:border-white/10 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="phishing">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              ✉️
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Análisis de Phishing</h3>
+            <p class="text-xs md:text-sm text-neutral-400 leading-relaxed font-light mb-6">
+              Para investigar correos electrónicos sospechosos, descargas de adjuntos maliciosos y posibles páginas de robo de credenciales corporativas.
+            </p>
+          </div>
+          <span class="text-xs font-semibold text-blue-400 group-hover:text-blue-300 flex items-center gap-1.5 transition-colors duration-200">
+            Iniciar Playbook 
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+          </span>
+        </div>
+
+        <!-- Playbook Malware -->
+        <div class="playbook-card bg-neutral-900/30 border border-white/5 hover:border-white/10 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="malware">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              🦠
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Infección por Malware / EDR</h3>
+            <p class="text-xs md:text-sm text-neutral-400 leading-relaxed font-light mb-6">
+              Guía de contención ante alertas de malware en hosts, comportamiento anómalo detectado por EDR o conexiones sospechosas de C2.
+            </p>
+          </div>
+          <span class="text-xs font-semibold text-purple-400 group-hover:text-purple-300 flex items-center gap-1.5 transition-colors duration-200">
+            Iniciar Playbook
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+          </span>
+        </div>
+
+        <!-- Playbook Fuerza Bruta -->
+        <div class="playbook-card bg-neutral-900/30 border border-white/5 hover:border-white/10 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="bruteforce">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              🔑
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Fuerza Bruta SSH / RDP</h3>
+            <p class="text-xs md:text-sm text-neutral-400 leading-relaxed font-light mb-6">
+              Investigación de ataques de fuerza bruta en autenticación, inicios de sesión exitosos sospechosos y posibles movimientos laterales.
+            </p>
+          </div>
+          <span class="text-xs font-semibold text-amber-400 group-hover:text-amber-300 flex items-center gap-1.5 transition-colors duration-200">
+            Iniciar Playbook
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- State 2: Active Wizard Questionnaire -->
+      <div id="wizardState" class="max-w-3xl mx-auto hidden bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-6">
+        <!-- Wizard Header -->
+        <div class="flex items-center justify-between border-b border-neutral-950/60 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl" id="wizardIcon">✉️</span>
+            <span class="text-xs font-bold text-white font-mono uppercase tracking-wider" id="wizardTitle">PLAYBOOK</span>
+          </div>
+          <button 
+            id="btnCancelWizard" 
+            class="text-[11px] text-neutral-500 hover:text-red-400 transition-colors duration-200 font-mono"
+          >
+            CANCELAR
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-[10px] text-neutral-500 font-mono">
+            <span>Diagnóstico en Progreso</span>
+            <span id="wizardStepText">Paso 1</span>
+          </div>
+          <div class="w-full h-1.5 bg-neutral-950/60 rounded-full overflow-hidden">
+            <div id="wizardProgress" class="h-full bg-blue-500 transition-all duration-300" style="width: 25%;"></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Question Area -->
+        <div class="space-y-4 py-4" id="questionArea">
+          <h2 class="text-lg md:text-xl font-bold text-white leading-relaxed" id="questionText">
+            ¿Se identificó una dirección URL sospechosa o archivo adjunto?
+          </h2>
+          <p class="text-xs md:text-sm text-neutral-400 leading-relaxed font-light" id="questionDesc">
+            Por ejemplo, si la alerta proviene de un reporte del usuario de phishing o el firewall detectó un dominio sospechoso.
+          </p>
+
+          <!-- Input Fields for dynamic values (like domain, hash, user etc.) -->
+          <div id="dynamicInputsWrapper" class="space-y-3 pt-3 hidden">
+            <!-- Dynamic variables input fields go here -->
+          </div>
+
+          <!-- Question Options -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4" id="optionsContainer">
+            <!-- Dynamic button options -->
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between pt-4 border-t border-neutral-950/50">
+          <button 
+            id="btnWizardBack" 
+            class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-400 hover:text-white text-xs font-semibold transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled
+          >
+            Atrás
+          </button>
+        </div>
+      </div>
+
+      <!-- State 3: Recommendation Results -->
+      <div id="resultsState" class="hidden space-y-6">
+        
+        <!-- Results Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 font-mono" id="resultPriorityBadge">
+              PRIORIDAD CRÍTICA
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-white">Diagnóstico y Recomendaciones SOC</h2>
+            <p class="text-xs text-neutral-400 font-light mt-1" id="resultPlaybookInfo">Playbook: Phishing</p>
+          </div>
+          
+          <button 
+            id="btnReset" 
+            class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+          >
+            🔄 Reiniciar Playbook
+          </button>
+        </div>
+
+        <!-- Bento Grid split layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Column 1: Remediations (7 cols) -->
+          <div class="lg:col-span-7 bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-6">
+            <h3 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-neutral-950/60 pb-3">
+              🛠️ Acciones de Mitigación Recomendadas
+            </h3>
+
+            <!-- Phases: Containment, Erradication, Recovery -->
+            <div class="space-y-6">
+              <!-- Containment -->
+              <div class="space-y-2">
+                <h4 class="text-xs font-bold text-red-400 font-mono tracking-wider uppercase">1. Fase de Contención</h4>
+                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listContainment">
+                  <!-- Dynamic items -->
+                </ul>
+              </div>
+
+              <!-- Erradication -->
+              <div class="space-y-2">
+                <h4 class="text-xs font-bold text-amber-400 font-mono tracking-wider uppercase">2. Fase de Erradicación</h4>
+                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listEradication">
+                  <!-- Dynamic items -->
+                </ul>
+              </div>
+
+              <!-- Recovery -->
+              <div class="space-y-2">
+                <h4 class="text-xs font-bold text-emerald-400 font-mono tracking-wider uppercase">3. Fase de Recuperación</h4>
+                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listRecovery">
+                  <!-- Dynamic items -->
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: SIEM Queries & Commands (5 cols) -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <!-- SIEM Block -->
+            <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
+              <div class="flex items-center justify-between border-b border-neutral-950/60 pb-3">
+                <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono">
+                  🔍 Consulta de Búsqueda SIEM
+                </h3>
+                
+                <div class="flex gap-1.5">
+                  <button 
+                    id="btnSiemspl" 
+                    class="px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30"
+                  >
+                    Splunk SPL
+                  </button>
+                  <button 
+                    id="btnSiemkql" 
+                    class="px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white"
+                  >
+                    Sentinel KQL
+                  </button>
+                </div>
+              </div>
+
+              <!-- Query code pre -->
+              <div class="relative group">
+                <pre id="siemQueryOutput" class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-[10px] font-mono text-neutral-300 overflow-x-auto min-h-[140px] whitespace-pre-wrap select-all"></pre>
+              </div>
+            </div>
+
+            <!-- CLI Command Block -->
+            <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
+              <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono border-b border-neutral-950/60 pb-3">
+                💻 Comando de Remediación PowerShell
+              </h3>
+              
+              <div class="relative group">
+                <pre id="powershellOutput" class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-[10px] font-mono text-neutral-300 overflow-x-auto min-h-[80px] whitespace-pre-wrap select-all"></pre>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Data for Playbook Trees
+  interface PlaybookQuestion {
+    id: string;
+    text: string;
+    description: string;
+    variableInput?: {
+      name: string;
+      placeholder: string;
+      label: string;
+      defaultValue: string;
+    };
+    options: {
+      text: string;
+      nextId: string; // Goes to another question or to a result ID starting with 'R_'
+    }[];
+  }
+
+  interface PlaybookResult {
+    priority: 'Baja' | 'Media' | 'Alta' | 'Crítica';
+    containment: string[];
+    eradication: string[];
+    recovery: string[];
+    spl: (vars: Record<string, string>) => string;
+    kql: (vars: Record<string, string>) => string;
+    powershell: (vars: Record<string, string>) => string;
+  }
+
+  const phishingTree: Record<string, PlaybookQuestion | PlaybookResult> = {
+    // Questions
+    'start': {
+      id: 'start',
+      text: '¿Se identificó una dirección URL sospechosa o archivo adjunto?',
+      description: 'Esto aplica si el correo de alerta contiene enlaces sospechosos externos o ficheros adjuntos dudosos.',
+      options: [
+        { text: 'Sí, hay URL o adjunto', nextId: 'q_interact' },
+        { text: 'No, es texto plano/spam simple', nextId: 'R_phish_low' }
+      ]
+    },
+    'q_interact': {
+      id: 'q_interact',
+      text: '¿El usuario interactuó con la URL o ejecutó el adjunto?',
+      description: 'Verificar si el usuario hizo clic en el enlace, introdujo datos, o descargó y abrió el archivo.',
+      options: [
+        { text: 'Sí (Clic / Ejecución)', nextId: 'q_credentials' },
+        { text: 'No, solo recibió el correo', nextId: 'q_sandbox' }
+      ]
+    },
+    'q_credentials': {
+      id: 'q_credentials',
+      text: '¿Se introdujeron credenciales corporativas en la página de destino?',
+      description: '¿El enlace llevaba a un clon de inicio de sesión (M365, etc.) y el usuario introdujo su contraseña?',
+      variableInput: {
+        name: 'user_target',
+        label: 'Nombre de usuario afectado (email)',
+        placeholder: 'ej: admin@empresa.com',
+        defaultValue: 'victima@empresa.com'
+      },
+      options: [
+        { text: 'Sí, credenciales introducidas', nextId: 'R_phish_critical' },
+        { text: 'No, solo visitó la web', nextId: 'R_phish_medium_visit' }
+      ]
+    },
+    'q_sandbox': {
+      id: 'q_sandbox',
+      text: '¿El adjunto fue analizado en Sandbox y dio positivo por malware?',
+      description: 'Si se subió el adjunto a una herramienta de análisis como VirusTotal, JoeSandbox, o EDR Sandbox.',
+      variableInput: {
+        name: 'hash_target',
+        label: 'Hash SHA256 del adjunto',
+        placeholder: 'ej: 72a8c3d9...',
+        defaultValue: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+      },
+      options: [
+        { text: 'Sí, es malicioso', nextId: 'R_phish_high_malware' },
+        { text: 'No, dio limpio o no hay adjunto', nextId: 'R_phish_none_interact' }
+      ]
+    },
+
+    // Results
+    'R_phish_low': {
+      priority: 'Baja',
+      containment: [
+        'Marcar el correo como spam en la pasarela de seguridad (Proofpoint, Defender for O365).',
+        'Eliminar el correo de la bandeja de entrada del usuario.'
+      ],
+      eradication: [
+        'Auditar si el remitente ha enviado más correos a la organización.'
+      ],
+      recovery: [
+        'Vigilar la cuenta en las siguientes 24 horas por si fuera un ataque dirigido.',
+        'Notificar al usuario confirmando que el correo fue neutralizado.'
+      ],
+      spl: (v) => `index=email recipient="${v.user_target || '*'}" subject="*" | stats count by sender`,
+      kql: (v) => `EmailEvents | where RecipientEmailAddress == "${v.user_target || '*'}" | summarize count() by SenderMailFromAddress`,
+      powershell: (v) => `Search-Mailbox -Identity "${v.user_target || 'user'}" -SearchQuery "Subject:'Spam'" -DeleteContent`
+    },
+    'R_phish_none_interact': {
+      priority: 'Baja',
+      containment: [
+        'Purgar el correo sospechoso del buzón del usuario.',
+        'Bloquear la dirección del remitente en el tenant de correo.'
+      ],
+      eradication: [
+        'Eliminar instancias del mismo correo (por asunto o id) en el resto de buzones de la organización.'
+      ],
+      recovery: [
+        'Recordar al usuario las políticas de Phishing y reporte de incidencias.'
+      ],
+      spl: (v) => `index=email subject="*" | eval msg="Buzón purgado"`,
+      kql: (v) => `EmailEvents | where Subject has "Phishing" | project NetworkMessageId, Subject, RecipientEmailAddress`,
+      powershell: (v) => `Get-Mailbox -ResultSize Unlimited | Search-Mailbox -SearchQuery 'Subject:"Suspect Subject"' -DeleteContent -Force`
+    },
+    'R_phish_medium_visit': {
+      priority: 'Media',
+      containment: [
+        'Bloquear el dominio/IP del sitio de phishing en el Firewall y Proxy de la corporación.',
+        'Escanear el host de la víctima utilizando el cliente local del EDR.'
+      ],
+      eradication: [
+        'Purgar el correo del buzón de la víctima y de otros posibles destinatarios.',
+        'Cerrar sesiones activas del navegador del usuario en el host por si hay secuestro de sesión.'
+      ],
+      recovery: [
+        'Monitorear la actividad de red del host en búsqueda de conexiones persistentes al dominio malicioso.',
+        'Verificar si hay descargas en segundo plano iniciadas por el navegador.'
+      ],
+      spl: (v) => `index=firewall dest_ip="*" OR dest_headers="*malicious*" | stats count by src_ip`,
+      kql: (v) => `DeviceNetworkEvents | where RemoteUrl has "malicious" or RemoteIP == "192.168.1.1" | project TimeGenerated, DeviceName, LocalIP, RemoteUrl`,
+      powershell: (v) => `Clear-DnsClientCache\nGet-Process -Name "chrome", "msedge" | Stop-Process -Force`
+    },
+    'R_phish_high_malware': {
+      priority: 'Alta',
+      containment: [
+        'Bloquear el hash del archivo adjunto en la consola del EDR corporativo.',
+        'Bloquear el dominio del remitente y purgar todos los correos idénticos.'
+      ],
+      eradication: [
+        'Ejecutar un análisis completo de antivirus en el endpoint afectado.',
+        'Buscar en el resto de equipos de la red la presencia del archivo con el hash especificado.'
+      ],
+      recovery: [
+        'Vigilar la generación de nuevos procesos o alertas del EDR en el host.',
+        'Asegurar que los parches de seguridad del sistema operativo estén al día.'
+      ],
+      spl: (v) => `index=edr file_hash="${v.hash_target || '*'}" | stats count by host`,
+      kql: (v) => `DeviceFileEvents | where SHA256 == "${v.hash_target || '*'}" | project TimeGenerated, DeviceName, FolderPath, FileName`,
+      powershell: (v) => `Get-ChildItem -Path C:\\ -Recurse -Filter "*${v.hash_target ? v.hash_target.substring(0,8) : 'file'}*" -ErrorAction SilentlyContinue`
+    },
+    'R_phish_critical': {
+      priority: 'Crítica',
+      containment: [
+        '**Restablecer inmediatamente la contraseña** del usuario afectado.',
+        '**Revocar todas las sesiones activas** y tokens de autenticación de Azure AD / Okta.',
+        'Forzar la re-inscripción de factores MFA si se sospecha de bypass de MFA.'
+      ],
+      eradication: [
+        'Aislar de la red el endpoint del usuario temporalmente hasta descartar ejecución de malware.',
+        'Purgar el correo phishing de todos los buzones de la empresa.'
+      ],
+      recovery: [
+        'Auditar los logs de acceso de la cuenta en las últimas 24 horas buscando inicios de sesión desde ubicaciones anómalas (imposible travel) o IPs sospechosas.',
+        'Comprobar si se crearon nuevas reglas de reenvío de correo en Outlook.'
+      ],
+      spl: (v) => `index=azure_ad eventName="Sign-in activity" user="${v.user_target || '*'}" | stats count by src_ip, country`,
+      kql: (v) => `SigninLogs | where UserPrincipalName == "${v.user_target || '*'}" | project TimeGenerated, IPAddress, Location, ResultType, AppDisplayName`,
+      powershell: (v) => `Revoke-SPOUserSession -User "${v.user_target || 'user@domain.com'}"\nSet-MsolUserPassword -UserPrincipalName "${v.user_target || 'user@domain.com'}" -ForceChangePassword $true`
+    }
+  };
+
+  const malwareTree: Record<string, PlaybookQuestion | PlaybookResult> = {
+    // Questions
+    'start': {
+      id: 'start',
+      text: '¿El EDR o Antivirus bloqueó la ejecución del archivo automáticamente?',
+      description: 'Comprobar si el estado de la alerta en el panel de seguridad es "Blocked" / "Prevented" o "Allowed" / "Executed".',
+      options: [
+        { text: 'Sí, fue bloqueado', nextId: 'q_multiple_alerts' },
+        { text: 'No, se ejecutó en el host', nextId: 'q_network_c2' }
+      ]
+    },
+    'q_multiple_alerts': {
+      id: 'q_multiple_alerts',
+      text: '¿Se detectaron otras alertas similares del mismo hash en la red?',
+      description: 'Buscar el SHA-256 en la consola de seguridad para ver si el archivo se ha distribuido en otros equipos.',
+      variableInput: {
+        name: 'hash_target',
+        label: 'Hash del Malware (SHA-256)',
+        placeholder: 'ej: a4f1d0b...',
+        defaultValue: '8f4a132c3f8f17...'
+      },
+      options: [
+        { text: 'Sí, múltiples hosts alertados', nextId: 'R_malware_medium_multi' },
+        { text: 'No, caso aislado', nextId: 'R_malware_low_isolated' }
+      ]
+    },
+    'q_network_c2': {
+      id: 'q_network_c2',
+      text: '¿El malware estableció conexión con alguna dirección IP o dominio externo (C2)?',
+      description: 'Revisar logs de red del host en el EDR para comprobar conexiones salientes del proceso malicioso.',
+      variableInput: {
+        name: 'ip_target',
+        label: 'Dirección IP/Dominio de C2',
+        placeholder: 'ej: 185.220.101.5',
+        defaultValue: '198.51.100.42'
+      },
+      options: [
+        { text: 'Sí, hay conexiones C2 externas', nextId: 'R_malware_critical_c2' },
+        { text: 'No, es ejecución local (sin red)', nextId: 'R_malware_high_local' }
+      ]
+    },
+
+    // Results
+    'R_malware_low_isolated': {
+      priority: 'Baja',
+      containment: [
+        'Confirmar la cuarentena del archivo en el host.',
+        'Borrar archivos temporales de descarga en el navegador.'
+      ],
+      eradication: [
+        'Validar que el proceso malicioso no esté corriendo en memoria.'
+      ],
+      recovery: [
+        'El antivirus previno la infección. Informar al usuario.'
+      ],
+      spl: (v) => `index=edr action=blocked file_hash="${v.hash_target || '*'}" | stats count by host`,
+      kql: (v) => `DeviceEvents | where ActionType == "AntivirusDetection" and SHA256 == "${v.hash_target || '*'}"`,
+      powershell: (v) => `Get-MpThreatDetection | Select-Object ThreatName, Resources, ActiveThreatStatus`
+    },
+    'R_malware_medium_multi': {
+      priority: 'Media',
+      containment: [
+        'Bloquear el hash globalmente en las políticas del EDR.',
+        'Bloquear la URL de descarga original en el Proxy/Firewall.'
+      ],
+      eradication: [
+        'Lanzar un comando de cuarentena/borrado remoto para ese hash en todos los hosts afectados.',
+        'Realizar un análisis completo de EDR en la red.'
+      ],
+      recovery: [
+        'Vigilar nuevos procesos hijos del vector inicial (ej: Outlook, Navegador).',
+        'Analizar el origen de la distribución (correo, red interna).'
+      ],
+      spl: (v) => `index=edr file_hash="${v.hash_target || '*'}" | chart count by host, filePath`,
+      kql: (v) => `DeviceFileEvents | where SHA256 == "${v.hash_target || '*'}" | summarize HostCount = dcount(DeviceName) by FileName`,
+      powershell: (v) => `Update-MpSignature\nStart-MpScan -ScanType QuickScan`
+    },
+    'R_malware_high_local': {
+      priority: 'Alta',
+      containment: [
+        '**Aislar el host inmediatamente** de la red mediante la consola del EDR.',
+        'Finalizar el proceso padre e hijos maliciosos en ejecución.'
+      ],
+      eradication: [
+        'Eliminar los archivos maliciosos persistentes del disco.',
+        'Inspeccionar y limpiar claves de registro de persistencia (`Run`, `RunOnce`, tareas programadas).'
+      ],
+      recovery: [
+        'Realizar un volcado físico de memoria del host antes de reiniciar (si es necesario para forense).',
+        'Restaurar el sistema a un punto anterior o reinstalar imagen limpia.'
+      ],
+      spl: (v) => `index=edr host="afectado" | transaction startswith="process_launch" endswith="file_write"`,
+      kql: (v) => `DeviceProcessEvents | where InitiatingProcessFileName in~ ("cmd.exe", "powershell.exe") | project DeviceName, FileName, ProcessCommandLine`,
+      powershell: (v) => `Stop-Process -Name "proceso_sospechoso" -Force\nRemove-Item -Path "C:\\ruta\\malware.exe" -Force`
+    },
+    'R_malware_critical_c2': {
+      priority: 'Crítica',
+      containment: [
+        '**Aislar el host de la red inmediatamente** para prevenir exfiltración de datos o movimiento lateral.',
+        '**Bloquear la IP de C2** en el cortafuegos perimetral y proxies.'
+      ],
+      eradication: [
+        'Deshabilitar la cuenta del usuario comprometido.',
+        'Escanear y eliminar el agente malware en memoria.'
+      ],
+      recovery: [
+        'Revisar logs del proxy buscando transferencias de gran volumen hacia la IP de C2 (exfiltración).',
+        'Iniciar una investigación forense completa del endpoint.'
+      ],
+      spl: (v) => `index=firewall dest_ip="${v.ip_target || '*'}" | stats sum(bytes_out) by src_ip`,
+      kql: (v) => `DeviceNetworkEvents | where RemoteIP == "${v.ip_target || '*'}" | summarize BytesSent = sum(BytesSent) by DeviceName, LocalIP`,
+      powershell: (v) => `Test-NetConnection -ComputerName "${v.ip_target || '8.8.8.8'}" -Port 443\nStop-NetJob`
+    }
+  };
+
+  const bruteforceTree: Record<string, PlaybookQuestion | PlaybookResult> = {
+    // Questions
+    'start': {
+      id: 'start',
+      text: '¿Hubo algún intento de inicio de sesión exitoso desde la IP atacante?',
+      description: 'Revisar los logs de autenticación (Event ID 4624 en Windows o Logins en Linux) procedentes de la dirección IP sospechosa.',
+      variableInput: {
+        name: 'ip_target',
+        label: 'Dirección IP atacante',
+        placeholder: 'ej: 45.142.120.4',
+        defaultValue: '198.51.100.12'
+      },
+      options: [
+        { text: 'Sí, login exitoso detectado', nextId: 'q_actions_post_login' },
+        { text: 'No, todos los accesos fallaron', nextId: 'q_ip_location' }
+      ]
+    },
+    'q_actions_post_login': {
+      id: 'q_actions_post_login',
+      text: '¿Se detectaron comandos sospechosos ejecutados después del login exitoso?',
+      description: '¿Se ejecutaron comandos de reconocimiento (`whoami`, `net user`, `ping`), herramientas de hacking o descargas de scripts?',
+      variableInput: {
+        name: 'user_target',
+        label: 'Usuario Comprometido',
+        placeholder: 'ej: root o administrador',
+        defaultValue: 'administrator'
+      },
+      options: [
+        { text: 'Sí, comandos ejecutados', nextId: 'R_bf_critical_active' },
+        { text: 'No se observan comandos', nextId: 'R_bf_high_success' }
+      ]
+    },
+    'q_ip_location': {
+      id: 'q_ip_location',
+      text: '¿La dirección IP atacante es externa (pública) o interna?',
+      description: 'Determinar si el ataque proviene de Internet o de una máquina comprometida en la LAN.',
+      options: [
+        { text: 'IP Pública (Internet)', nextId: 'R_bf_low_block' },
+        { text: 'IP Interna (LAN)', nextId: 'R_bf_medium_internal' }
+      ]
+    },
+
+    // Results
+    'R_bf_low_block': {
+      priority: 'Baja',
+      containment: [
+        'Bloquear la IP atacante en el Firewall perimetral o WAF.',
+        'Implementar bloqueo temporal en base a intentos fallidos en el servicio afectado.'
+      ],
+      eradication: [
+        'Asegurar que el servicio atacado no esté expuesto directamente a Internet (usar VPN).'
+      ],
+      recovery: [
+        'Monitorear los intentos en las siguientes horas para verificar si el atacante cambia de IP.'
+      ],
+      spl: (v) => `index=auth action=failure src_ip="${v.ip_target || '*'}" | stats count by user`,
+      kql: (v) => `DeviceLogonEvents | where ActionType == "LogonFailed" and RemoteIPAddress == "${v.ip_target || '*'}" | summarize count() by AccountName`,
+      powershell: (v) => `New-NetFirewallRule -DisplayName "Block Attacker IP" -Direction Inbound -Action Block -RemoteAddress "${v.ip_target || '192.168.1.1'}"`
+    },
+    'R_bf_medium_internal': {
+      priority: 'Media',
+      containment: [
+        'Aislar el host emisor (IP interna) mediante el EDR.',
+        'Bloquear la comunicación interna desde ese puerto en la red si no hay EDR.'
+      ],
+      eradication: [
+        'Escanear el host interno atacante; es muy probable que haya sido infectado y esté siendo usado para movimiento lateral.'
+      ],
+      recovery: [
+        'Revisar si el host emisor se comunicaba con otros activos críticos de la empresa.'
+      ],
+      spl: (v) => `index=auth action=failure src_ip="${v.ip_target || '*'}" | chart count by user, dest`,
+      kql: (v) => `DeviceLogonEvents | where ActionType == "LogonFailed" and LocalIPAddress == "${v.ip_target || '*'}" | summarize count() by DeviceName`,
+      powershell: (v) => `Invoke-Command -ComputerName "HostEmisor" -ScriptBlock { Get-MpThreatDetection }`
+    },
+    'R_bf_high_success': {
+      priority: 'Alta',
+      containment: [
+        '**Deshabilitar inmediatamente la cuenta de usuario** afectada.',
+        'Forzar un cambio de contraseña y revocar sesiones activas del usuario.',
+        'Bloquear la IP en el cortafuegos.'
+      ],
+      eradication: [
+        'Buscar si hay otros accesos exitosos con la misma cuenta en otros servicios (M365, VPN).'
+      ],
+      recovery: [
+        'Auditar exhaustivamente la actividad del usuario en el host para descartar que haya dejado backdoors.',
+        'Revisar si el usuario tiene privilegios de administrador.'
+      ],
+      spl: (v) => `index=auth action=success user="${v.user_target || '*'}" src_ip="${v.ip_target || '*'}"`,
+      kql: (v) => `DeviceLogonEvents | where ActionType == "LogonSuccess" and AccountName == "${v.user_target || '*'}" and RemoteIPAddress == "${v.ip_target || '*'}"`,
+      powershell: (v) => `Disable-LocalUser -Name "${v.user_target || 'user'}"\nStop-Service -Name "RemoteRegistry"`
+    },
+    'R_bf_critical_active': {
+      priority: 'Crítica',
+      containment: [
+        '**Aislar el host de la red inmediatamente** para contener el intruso activo.',
+        '**Deshabilitar la cuenta del usuario** y forzar cierre de sesión remoto.'
+      ],
+      eradication: [
+        'Bloquear la IP en la red.',
+        'Escanear y eliminar persistencias agregadas (nuevos usuarios creados, tareas programadas, accesos remotos).'
+      ],
+      recovery: [
+        'Iniciar el proceso de respuesta ante brechas de seguridad.',
+        'Revisar logs de eventos buscando comandos laterales ejecutados por el intruso.'
+      ],
+      spl: (v) => `index=os_logs process="*" host="host_afectado" | stats count by CommandLine`,
+      kql: (v) => `DeviceProcessEvents | where DeviceName == "compromised-host" | project TimeGenerated, FileName, ProcessCommandLine, AccountName`,
+      powershell: (v) => `Disable-LocalUser -Name "${v.user_target || 'user'}"\nStop-Process -Id (Get-Process | Where-Object {$_.SessionId -ne 0}).Id -Force`
+    }
+  };
+
+  // State Management Variables
+  let currentPlaybookName = '';
+  let currentTree: Record<string, PlaybookQuestion | PlaybookResult> = {};
+  let currentStepId = 'start';
+  let historySteps: string[] = [];
+  let userAnswers: Record<string, string> = {};
+  let activeSiem = 'spl';
+
+  // UI state query selectors
+  const selectorState = document.getElementById('selectorState') as HTMLDivElement;
+  const wizardState = document.getElementById('wizardState') as HTMLDivElement;
+  const resultsState = document.getElementById('resultsState') as HTMLDivElement;
+
+  const btnCancelWizard = document.getElementById('btnCancelWizard') as HTMLButtonElement;
+  const btnWizardBack = document.getElementById('btnWizardBack') as HTMLButtonElement;
+  const btnReset = document.getElementById('btnReset') as HTMLButtonElement;
+
+  const wizardIcon = document.getElementById('wizardIcon') as HTMLSpanElement;
+  const wizardTitle = document.getElementById('wizardTitle') as HTMLSpanElement;
+  const wizardStepText = document.getElementById('wizardStepText') as HTMLSpanElement;
+  const wizardProgress = document.getElementById('wizardProgress') as HTMLDivElement;
+
+  const questionText = document.getElementById('questionText') as HTMLHeadingElement;
+  const questionDesc = document.getElementById('questionDesc') as HTMLParagraphElement;
+  const dynamicInputsWrapper = document.getElementById('dynamicInputsWrapper') as HTMLDivElement;
+  const optionsContainer = document.getElementById('optionsContainer') as HTMLDivElement;
+
+  const resultPriorityBadge = document.getElementById('resultPriorityBadge') as HTMLSpanElement;
+  const resultPlaybookInfo = document.getElementById('resultPlaybookInfo') as HTMLParagraphElement;
+
+  const listContainment = document.getElementById('listContainment') as HTMLUListElement;
+  const listEradication = document.getElementById('listEradication') as HTMLUListElement;
+  const listRecovery = document.getElementById('listRecovery') as HTMLUListElement;
+
+  const btnSiemspl = document.getElementById('btnSiemspl') as HTMLButtonElement;
+  const btnSiemkql = document.getElementById('btnSiemkql') as HTMLButtonElement;
+  const siemQueryOutput = document.getElementById('siemQueryOutput') as HTMLPreElement;
+  const powershellOutput = document.getElementById('powershellOutput') as HTMLPreElement;
+
+  // Set card selectors clicks
+  document.querySelectorAll('.playbook-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const el = card as HTMLElement;
+      const playbook = el.dataset.playbook || 'phishing';
+      startPlaybook(playbook);
+    });
+  });
+
+  function startPlaybook(name: string) {
+    currentPlaybookName = name;
+    currentStepId = 'start';
+    historySteps = [];
+    userAnswers = {};
+    
+    if (name === 'phishing') {
+      currentTree = phishingTree;
+      wizardIcon.textContent = '✉️';
+      wizardTitle.textContent = 'Playbook: Análisis de Phishing';
+    } else if (name === 'malware') {
+      currentTree = malwareTree;
+      wizardIcon.textContent = '🦠';
+      wizardTitle.textContent = 'Playbook: Infección por Malware';
+    } else {
+      currentTree = bruteforceTree;
+      wizardIcon.textContent = '🔑';
+      wizardTitle.textContent = 'Playbook: Fuerza Bruta SSH/RDP';
+    }
+
+    selectorState.classList.add('hidden');
+    resultsState.classList.add('hidden');
+    wizardState.classList.remove('hidden');
+
+    renderStep();
+  }
+
+  // Render question step
+  function renderStep() {
+    const step = currentTree[currentStepId];
+    if (!step) return;
+
+    // Check if it's a result step
+    if (currentStepId.startsWith('R_')) {
+      showResults(step as PlaybookResult);
+      return;
+    }
+
+    const q = step as PlaybookQuestion;
+
+    questionText.textContent = q.text;
+    questionDesc.textContent = q.description;
+
+    // Handle progress bar
+    const totalEstSteps = 4;
+    const currentStepNum = historySteps.length + 1;
+    wizardStepText.textContent = `Paso ${currentStepNum} de ~${totalEstSteps}`;
+    wizardProgress.style.width = `${(currentStepNum / totalEstSteps) * 100}%`;
+
+    // Handle back button disabled
+    btnWizardBack.disabled = historySteps.length === 0;
+
+    // Handle dynamic variable inputs
+    dynamicInputsWrapper.innerHTML = '';
+    if (q.variableInput) {
+      dynamicInputsWrapper.classList.remove('hidden');
+      
+      const v = q.variableInput;
+      const wrap = document.createElement('div');
+      wrap.className = 'flex flex-col gap-1.5';
+      wrap.innerHTML = `
+        <label for="${v.name}" class="text-xs text-neutral-400 font-medium">${v.label}</label>
+        <input 
+          type="text" 
+          id="${v.name}" 
+          value="${v.defaultValue}" 
+          class="bg-neutral-950/60 border border-white/5 focus:border-blue-500/50 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+          placeholder="${v.placeholder}"
+        />
+      `;
+      dynamicInputsWrapper.appendChild(wrap);
+    } else {
+      dynamicInputsWrapper.classList.add('hidden');
+    }
+
+    // Render Options Buttons
+    optionsContainer.innerHTML = '';
+    q.options.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.className = 'px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-200 hover:text-white font-semibold text-xs md:text-sm text-left transition-all duration-200 cursor-pointer active:scale-98 flex items-center justify-between group';
+      btn.innerHTML = `
+        <span>${opt.text}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      `;
+
+      btn.addEventListener('click', () => {
+        // Collect variables values before going to next step
+        if (q.variableInput) {
+          const val = (document.getElementById(q.variableInput.name) as HTMLInputElement).value.trim();
+          userAnswers[q.variableInput.name] = val || q.variableInput.defaultValue;
+        }
+
+        historySteps.push(currentStepId);
+        currentStepId = opt.nextId;
+        renderStep();
+      });
+
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  // Show Results State
+  function showResults(res: PlaybookResult) {
+    wizardState.classList.add('hidden');
+    resultsState.classList.remove('hidden');
+
+    // 1. Set Priority Badge
+    let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+    if (res.priority === 'Crítica') {
+      badgeColor = 'bg-red-500/10 text-red-400 border-red-500/20';
+    } else if (res.priority === 'Alta') {
+      badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+    } else if (res.priority === 'Media') {
+      badgeColor = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+    }
+    resultPriorityBadge.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 font-mono ${badgeColor}`;
+    resultPriorityBadge.textContent = `PRIORIDAD ${res.priority.toUpperCase()}`;
+
+    // 2. Set Playbook info header
+    resultPlaybookInfo.textContent = `Playbook: ${currentPlaybookName.toUpperCase()} • ${historySteps.length} pasos analizados`;
+
+    // 3. Set list remediations
+    renderList(listContainment, res.containment);
+    renderList(listEradication, res.eradication);
+    renderList(listRecovery, res.recovery);
+
+    // 4. Update SIEM and PowerShell Output
+    updateSIEMOutput(res);
+    powershellOutput.textContent = res.powershell(userAnswers);
+  }
+
+  function renderList(ulElement: HTMLUListElement, items: string[]) {
+    ulElement.innerHTML = '';
+    items.forEach((item) => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ulElement.appendChild(li);
+    });
+  }
+
+  function updateSIEMOutput(res: PlaybookResult) {
+    if (activeSiem === 'spl') {
+      btnSiemspl.className = 'px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30';
+      btnSiemkql.className = 'px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white';
+      siemQueryOutput.textContent = res.spl(userAnswers);
+    } else {
+      btnSiemkql.className = 'px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30';
+      btnSiemspl.className = 'px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white';
+      siemQueryOutput.textContent = res.kql(userAnswers);
+    }
+  }
+
+  // SIEM tab toggles
+  btnSiemspl.addEventListener('click', () => {
+    activeSiem = 'spl';
+    const res = currentTree[currentStepId] as PlaybookResult;
+    if (res) updateSIEMOutput(res);
+  });
+
+  btnSiemkql.addEventListener('click', () => {
+    activeSiem = 'kql';
+    const res = currentTree[currentStepId] as PlaybookResult;
+    if (res) updateSIEMOutput(res);
+  });
+
+  // Wizard Back Navigation
+  btnWizardBack.addEventListener('click', () => {
+    if (historySteps.length > 0) {
+      currentStepId = historySteps.pop()!;
+      renderStep();
+    }
+  });
+
+  // Cancel Wizard
+  btnCancelWizard.addEventListener('click', () => {
+    if (confirm('¿Estás seguro de que deseas cancelar el playbook? Se perderán las respuestas seleccionadas.')) {
+      resetToSelector();
+    }
+  });
+
+  // Reset to initial state
+  btnReset.addEventListener('click', resetToSelector);
+
+  function resetToSelector() {
+    wizardState.classList.add('hidden');
+    resultsState.classList.add('hidden');
+    selectorState.classList.remove('hidden');
+  }
+</script>
