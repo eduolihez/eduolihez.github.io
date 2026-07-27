@@ -20,7 +20,19 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 
 ### 🧪 IOC Defanger & Extractor
 * **Ubicación**: [/tools/defanger](https://eduolihez.github.io/tools/defanger)
-* **Descripción**: Permite desarmar (defang) e higienizar direcciones IP, URLs y correos electrónicos, o extraer IOCs (hashes MD5/SHA256, correos, IPs, URLs) de texto sucio. Toda la lógica se ejecuta localmente en el navegador.
+* **Descripción**: Permite desarmar (defang) e higienizar direcciones IP, URLs y correos electrónicos, o extraer IOCs (hashes, correos, IPs, URLs) de texto sucio.
+
+### ✉️ Email Header Analyzer
+* **Ubicación**: [/tools/email-analyzer](https://eduolihez.github.io/tools/email-analyzer)
+* **Descripción**: Permite analizar cabeceras de correo en crudo o cargar archivos `.eml` para verificar el estado de SPF, DKIM, DMARC y representar gráficamente la línea de tiempo de saltos de red entre servidores con sus retardos correspondientes.
+
+### 🛡️ Generador de Reglas YARA
+* **Ubicación**: [/tools/yara-generator](https://eduolihez.github.io/tools/yara-generator)
+* **Descripción**: Asistente interactivo paso a paso para construir reglas de detección YARA con modificadores de cadena y condición expresa, acompañado de un analizador sintáctico (linter) integrado en tiempo real.
+
+### 🌿 Playbooks Interactivos de Incidentes
+* **Ubicación**: [/tools/playbooks](https://eduolihez.github.io/tools/playbooks)
+* **Descripción**: Árboles de decisión interactivos para guiar a los analistas en la resolución de alertas de Phishing, Malware y Fuerza Bruta, proveyendo acciones de mitigación estructuradas y consultas de búsqueda SIEM (Splunk/Sentinel) generadas dinámicamente.
 
 ---
 
@@ -32,15 +44,17 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 │   ├── layouts/          # Layout base del sitio con efectos de fondo y tipografías
 │   ├── pages/            # Enrutamiento de páginas (Astro)
 │   │   ├── index.astro   # Página de inicio del portal (Dashboard)
-│   │   └── tools/        # Herramientas individuales
-│   │       └── defanger.astro # IOC Defanger & Extractor
+│   │   └── tools/        # Herramientas individuales (Astro)
+│   │       ├── defanger.astro       # IOC Defanger & Extractor
+│   │       ├── email-analyzer.astro # Email Header Analyzer
+│   │       ├── playbooks.astro      # Playbooks Interactivos
+│   │       └── yara-generator.astro # Generador de Reglas YARA
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
-├── public/               # Recursos estáticos públicos (imágenes, favicon)
+├── public/               # Recursos estáticos públicos (imágenes, favicon, .nojekyll)
 ├── .github/              # Configuraciones de GitHub (workflows, templates)
 ├── astro.config.mjs      # Configuración de Astro e integraciones
-├── package.json          # Archivo de dependencias y scripts de Node.js
-└── tailwind.config.mjs   # Configuración de diseño y estilos de Tailwind
+└── package.json          # Archivo de dependencias y scripts de Node.js
 ```
 
 ---
