@@ -1,0 +1,624 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Generador de Reglas YARA | Blue Team Hub" description="Crea y valida reglas de detección YARA paso a paso en tu navegador de forma sencilla con linter integrado.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+    
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+        Generador de Reglas YARA
+      </h1>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Construye reglas de detección YARA válidas a través de un formulario interactivo. Declara metadatos, añade cadenas (de texto, hexadecimales o expresiones regulares) con sus respectivos modificadores, define la condición y obtén el código validado por un analizador de sintaxis (linter) en tiempo real.
+      </p>
+    </div>
+
+    <!-- Workspace Bento Box Layout (Side-by-side) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+      
+      <!-- Left Column: Form Builder (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Box 1: Metadata -->
+        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
+          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-neutral-950/60 pb-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            1. Metadatos de la Regla
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label for="ruleName" class="text-xs text-neutral-400 font-medium">Nombre de la Regla *</label>
+              <input 
+                type="text" 
+                id="ruleName" 
+                value="detect_threat_pattern"
+                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
+                placeholder="ej: detect_malware_apt"
+              />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="metaAuthor" class="text-xs text-neutral-400 font-medium">Autor</label>
+              <input 
+                type="text" 
+                id="metaAuthor" 
+                value="Eduardo Olivares"
+                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                placeholder="Tu nombre o empresa"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label for="metaDesc" class="text-xs text-neutral-400 font-medium">Descripción</label>
+              <input 
+                type="text" 
+                id="metaDesc" 
+                value="Detecta patrones sospechosos asociados a APT"
+                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                placeholder="Descripción del incidente"
+              />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="metaRef" class="text-xs text-neutral-400 font-medium">Referencia / CVE</label>
+              <input 
+                type="text" 
+                id="metaRef" 
+                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                placeholder="ej: https://threatintel.com"
+              />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="metaVersion" class="text-xs text-neutral-400 font-medium">Versión</label>
+              <input 
+                type="text" 
+                id="metaVersion" 
+                value="1.0"
+                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                placeholder="1.0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 2: Strings Section -->
+        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              2. Cadenas de Detección (Strings)
+            </h2>
+            <button 
+              id="btnAddString" 
+              class="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 hover:text-blue-300 text-[10px] font-mono font-bold tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
+            >
+              ➕ AÑADIR CADENA
+            </button>
+          </div>
+
+          <!-- Dynamic Strings List -->
+          <div id="stringsContainer" class="space-y-4">
+            <!-- Default String Item (Initial) -->
+            <div class="string-item bg-neutral-950/40 border border-white/5 rounded-xl p-4 space-y-3 relative group" data-id="1">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-neutral-500 font-mono font-bold">$</span>
+                  <input 
+                    type="text" 
+                    value="s1"
+                    class="string-var w-20 bg-neutral-900 border border-neutral-800 rounded-lg px-2 py-1 text-xs font-mono text-neutral-300 focus:outline-none focus:border-blue-500/50"
+                    placeholder="s1"
+                  />
+                  <select 
+                    class="string-type bg-neutral-900 border border-neutral-800 rounded-lg px-2 py-1 text-xs font-mono text-neutral-400 focus:outline-none"
+                  >
+                    <option value="text">Texto</option>
+                    <option value="hex">Hexadecimal</option>
+                    <option value="regex">RegEx</option>
+                  </select>
+                </div>
+
+                <!-- Remove Button (hidden on the only one) -->
+                <button 
+                  class="btn-remove-string text-neutral-500 hover:text-red-400 text-xs transition-colors duration-200 cursor-pointer p-1"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+              <!-- String Value Input -->
+              <div class="flex flex-col gap-1">
+                <input 
+                  type="text" 
+                  value="malicious_payload_domain"
+                  class="string-val w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-1.5 text-xs font-mono text-neutral-300 focus:outline-none focus:border-blue-500/50"
+                  placeholder="ej: malicious_domain.com"
+                />
+              </div>
+
+              <!-- Modifier Flags -->
+              <div class="flex flex-wrap items-center gap-4 text-[10px] text-neutral-400 select-none string-flags">
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-neutral-200">
+                  <input type="checkbox" checked class="flag-nocase accent-blue-600 rounded" /> nocase
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-neutral-200">
+                  <input type="checkbox" class="flag-wide accent-blue-600 rounded" /> wide
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-neutral-200">
+                  <input type="checkbox" checked class="flag-ascii accent-blue-600 rounded" /> ascii
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-neutral-200">
+                  <input type="checkbox" class="flag-fullword accent-blue-600 rounded" /> fullword
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-neutral-200">
+                  <input type="checkbox" class="flag-private accent-blue-600 rounded" /> private
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 3: Condition Section -->
+        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
+          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-neutral-950/60 pb-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+            3. Condición de Disparo (Condition)
+          </h2>
+
+          <div class="flex flex-col gap-3">
+            <label for="conditionStyle" class="text-xs text-neutral-400 font-medium">Lógica de Condición</label>
+            <select 
+              id="conditionStyle" 
+              class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+            >
+              <option value="any">Cualquiera de las cadenas declaradas (any of them)</option>
+              <option value="all">Todas las cadenas declaradas (all of them)</option>
+              <option value="custom">Condición personalizada...</option>
+            </select>
+          </div>
+
+          <!-- Custom Condition Input (shown only when 'custom' is selected) -->
+          <div id="customConditionWrapper" class="flex flex-col gap-1.5 hidden animate-fade-in">
+            <label for="conditionCustom" class="text-xs text-neutral-400 font-medium">Condición Expresa</label>
+            <input 
+              type="text" 
+              id="conditionCustom" 
+              value="any of ($s*)"
+              class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
+              placeholder="ej: $s1 and ($s2 or $s3)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Output & Linter (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- YARA Rule Code Output -->
+        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative min-h-[420px]">
+          <div>
+            <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+              <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                Regla YARA Generada
+              </h2>
+              
+              <button 
+                id="btnCopy" 
+                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
+                </svg>
+                Copiar
+              </button>
+            </div>
+
+            <!-- Code display area -->
+            <pre class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-[10px] md:text-xs font-mono text-neutral-300 overflow-x-auto min-h-[300px] whitespace-pre select-all" id="yaraOutput"></pre>
+          </div>
+        </div>
+
+        <!-- Linter (Syntax Validation) -->
+        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
+          <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2 border-b border-neutral-950/60 pb-2">
+            🛡️ Analizador de Sintaxis (Linter)
+          </h3>
+          
+          <div class="space-y-3" id="linterList">
+            <!-- Warnings and errors will be populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // UI Elements
+  const ruleName = document.getElementById('ruleName') as HTMLInputElement;
+  const metaAuthor = document.getElementById('metaAuthor') as HTMLInputElement;
+  const metaDesc = document.getElementById('metaDesc') as HTMLInputElement;
+  const metaRef = document.getElementById('metaRef') as HTMLInputElement;
+  const metaVersion = document.getElementById('metaVersion') as HTMLInputElement;
+  
+  const stringsContainer = document.getElementById('stringsContainer') as HTMLDivElement;
+  const btnAddString = document.getElementById('btnAddString') as HTMLButtonElement;
+  
+  const conditionStyle = document.getElementById('conditionStyle') as HTMLSelectElement;
+  const customConditionWrapper = document.getElementById('customConditionWrapper') as HTMLDivElement;
+  const conditionCustom = document.getElementById('conditionCustom') as HTMLInputElement;
+  
+  const yaraOutput = document.getElementById('yaraOutput') as HTMLPreElement;
+  const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+  const linterList = document.getElementById('linterList') as HTMLDivElement;
+
+  let stringIdCounter = 1;
+
+  // Track event listeners in strings to update output
+  function bindStringEvents(el: HTMLElement) {
+    const inputs = el.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.addEventListener('input', generateRule);
+    });
+
+    const typeSelect = el.querySelector('.string-type') as HTMLSelectElement;
+    typeSelect.addEventListener('change', () => {
+      const selected = typeSelect.value;
+      const flagsDiv = el.querySelector('.string-flags') as HTMLDivElement;
+      const valInput = el.querySelector('.string-val') as HTMLInputElement;
+      
+      // Update placeholder based on type
+      if (selected === 'hex') {
+        valInput.placeholder = 'ej: { E2 34 ?? 5F 88 }';
+        if (valInput.value === 'malicious_payload_domain') {
+          valInput.value = '{ E2 34 ?? 5F 88 }';
+        }
+        flagsDiv.classList.add('opacity-30', 'pointer-events-none');
+      } else if (selected === 'regex') {
+        valInput.placeholder = 'ej: /malicious\\.[a-z]{2,4}/';
+        flagsDiv.classList.remove('opacity-30', 'pointer-events-none');
+      } else {
+        valInput.placeholder = 'ej: malicious_domain.com';
+        flagsDiv.classList.remove('opacity-30', 'pointer-events-none');
+      }
+      generateRule();
+    });
+
+    const btnRemove = el.querySelector('.btn-remove-string') as HTMLButtonElement;
+    btnRemove.addEventListener('click', () => {
+      const items = stringsContainer.querySelectorAll('.string-item');
+      if (items.length > 1) {
+        el.remove();
+        generateRule();
+      } else {
+        alert('Debes tener al menos una cadena declarada en la regla YARA.');
+      }
+    });
+  }
+
+  // Initialize first string item events
+  bindStringEvents(stringsContainer.firstElementChild as HTMLElement);
+
+  // Add String Button Click
+  btnAddString.addEventListener('click', () => {
+    stringIdCounter++;
+    const template = stringsContainer.firstElementChild as HTMLElement;
+    const clone = template.cloneNode(true) as HTMLElement;
+    
+    // Set unique values
+    clone.dataset.id = stringIdCounter.toString();
+    const varInput = clone.querySelector('.string-var') as HTMLInputElement;
+    varInput.value = `s${stringIdCounter}`;
+    
+    const valInput = clone.querySelector('.string-val') as HTMLInputElement;
+    valInput.value = '';
+    valInput.placeholder = 'ej: malicious_pattern';
+    
+    // Bind change events
+    bindStringEvents(clone);
+    stringsContainer.appendChild(clone);
+    generateRule();
+  });
+
+  // Condition dropdown
+  conditionStyle.addEventListener('change', () => {
+    if (conditionStyle.value === 'custom') {
+      customConditionWrapper.classList.remove('hidden');
+    } else {
+      customConditionWrapper.classList.add('hidden');
+    }
+    generateRule();
+  });
+
+  // Base Form events
+  [ruleName, metaAuthor, metaDesc, metaRef, metaVersion, conditionCustom].forEach(el => {
+    el.addEventListener('input', generateRule);
+  });
+
+  // Core formatting & linting engine
+  interface YaraString {
+    variable: string;
+    type: 'text' | 'hex' | 'regex';
+    value: string;
+    nocase: boolean;
+    wide: boolean;
+    ascii: boolean;
+    fullword: boolean;
+    private: boolean;
+  }
+
+  function getStrings(): YaraString[] {
+    const list: YaraString[] = [];
+    const items = stringsContainer.querySelectorAll('.string-item');
+    items.forEach((item) => {
+      const el = item as HTMLElement;
+      const variable = (el.querySelector('.string-var') as HTMLInputElement).value.trim();
+      const type = (el.querySelector('.string-type') as HTMLSelectElement).value as any;
+      const value = (el.querySelector('.string-val') as HTMLInputElement).value.trim();
+      
+      const nocase = (el.querySelector('.flag-nocase') as HTMLInputElement).checked;
+      const wide = (el.querySelector('.flag-wide') as HTMLInputElement).checked;
+      const ascii = (el.querySelector('.flag-ascii') as HTMLInputElement).checked;
+      const fullword = (el.querySelector('.flag-fullword') as HTMLInputElement).checked;
+      const privateFlag = (el.querySelector('.flag-private') as HTMLInputElement).checked;
+
+      list.push({
+        variable,
+        type,
+        value,
+        nocase,
+        wide,
+        ascii,
+        fullword,
+        private: privateFlag
+      });
+    });
+    return list;
+  }
+
+  function generateRule() {
+    const name = ruleName.value.trim().replace(/\s+/g, '_');
+    const author = metaAuthor.value.trim();
+    const description = metaDesc.value.trim();
+    const reference = metaRef.value.trim();
+    const version = metaVersion.value.trim();
+
+    const stringsList = getStrings();
+    const condStyle = conditionStyle.value;
+    const condCustom = conditionCustom.value.trim();
+
+    // 1. Build Rule Header
+    let ruleText = `rule ${name || 'detect_unnamed_rule'}\n{\n`;
+
+    // 2. Build Meta Section
+    if (description || author || reference || version) {
+      ruleText += `    meta:\n`;
+      if (description) ruleText += `        description = "${description}"\n`;
+      if (author) ruleText += `        author = "${author}"\n`;
+      if (reference) ruleText += `        reference = "${reference}"\n`;
+      if (version) ruleText += `        version = "${version}"\n`;
+      ruleText += `        date = "${new Date().toISOString().split('T')[0]}"\n`;
+    }
+
+    // 3. Build Strings Section
+    if (stringsList.length > 0) {
+      ruleText += `\n    strings:\n`;
+      stringsList.forEach((str) => {
+        if (!str.variable) return;
+        
+        let line = `        $${str.variable} = `;
+        if (str.type === 'hex') {
+          // Hex string value format: { AB CD 12 }
+          let val = str.value;
+          if (!val.startsWith('{')) val = `{ ${val}`;
+          if (!val.endsWith('}')) val = `${val} }`;
+          line += val;
+        } else if (str.type === 'regex') {
+          // Regex value format: /abc/
+          let val = str.value;
+          if (!val.startsWith('/')) val = `/${val}`;
+          if (!val.endsWith('/')) val = `${val}/`;
+          line += val;
+        } else {
+          // Text format
+          line += `"${str.value}"`;
+        }
+
+        // Modifiers flags (only for text and regex)
+        if (str.type !== 'hex') {
+          const modifiers = [];
+          if (str.nocase) modifiers.push('nocase');
+          if (str.wide) modifiers.push('wide');
+          if (str.ascii) modifiers.push('ascii');
+          if (str.fullword) modifiers.push('fullword');
+          if (str.private) modifiers.push('private');
+          
+          if (modifiers.length > 0) {
+            line += ` ${modifiers.join(' ')}`;
+          }
+        }
+
+        ruleText += `${line}\n`;
+      });
+    }
+
+    // 4. Build Condition Section
+    ruleText += `\n    condition:\n`;
+    if (condStyle === 'any') {
+      ruleText += `        any of them\n`;
+    } else if (condStyle === 'all') {
+      ruleText += `        all of them\n`;
+    } else {
+      ruleText += `        ${condCustom || 'any of them'}\n`;
+    }
+
+    ruleText += `}`;
+
+    yaraOutput.textContent = ruleText;
+
+    // Run lint checks
+    runLinter(name, stringsList, condStyle, condCustom);
+  }
+
+  // Syntax Linter Logic
+  interface LintItem {
+    type: 'error' | 'warning' | 'success';
+    message: string;
+  }
+
+  function runLinter(name: string, strings: YaraString[], condStyle: string, condCustom: string) {
+    const list: LintItem[] = [];
+
+    // Check 1: Rule Name
+    const nameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+    if (!name) {
+      list.push({ type: 'error', message: 'El nombre de la regla no puede estar vacío.' });
+    } else if (!nameRegex.test(name)) {
+      list.push({ type: 'error', message: 'El nombre de la regla contiene caracteres no válidos. Debe empezar por letra o guion bajo (_) y no contener espacios ni caracteres especiales.' });
+    }
+
+    // Check 2: Strings variables syntax and duplicates
+    const declaredVariables = new Set<string>();
+    let duplicates = false;
+    strings.forEach(str => {
+      if (!str.variable) return;
+      if (declaredVariables.has(str.variable)) {
+        duplicates = true;
+      }
+      declaredVariables.add(str.variable);
+
+      // Check hex string syntax
+      if (str.type === 'hex' && str.value) {
+        const clean = str.value.replace(/[{}]/g, '').trim();
+        // Regex to check valid hex pattern: only hex numbers, double questions ?? or spacing
+        const hexRegex = /^[a-fA-F0-9\?\s]+$/;
+        if (!hexRegex.test(clean)) {
+          list.push({ type: 'warning', message: `La cadena hexadecimal $${str.variable} contiene caracteres no válidos (solo se permite 0-9, A-F y ??).` });
+        }
+      }
+    });
+
+    if (duplicates) {
+      list.push({ type: 'error', message: 'Hay variables de cadenas duplicadas en la declaración.' });
+    }
+
+    // Check 3: Variables declared vs referenced in custom conditions
+    if (condStyle === 'custom' && condCustom) {
+      // Find all referenced variables ($s1, etc.)
+      const variableRegex = /\$[a-zA-Z0-9_]+/g;
+      const referencedMatches = condCustom.match(variableRegex) || [];
+      const referencedVariables = new Set(referencedMatches.map(m => m.substring(1))); // strip leading $
+
+      // 3.1. Undeclared variable used in condition
+      referencedVariables.forEach(ref => {
+        // Handle wildcards like $s* by matching prefixes
+        if (ref.endsWith('*')) {
+          const prefix = ref.slice(0, -1);
+          let found = false;
+          declaredVariables.forEach(dec => {
+            if (dec.startsWith(prefix)) found = true;
+          });
+          if (!found) {
+            list.push({ type: 'error', message: `La condición usa el patrón de comodín $${ref}, pero no hay variables declaradas que empiecen por '${prefix}'.` });
+          }
+        } else {
+          if (!declaredVariables.has(ref)) {
+            list.push({ type: 'error', message: `La variable $${ref} se usa en la condición pero no ha sido declarada en la sección 'strings'.` });
+          }
+        }
+      });
+
+      // 3.2. Declared variable unused in condition
+      declaredVariables.forEach(dec => {
+        let isUsed = referencedVariables.has(dec);
+        // Check if matches wildcard like $s*
+        referencedVariables.forEach(ref => {
+          if (ref.endsWith('*')) {
+            const prefix = ref.slice(0, -1);
+            if (dec.startsWith(prefix)) {
+              isUsed = true;
+            }
+          }
+        });
+        if (!isUsed) {
+          list.push({ type: 'warning', message: `La cadena $${dec} está declarada pero no se hace referencia a ella en la condición.` });
+        }
+      });
+    }
+
+    // Render linter output
+    linterList.innerHTML = '';
+    
+    if (list.length === 0) {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'flex items-start gap-2 text-xs text-emerald-400 font-medium bg-emerald-500/5 border border-emerald-500/10 p-3 rounded-xl';
+      itemDiv.innerHTML = `
+        <span class="text-sm">✓</span>
+        <span>Regla YARA válida. Cero errores de sintaxis o variables no utilizadas.</span>
+      `;
+      linterList.appendChild(itemDiv);
+    } else {
+      list.forEach((item) => {
+        const itemDiv = document.createElement('div');
+        if (item.type === 'error') {
+          itemDiv.className = 'flex items-start gap-2 text-xs text-red-400 bg-red-500/5 border border-red-500/10 p-3 rounded-xl';
+          itemDiv.innerHTML = `
+            <span class="text-sm">❌</span>
+            <span><strong>[Error]</strong> ${item.message}</span>
+          `;
+        } else {
+          itemDiv.className = 'flex items-start gap-2 text-xs text-amber-400 bg-amber-500/5 border border-amber-500/10 p-3 rounded-xl';
+          itemDiv.innerHTML = `
+            <span class="text-sm">⚠️</span>
+            <span><strong>[Advertencia]</strong> ${item.message}</span>
+          `;
+        }
+        linterList.appendChild(itemDiv);
+      });
+    }
+  }
+
+  // Copy to clipboard with animation
+  btnCopy.addEventListener('click', () => {
+    const text = yaraOutput.textContent;
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const originalHtml = btnCopy.innerHTML;
+      btnCopy.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-emerald-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <span class="text-emerald-400">Copiado!</span>
+      `;
+      btnCopy.classList.add('border-emerald-500/30', 'bg-emerald-500/5');
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalHtml;
+        btnCopy.classList.remove('border-emerald-500/30', 'bg-emerald-500/5');
+      }, 2000);
+    });
+  });
+
+  // Initial generation on load
+  generateRule();
+</script>
