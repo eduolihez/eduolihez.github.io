@@ -6,72 +6,71 @@ Este sitio web se aloja en [eduolihez.github.io](https://eduolihez.github.io) co
 
 ---
 
-## 🎯 Propósito del Proyecto
+## 🎨 Diseño y Stack Tecnológico
 
-A diferencia de los recursos convencionales que requieren infraestructuras backend complejas, **Blue Team Hub** procesa todos los datos localmente en el navegador del analista. Esto garantiza:
-1. **OpSec / Privacidad**: Los payloads, cabeceras de correo o IOCs analizados nunca salen de tu máquina local.
-2. **Portabilidad y Rapidez**: Carga inmediata sin latencia de servidor.
-3. **Costo Cero**: Ejecución e infraestructura gratuitas sobre GitHub Pages.
+El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS Glassmorphism de estilo Apple** utilizando:
+
+* **Astro**: Para compilación de páginas estáticas ultrarrápidas y componentes reutilizables.
+* **Tailwind CSS (v4)**: Para un diseño fluido, moderno y responsivo con efectos esmerilados y fondos con destellos (gradients glow).
+* **TypeScript / JavaScript**: Para el procesamiento interactivo de datos locales (sin backend).
 
 ---
 
-## 🛠️ Herramientas Disponibles e Ideas en Planificación
+## 🛠️ Herramientas Disponibles
 
-### 🧪 IOC Defanger & Extractor (Disponible)
-* **Ubicación**: [tools/defanger.html](file:///c:/Users/eduol/Documents/GitHub/eduolihez.github.io/tools/defanger.html)
-* **Descripción**: Permite desarmar (defang) e higienizar direcciones IP, URLs y correos electrónicos para compartirlos de forma segura en informes de incidentes, o bien realizar la operación inversa (refang). También incorpora un extractor automático de IOCs mediante expresiones regulares desde bloques de texto crudo.
-
-### ✉️ Email Header Analyzer (Próximamente)
-* **Descripción**: Analizador visual de cabeceras de correo sospechosas (`.eml` o texto crudo). Parseo de la ruta de saltos de red y validación de registros de autenticación SPF, DKIM y DMARC de forma 100% local.
-
-### 🛡️ Generador de Reglas YARA (Próximamente)
-* **Descripción**: Formulario interactivo que guía en la escritura y estructuración correcta de reglas YARA minimizando errores de sintaxis en metadatos, strings y lógica de condiciones.
-
-### 🌿 Playbooks Interactivos (Próximamente)
-* **Descripción**: Árboles de decisión dinámicos para guiar al analista paso a paso durante un incidente de seguridad (Phishing, Malware, Fuerza Bruta) e integrando comandos y queries SIEM (KQL, SPL) listos para usar.
+### 🧪 IOC Defanger & Extractor
+* **Ubicación**: [/tools/defanger](https://eduolihez.github.io/tools/defanger)
+* **Descripción**: Permite desarmar (defang) e higienizar direcciones IP, URLs y correos electrónicos, o extraer IOCs (hashes MD5/SHA256, correos, IPs, URLs) de texto sucio. Toda la lógica se ejecuta localmente en el navegador.
 
 ---
 
 ## 📁 Estructura del Repositorio
 
 ```text
-├── index.html           # Página de inicio del portal (landing page)
-├── ideas.md             # Documento de ideas y planificación de contenidos
-├── src/                 # Recursos de la aplicación (CSS, JS, imágenes)
-│   └── css/
-│       └── styles.css   # Estilos CSS generales (Dark Theme)
-├── tools/               # Directorio con las herramientas individuales (HTML independiente)
-│   └── defanger.html    # Código fuente de la herramienta Defanger
-├── .github/             # Configuraciones específicas de GitHub (plantillas, etc.)
-└── .gitignore           # Archivo de exclusión de Git
+├── src/
+│   ├── components/       # Componentes globales (Header, Footer)
+│   ├── layouts/          # Layout base del sitio con efectos de fondo y tipografías
+│   ├── pages/            # Enrutamiento de páginas (Astro)
+│   │   ├── index.astro   # Página de inicio del portal (Dashboard)
+│   │   └── tools/        # Herramientas individuales
+│   │       └── defanger.astro # IOC Defanger & Extractor
+│   └── styles/
+│       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
+├── public/               # Recursos estáticos públicos (imágenes, favicon)
+├── .github/              # Configuraciones de GitHub (workflows, templates)
+├── astro.config.mjs      # Configuración de Astro e integraciones
+├── package.json          # Archivo de dependencias y scripts de Node.js
+└── tailwind.config.mjs   # Configuración de diseño y estilos de Tailwind
 ```
 
 ---
 
-## 🚀 Cómo Ejecutar en Local
+## 🚀 Desarrollo Local
 
-Dado que el sitio es completamente estático, no necesitas instalar dependencias de base de datos ni configurar servidores web complejos.
+Para correr el proyecto localmente y realizar cambios:
 
-### Opción 1: Abrir directamente
-Solo haz doble clic en [index.html](file:///c:/Users/eduol/Documents/GitHub/eduolihez.github.io/index.html) para abrirlo en cualquier navegador web.
+1. **Instalar Dependencias**:
+   ```bash
+   npm install
+   ```
 
-### Opción 2: Usar un servidor web ligero
-Si deseas simular un entorno de producción o evitar bloqueos de CORS en futuras integraciones:
+2. **Iniciar Servidor de Desarrollo**:
+   ```bash
+   npm run dev
+   ```
+   Abre [http://localhost:4321](http://localhost:4321) en tu navegador.
 
-**Usando Python 3:**
-```bash
-python -m http.server 8000
-```
-Luego navega a `http://localhost:8000`.
-
-**Usando VS Code:**
-Instala la extensión **Live Server**, abre el proyecto y haz clic en *Go Live*.
+3. **Compilar para Producción**:
+   ```bash
+   npm run build
+   ```
+   Genera la carpeta `dist/` con el HTML/CSS/JS estático listo para servir.
 
 ---
 
-## 🤝 Contribuciones y Reporte de Problemas
+## 🚀 Despliegue Automatizado
 
-¡Las contribuciones son bienvenidas! Si encuentras un fallo o deseas sugerir una nueva herramienta táctica:
-1. Revisa nuestra política en [SECURITY.md](file:///c:/Users/eduol/Documents/GitHub/eduolihez.github.io/SECURITY.md) si encuentras algún problema de seguridad.
-2. Abre un Issue utilizando nuestras plantillas en la pestaña correspondiente de GitHub.
-3. Envía un Pull Request siguiendo la estructura solicitada.
+El repositorio cuenta con un pipeline de CI/CD configurado con **GitHub Actions** en `.github/workflows/deploy.yml`:
+
+- Cada vez que haces `git push` a la rama `main`, el workflow instala dependencias, compila el sitio de Astro (`npm run build`) y empuja los archivos generados a la rama `gh-pages`.
+- Asegúrate de tener configurado tu repositorio en GitHub para servir Pages desde la rama `gh-pages`.

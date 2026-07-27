@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Tools catalog
+const tools = [
+  {
+    id: "defanger",
+    title: "IOC Defanger & Extractor",
+    description: "Desarma (defang) e higieniza de forma segura direcciones IP, URLs y correos electrónicos para tus informes, o extrae IOCs directamente desde texto crudo en segundos.",
+    icon: "🧪",
+    badge: "DISPONIBLE",
+    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    href: "/tools/defanger",
+    actionText: "Abrir Herramienta",
+    disabled: false,
+  },
+  {
+    id: "email-analyzer",
+    title: "Email Header Analyzer",
+    description: "[En Planificación] Analiza cabeceras crudas de correos sospechosos de forma visual. Comprueba autenticación SPF, DKIM, DMARC e identifica saltos de red.",
+    icon: "✉️",
+    badge: "PRÓXIMAMENTE",
+    badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    href: "#",
+    actionText: "Planificado",
+    disabled: true,
+  },
+  {
+    id: "yara-generator",
+    title: "Generador de Reglas YARA",
+    description: "[En Planificación] Escribe y valida reglas de detección YARA sin errores de sintaxis a través de un asistente paso a paso en el cliente.",
+    icon: "🛡️",
+    badge: "PRÓXIMAMENTE",
+    badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    href: "#",
+    actionText: "Planificado",
+    disabled: true,
+  },
+  {
+    id: "playbooks",
+    title: "Playbooks Interactivos",
+    description: "[En Planificación] Árboles de decisión interactivos para incidentes de seguridad (Phishing, Malware, SSH brute-force) con generación de queries SIEM automáticas.",
+    icon: "🌿",
+    badge: "PRÓXIMAMENTE",
+    badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    href: "#",
+    actionText: "Planificado",
+    disabled: true,
+  },
+  {
+    id: "passwdcentinel",
+    title: "Password Sentinel",
+    description: "Visita el proyecto oficial de tu extensión de Chrome para auditar contraseñas y verificar filtraciones vía API de Have I Been Pwned.",
+    icon: "🔑",
+    badge: "EXTENSION CHROME",
+    badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    href: "https://eduolihez.com/projects/passwdcentinel/",
+    actionText: "Ir a eduolihez.com",
+    disabled: false,
+    external: true,
+  },
+  {
+    id: "followguard",
+    title: "FollowGuard OSINT",
+    description: "Visualiza el desarrollo de tu herramienta de ciberinteligencia en redes sociales para detectar perfiles falsos y bots.",
+    icon: "📊",
+    badge: "PYTHON / GRAPH",
+    badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+    href: "https://eduolihez.com/projects/followguard/",
+    actionText: "Ir a eduolihez.com",
+    disabled: false,
+    external: true,
+  }
+];
+---
+
+<Layout title="Blue Team Hub | Eduardo Olivares" description="Portal de herramientas estáticas de ciberseguridad para analistas SOC y respuesta a incidentes.">
+  <Header activeTab="inicio" />
+  
+  <main class="w-full max-w-6xl mx-auto px-4 mt-16 flex-grow">
+    
+    <!-- Hero Section -->
+    <section class="text-center relative py-12 md:py-20 overflow-hidden">
+      <!-- Glow decoration -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-blue-500/10 blur-[80px] -z-10 pointer-events-none"></div>
+      
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-blue-400 mb-6 backdrop-blur-md">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+        STATUS: STABLE DEPLOY (GITHUB PAGES)
+      </div>
+      
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight max-w-4xl mx-auto">
+        Herramientas y Recursos para <br class="hidden md:inline" />
+        <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          Operaciones de Seguridad (SOC)
+        </span>
+      </h1>
+      
+      <p class="text-sm md:text-lg text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+        Un espacio de utilidades **100% estáticas y locales** (sin envío de datos a servidores) diseñado para analistas SOC, investigadores de amenazas y operaciones del Blue Team.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#herramientas" class="w-full sm:w-auto">
+          <button class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/10 transition-all duration-200 cursor-pointer">
+            Ver Herramientas
+          </button>
+        </a>
+        <a href="https://github.com/eduolihez" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto">
+          <button class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm transition-all duration-200 cursor-pointer">
+            Ver GitHub
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <!-- Grid Layout Tools Section -->
+    <section id="herramientas" class="mt-20 scroll-mt-28">
+      <div class="flex items-center justify-between mb-8 border-b border-neutral-900 pb-4">
+        <h2 class="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+          <span>🛠️</span> Caja de Herramientas
+        </h2>
+        <span class="text-xs text-neutral-500 font-mono">
+          Total: {tools.length} elementos
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tools.map((tool) => (
+          <div class={`relative group rounded-2xl transition-all duration-300 ${
+            tool.disabled 
+              ? 'opacity-60 cursor-not-allowed bg-neutral-950/20 border border-neutral-900' 
+              : 'bg-neutral-900/30 hover:bg-neutral-900/50 border border-white/5 hover:border-white/10 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5'
+          }`}>
+            <!-- Card content wrapper -->
+            <div class="p-6 flex flex-col justify-between h-full min-h-[220px]">
+              <div>
+                <!-- Card Header -->
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-3xl filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)] group-hover:scale-110 transition-transform duration-300">
+                    {tool.icon}
+                  </span>
+                  <span class={`text-[10px] px-2 py-0.5 rounded-md border font-mono font-bold tracking-wider ${tool.badgeColor}`}>
+                    {tool.badge}
+                  </span>
+                </div>
+
+                <!-- Text -->
+                <h3 class="text-lg font-bold text-neutral-200 group-hover:text-white transition-colors duration-200 mb-2">
+                  {tool.title}
+                </h3>
+                <p class="text-xs md:text-sm text-neutral-400 leading-relaxed font-light mb-6">
+                  {tool.description}
+                </p>
+              </div>
+
+              <!-- Action Link / Bottom -->
+              <div class="mt-auto pt-4 border-t border-neutral-950/50 flex items-center justify-between text-xs">
+                {tool.disabled ? (
+                  <span class="text-neutral-600 font-medium select-none flex items-center gap-1.5">
+                    ⚙️ {tool.actionText}
+                  </span>
+                ) : (
+                  <a 
+                    href={tool.href} 
+                    target={tool.external ? "_blank" : undefined}
+                    rel={tool.external ? "noopener noreferrer" : undefined}
+                    class="text-blue-400 group-hover:text-blue-300 font-semibold flex items-center gap-1.5 transition-colors duration-200"
+                  >
+                    {tool.actionText}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+            
+            <!-- Glow Effect on Hover -->
+            {!tool.disabled && (
+              <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-blue-500/0 via-blue-500/0 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </main>
+  
+  <Footer />
+</Layout>

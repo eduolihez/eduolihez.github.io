@@ -1,0 +1,296 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="IOC Defanger & Extractor | Blue Team Hub" description="Desarma, re-arma y extrae direcciones IP, dominios, correos y hashes de forma 100% local en tu navegador.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+    
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+        IOC Defanger & Extractor
+      </h1>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Desarma (defang) URLs, IPs y correos electrónicos para compartirlos de forma segura en informes de incidentes, re-arma (refang) o extrae indicadores de compromiso (IOCs) desde logs o texto crudo. Todo de forma 100% local y segura.
+      </p>
+    </div>
+
+    <!-- Bento Workspace Layout (Side-by-side on desktop) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+      
+      <!-- Panel 1: Input -->
+      <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              Entrada de Datos
+            </h2>
+            <span class="text-[10px] text-neutral-500 font-mono" id="charCount">0 caracteres</span>
+          </div>
+
+          <div class="relative">
+            <textarea 
+              id="iocInput" 
+              rows="12" 
+              class="w-full bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+              placeholder="Pega aquí el texto que contenga las URLs, IPs (ej: 192.168.1.1 o http://malicious.domain), correos o hashes (MD5, SHA-256)..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-neutral-950/50">
+          <button 
+            id="btnDefang" 
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md shadow-blue-500/10 active:scale-95"
+          >
+            🛡️ Desarmar (Defang)
+          </button>
+          
+          <button 
+            id="btnRefang" 
+            class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            🔌 Re-armar (Refang)
+          </button>
+          
+          <button 
+            id="btnExtract" 
+            class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            🔍 Extraer IOCs
+          </button>
+          
+          <button 
+            id="btnClear" 
+            class="px-4 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer ml-auto active:scale-95"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Panel 2: Output -->
+      <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden">
+        
+        <div>
+          <!-- Header with copy action -->
+          <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500" id="statusDot"></span>
+              <span id="outputTitle">Resultado</span>
+            </h2>
+            
+            <button 
+              id="btnCopy" 
+              class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              disabled
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+
+          <!-- Output Box -->
+          <div class="relative group">
+            <div 
+              id="iocOutput" 
+              class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-400 overflow-y-auto min-h-[220px] max-h-[360px] whitespace-pre-wrap selection:bg-emerald-500/20 selection:text-emerald-300"
+            >Esperando que proceses o extraigas datos de la entrada...</div>
+          </div>
+        </div>
+
+        <!-- Extra details/stats -->
+        <div class="mt-6 pt-4 border-t border-neutral-950/50 flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+          <span>Modo OpSec local: Activo</span>
+          <span id="outputStat">0 elementos</span>
+        </div>
+      </div>
+      
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Logic for Defanging, Refanging and Extraction
+  const inputElement = document.getElementById('iocInput') as HTMLTextAreaElement;
+  const outputElement = document.getElementById('iocOutput') as HTMLDivElement;
+  const outputTitle = document.getElementById('outputTitle') as HTMLSpanElement;
+  const charCount = document.getElementById('charCount') as HTMLSpanElement;
+  const outputStat = document.getElementById('outputStat') as HTMLSpanElement;
+  const statusDot = document.getElementById('statusDot') as HTMLSpanElement;
+  
+  const btnDefang = document.getElementById('btnDefang') as HTMLButtonElement;
+  const btnRefang = document.getElementById('btnRefang') as HTMLButtonElement;
+  const btnExtract = document.getElementById('btnExtract') as HTMLButtonElement;
+  const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
+  const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+
+  // Track keypress to update character count
+  inputElement.addEventListener('input', () => {
+    charCount.textContent = `${inputElement.value.length} caracteres`;
+  });
+
+  // Helper functions for Defang/Refang
+  function defang(text: string): string {
+    return text
+      // Defang URLs: http -> hxxp, https -> hxxps
+      .replace(/https:\/\//gi, 'hxxps://')
+      .replace(/http:\/\//gi, 'hxxp://')
+      // Defang domain names and IPs (handles dots with brackets)
+      .replace(/([a-zA-Z0-9-]{1,63})\.([a-zA-Z]{2,12})/g, '$1[.]$2')
+      .replace(/(\b\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}\b)/g, '$1[.]$2[.]$3[.]$4')
+      // Defang emails: test@example.com -> test[at]example[.]com
+      .replace(/@/g, '[at]');
+  }
+
+  function refang(text: string): string {
+    return text
+      .replace(/hxxps:\/\//gi, 'https://')
+      .replace(/hxxp:\/\//gi, 'http://')
+      .replace(/\[\.\]/g, '.')
+      .replace(/\(\.\)/g, '.')
+      .replace(/\[dot\]/gi, '.')
+      .replace(/\[at\]/gi, '@')
+      .replace(/\(at\)/gi, '@');
+  }
+
+  // RegEx patterns for extraction
+  const ipv4Regex = /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g;
+  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+  const urlRegex = /https?:\/\/(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(?::\d+)?(?:\/[^\s]*)?/gi;
+  const md5Regex = /\b[a-fA-F0-9]{32}\b/g;
+  const sha1Regex = /\b[a-fA-F0-9]{40}\b/g;
+  const sha256Regex = /\b[a-fA-F0-9]{64}\b/g;
+
+  interface ExtractionResult {
+    output: string;
+    count: number;
+  }
+
+  function extractIOCs(text: string): ExtractionResult {
+    // First refang input to normalize it before search
+    const normalizedText = refang(text);
+
+    const iocs = {
+      urls: [...new Set(normalizedText.match(urlRegex) || [])],
+      ips: [...new Set(normalizedText.match(ipv4Regex) || [])],
+      emails: [...new Set(normalizedText.match(emailRegex) || [])],
+      md5: [...new Set(normalizedText.match(md5Regex) || [])],
+      sha1: [...new Set(normalizedText.match(sha1Regex) || [])],
+      sha256: [...new Set(normalizedText.match(sha256Regex) || [])]
+    };
+
+    let output = '';
+    let count = 0;
+
+    for (const [key, list] of Object.entries(iocs)) {
+      if (list.length > 0) {
+        const typeLabel = key.toUpperCase();
+        output += `=== ${typeLabel} (${list.length}) ===\n`;
+        // We defang extracted IOCs immediately to prevent clicking in the output box
+        list.forEach(item => {
+          output += `${defang(item)}\n`;
+        });
+        output += '\n';
+        count += list.length;
+      }
+    }
+
+    return { output: output.trim(), count };
+  }
+
+  // Set active state styling
+  function updateOutput(text: string, title: string, statLabel: string, success = true) {
+    outputElement.textContent = text;
+    outputElement.classList.remove('text-neutral-600', 'text-neutral-400');
+    outputElement.classList.add('text-neutral-200');
+    outputTitle.textContent = title;
+    outputStat.textContent = statLabel;
+    btnCopy.disabled = !text || text.startsWith('Esperando');
+
+    // Update status dot color
+    if (success && text) {
+      statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+    } else {
+      statusDot.className = 'w-2 h-2 rounded-full bg-blue-500';
+    }
+  }
+
+  // Events
+  btnDefang.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    
+    const result = defang(val);
+    updateOutput(result, "Resultado: Defang", "Texto modificado");
+  });
+
+  btnRefang.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    
+    const result = refang(val);
+    updateOutput(result, "Resultado: Refang", "Texto modificado");
+  });
+
+  btnExtract.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+
+    const { output, count } = extractIOCs(val);
+    const content = output || 'No se encontraron IOCs válidos (IPs, URLs, Hashes, Emails).';
+    updateOutput(content, "Resultado: Extracción", `${count} IOCs extraídos`, count > 0);
+  });
+
+  btnClear.addEventListener('click', () => {
+    inputElement.value = '';
+    charCount.textContent = '0 caracteres';
+    outputElement.textContent = 'Esperando que proceses o extraigas datos de la entrada...';
+    outputElement.classList.remove('text-neutral-200');
+    outputElement.classList.add('text-neutral-400');
+    outputTitle.textContent = "Resultado";
+    outputStat.textContent = '0 elementos';
+    btnCopy.disabled = true;
+    statusDot.className = 'w-2 h-2 rounded-full bg-blue-500';
+  });
+
+  btnCopy.addEventListener('click', () => {
+    const content = outputElement.textContent;
+    if (!content || content.startsWith('Esperando')) return;
+
+    navigator.clipboard.writeText(content).then(() => {
+      const originalHtml = btnCopy.innerHTML;
+      btnCopy.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-emerald-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <span class="text-emerald-400">Copiado!</span>
+      `;
+      btnCopy.classList.add('border-emerald-500/30', 'bg-emerald-500/5');
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalHtml;
+        btnCopy.classList.remove('border-emerald-500/30', 'bg-emerald-500/5');
+      }, 2000);
+    }).catch(err => {
+      console.error('Error al copiar: ', err);
+    });
+  });
+</script>
