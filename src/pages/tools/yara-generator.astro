@@ -32,9 +32,9 @@ import Footer from '../../components/Footer.astro';
       <div class="lg:col-span-7 space-y-6">
         
         <!-- Box 1: Metadata -->
-        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
-          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-neutral-950/60 pb-3 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4">
+          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-white/[0.04] pb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
             1. Metadatos de la Regla
           </h2>
 
@@ -45,7 +45,7 @@ import Footer from '../../components/Footer.astro';
                 type="text" 
                 id="ruleName" 
                 value="detect_threat_pattern"
-                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
+                class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
                 placeholder="ej: detect_malware_apt"
               />
             </div>
@@ -55,7 +55,7 @@ import Footer from '../../components/Footer.astro';
                 type="text" 
                 id="metaAuthor" 
                 value="Eduardo Olivares"
-                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
                 placeholder="Tu nombre o empresa"
               />
             </div>
@@ -68,7 +68,7 @@ import Footer from '../../components/Footer.astro';
                 type="text" 
                 id="metaDesc" 
                 value="Detecta patrones sospechosos asociados a APT"
-                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
                 placeholder="Descripción del incidente"
               />
             </div>
@@ -77,7 +77,7 @@ import Footer from '../../components/Footer.astro';
               <input 
                 type="text" 
                 id="metaRef" 
-                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
                 placeholder="ej: https://threatintel.com"
               />
             </div>
@@ -87,7 +87,7 @@ import Footer from '../../components/Footer.astro';
                 type="text" 
                 id="metaVersion" 
                 value="1.0"
-                class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
+                class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs text-neutral-300 focus:outline-none transition-all duration-200"
                 placeholder="1.0"
               />
             </div>
@@ -95,24 +95,27 @@ import Footer from '../../components/Footer.astro';
         </div>
 
         <!-- Box 2: Strings Section -->
-        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
-          <div class="flex items-center justify-between border-b border-neutral-950/60 pb-3">
+        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-white/[0.04] pb-3">
             <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
               2. Cadenas de Detección (Strings)
             </h2>
             <button 
               id="btnAddString" 
               class="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 hover:text-blue-300 text-[10px] font-mono font-bold tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
             >
-              ➕ AÑADIR CADENA
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              AÑADIR CADENA
             </button>
           </div>
 
           <!-- Dynamic Strings List -->
           <div id="stringsContainer" class="space-y-4">
             <!-- Default String Item (Initial) -->
-            <div class="string-item bg-neutral-950/40 border border-white/5 rounded-xl p-4 space-y-3 relative group" data-id="1">
+            <div class="string-item bg-black/40 border border-white/[0.06] rounded-xl p-4 space-y-3 relative group" data-id="1">
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-2">
                   <span class="text-xs text-neutral-500 font-mono font-bold">$</span>
@@ -172,9 +175,9 @@ import Footer from '../../components/Footer.astro';
         </div>
 
         <!-- Box 3: Condition Section -->
-        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl space-y-4">
-          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-neutral-950/60 pb-3 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4">
+          <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-white/[0.04] pb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
             3. Condición de Disparo (Condition)
           </h2>
 
@@ -182,7 +185,7 @@ import Footer from '../../components/Footer.astro';
             <label for="conditionStyle" class="text-xs text-neutral-400 font-medium">Lógica de Condición</label>
             <select 
               id="conditionStyle" 
-              class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+              class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
             >
               <option value="any">Cualquiera de las cadenas declaradas (any of them)</option>
               <option value="all">Todas las cadenas declaradas (all of them)</option>
@@ -197,7 +200,7 @@ import Footer from '../../components/Footer.astro';
               type="text" 
               id="conditionCustom" 
               value="any of ($s*)"
-              class="bg-neutral-950/50 border border-white/5 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
+              class="bg-black/40 border border-white/[0.08] focus:border-neutral-700/85 focus:ring-0 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none transition-all duration-200"
               placeholder="ej: $s1 and ($s2 or $s3)"
             />
           </div>
@@ -208,11 +211,11 @@ import Footer from '../../components/Footer.astro';
       <div class="lg:col-span-5 space-y-6">
         
         <!-- YARA Rule Code Output -->
-        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative min-h-[420px]">
+        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between relative min-h-[420px]">
           <div>
-            <div class="flex items-center justify-between mb-4 border-b border-neutral-950/60 pb-3">
+            <div class="flex items-center justify-between mb-4 border-b border-white/[0.04] pb-3">
               <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                 Regla YARA Generada
               </h2>
               
@@ -228,14 +231,17 @@ import Footer from '../../components/Footer.astro';
             </div>
 
             <!-- Code display area -->
-            <pre class="w-full bg-neutral-950/60 border border-neutral-900 rounded-xl p-4 text-[10px] md:text-xs font-mono text-neutral-300 overflow-x-auto min-h-[300px] whitespace-pre select-all" id="yaraOutput"></pre>
+            <pre class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-[10px] md:text-xs font-mono text-neutral-300 overflow-x-auto min-h-[300px] whitespace-pre select-all" id="yaraOutput"></pre>
           </div>
         </div>
 
         <!-- Linter (Syntax Validation) -->
-        <div class="bg-neutral-900/30 border border-white/5 rounded-2xl p-6 shadow-xl">
-          <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2 border-b border-neutral-950/60 pb-2">
-            🛡️ Analizador de Sintaxis (Linter)
+        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl">
+          <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-white/[0.04] pb-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4.5 h-4.5 text-blue-400">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            </svg>
+            Analizador de Sintaxis (Linter)
           </h3>
           
           <div class="space-y-3" id="linterList">
@@ -570,9 +576,11 @@ import Footer from '../../components/Footer.astro';
     
     if (list.length === 0) {
       const itemDiv = document.createElement('div');
-      itemDiv.className = 'flex items-start gap-2 text-xs text-emerald-400 font-medium bg-emerald-500/5 border border-emerald-500/10 p-3 rounded-xl';
+      itemDiv.className = 'flex items-start gap-2.5 text-xs text-emerald-400 font-medium bg-emerald-500/5 border border-emerald-500/10 p-3 rounded-xl';
       itemDiv.innerHTML = `
-        <span class="text-sm">✓</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0 text-emerald-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
         <span>Regla YARA válida. Cero errores de sintaxis o variables no utilizadas.</span>
       `;
       linterList.appendChild(itemDiv);
@@ -580,15 +588,19 @@ import Footer from '../../components/Footer.astro';
       list.forEach((item) => {
         const itemDiv = document.createElement('div');
         if (item.type === 'error') {
-          itemDiv.className = 'flex items-start gap-2 text-xs text-red-400 bg-red-500/5 border border-red-500/10 p-3 rounded-xl';
+          itemDiv.className = 'flex items-start gap-2.5 text-xs text-red-400 bg-red-500/5 border border-red-500/10 p-3 rounded-xl';
           itemDiv.innerHTML = `
-            <span class="text-sm">❌</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0 text-red-405">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
             <span><strong>[Error]</strong> ${item.message}</span>
           `;
         } else {
-          itemDiv.className = 'flex items-start gap-2 text-xs text-amber-400 bg-amber-500/5 border border-amber-500/10 p-3 rounded-xl';
+          itemDiv.className = 'flex items-start gap-2.5 text-xs text-amber-400 bg-amber-500/5 border border-amber-500/10 p-3 rounded-xl';
           itemDiv.innerHTML = `
-            <span class="text-sm">⚠️</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 shrink-0 text-amber-405">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
             <span><strong>[Advertencia]</strong> ${item.message}</span>
           `;
         }
