@@ -104,6 +104,39 @@ import Footer from '../../components/Footer.astro';
         <!-- Actual Results Panel (hidden by default) -->
         <div id="resultsPanel" class="space-y-6 hidden">
           
+          <!-- Box 0: Premium Security Score & Export -->
+          <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+              <!-- Score Ring -->
+              <div class="relative w-20 h-20 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.04]">
+                <svg class="w-full h-full transform -rotate-90">
+                  <circle cx="40" cy="40" r="34" stroke-width="4" stroke="rgba(255,255,255,0.03)" fill="transparent"/>
+                  <circle id="scoreRing" cx="40" cy="40" r="34" stroke-width="4.5" stroke="currentColor" fill="transparent" class="text-blue-500 transition-all duration-1000" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+                </svg>
+                <span id="scoreText" class="absolute text-lg font-bold font-mono text-white">0%</span>
+              </div>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-bold text-white">Nivel de Confianza del Remitente</h4>
+                  <span id="scoreStatusBadge" class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-neutral-900 text-neutral-450 uppercase tracking-wider font-mono">No verificado</span>
+                </div>
+                <p id="scoreVerdict" class="text-xs text-neutral-400 font-light leading-relaxed">
+                  Carga y analiza cabeceras de correo para comprobar la autenticidad e identificar spoofing de remitente.
+                </p>
+              </div>
+            </div>
+            
+            <button 
+              id="btnDownloadReport" 
+              class="w-full md:w-auto px-4 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md flex items-center justify-center gap-1.5 active:scale-95 shrink-0"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Descargar Informe
+            </button>
+          </div>
+
           <!-- Box 1: Auth Status (SPF, DKIM, DMARC) -->
           <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl">
             <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-white/[0.04] pb-2.5">
@@ -238,6 +271,13 @@ import Footer from '../../components/Footer.astro';
   const timelineContainer = document.getElementById('timelineContainer') as HTMLDivElement;
   const hopsCount = document.getElementById('hopsCount') as HTMLSpanElement;
 
+  // Score Elements
+  const scoreRing = document.getElementById('scoreRing') as SVGStrokeElement & HTMLElement;
+  const scoreText = document.getElementById('scoreText') as HTMLSpanElement;
+  const scoreStatusBadge = document.getElementById('scoreStatusBadge') as HTMLSpanElement;
+  const scoreVerdict = document.getElementById('scoreVerdict') as HTMLParagraphElement;
+  const btnDownloadReport = document.getElementById('btnDownloadReport') as HTMLButtonElement;
+
   // Drag and drop events
   dropzone.addEventListener('click', () => fileInput.click());
   
@@ -298,6 +338,11 @@ import Footer from '../../components/Footer.astro';
     fileInput.value = '';
     resultsPanel.classList.add('hidden');
     resultsPlaceholder.classList.remove('hidden');
+    scoreRing.style.strokeDashoffset = '213.6';
+    scoreText.textContent = '0%';
+    scoreStatusBadge.textContent = 'No verificado';
+    scoreStatusBadge.className = 'text-[9px] px-1.5 py-0.5 rounded font-bold bg-neutral-900 text-neutral-450 uppercase tracking-wider font-mono';
+    scoreVerdict.textContent = 'Carga y analiza cabeceras de correo para comprobar la autenticidad.';
   });
 
   // Extract a field value from header text
@@ -492,6 +537,46 @@ import Footer from '../../components/Footer.astro';
     dmarcBadge.textContent = auth.dmarc.status;
     dmarcDetails.textContent = auth.dmarc.details;
 
+    // Compute security score
+    let score = 10;
+    if (auth.spf.status === 'PASS') score += 30;
+    else if (auth.spf.status === 'FAIL') score -= 20;
+    else if (auth.spf.status === 'NONE') score += 0;
+    else score += 10; // NEUTRAL / SOFTFAIL
+
+    if (auth.dkim.status === 'PASS') score += 30;
+    else if (auth.dkim.status === 'FAIL') score -= 20;
+    else if (auth.dkim.status === 'NONE') score += 0;
+    else score += 10;
+
+    if (auth.dmarc.status === 'PASS') score += 30;
+    else if (auth.dmarc.status === 'FAIL') score -= 20;
+    else if (auth.dmarc.status === 'NONE') score += 0;
+    else score += 10;
+
+    if (score < 0) score = 0;
+    if (score > 100) score = 100;
+
+    // Update gauge ring (Full circle length = 213.6)
+    const offset = 213.6 - (213.6 * score / 100);
+    scoreRing.style.strokeDashoffset = String(offset);
+    scoreText.textContent = `${score}%`;
+
+    // Status Badge and Verdict
+    if (score >= 85) {
+      scoreStatusBadge.textContent = "CONFIABLE";
+      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider font-mono";
+      scoreVerdict.textContent = "El remitente está completamente verificado. Todas las validaciones SPF, DKIM y DMARC pasaron correctamente.";
+    } else if (score >= 50) {
+      scoreStatusBadge.textContent = "SOSPECHOSO";
+      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider font-mono";
+      scoreVerdict.textContent = "El correo presenta validaciones incompletas o fallos parciales. Podría tratarse de un remitente falsificado (spoofing).";
+    } else {
+      scoreStatusBadge.textContent = "PELIGROSO";
+      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase tracking-wider font-mono";
+      scoreVerdict.textContent = "Fallo severo de validación de identidad (SPF/DMARC fallidos). Extremar precauciones con enlaces y archivos adjuntos.";
+    }
+
     // 2. Metadata details
     metaSubject.textContent = getHeaderValue(headersText, 'Subject');
     metaFrom.textContent = getHeaderValue(headersText, 'From');
@@ -568,4 +653,56 @@ import Footer from '../../components/Footer.astro';
     resultsPlaceholder.classList.add('hidden');
     resultsPanel.classList.remove('hidden');
   }
+
+  // Report Download Listener
+  btnDownloadReport.addEventListener('click', () => {
+    const raw = headerInput.value.trim();
+    if (!raw) return;
+
+    const auth = parseSecurityAuth(raw);
+    const subject = getHeaderValue(raw, 'Subject');
+    const fromVal = getHeaderValue(raw, 'From');
+    const toVal = getHeaderValue(raw, 'To');
+    const dateVal = getHeaderValue(raw, 'Date');
+    const messageId = getHeaderValue(raw, 'Message-ID');
+    const hops = parseReceivedHops(raw);
+
+    let md = `# Informe de Análisis de Cabeceras de Correo\n\n`;
+    md += `**Fecha del Análisis:** ${new Date().toLocaleString()}\n`;
+    md += `**Nivel de Confianza:** ${scoreText.textContent} (${scoreStatusBadge.textContent})\n\n`;
+    
+    md += `## Datos Generales\n`;
+    md += `- **Asunto:** ${subject}\n`;
+    md += `- **De:** ${fromVal}\n`;
+    md += `- **Para:** ${toVal}\n`;
+    md += `- **Fecha de Envío:** ${dateVal}\n`;
+    md += `- **Message-ID:** ${messageId}\n\n`;
+
+    md += `## Seguridad de Autenticación\n`;
+    md += `- **SPF:** ${auth.spf.status} (${auth.spf.details})\n`;
+    md += `- **DKIM:** ${auth.dkim.status} (${auth.dkim.details})\n`;
+    md += `- **DMARC:** ${auth.dmarc.status} (${auth.dmarc.details})\n\n`;
+
+    md += `## Saltos de Red (Hop-by-Hop)\n`;
+    if (hops.length === 0) {
+      md += `No se encontraron cabeceras Received válidas.\n`;
+    } else {
+      md += `| Hop | De (Sender) | Por (Receiver) | Fecha | Retraso |\n`;
+      md += `|---|---|---|---|---|\n`;
+      hops.forEach(h => {
+        const delayStr = h.hopNumber > 1 ? formatDelay(h.delay) : '0s (Origen)';
+        md += `| ${h.hopNumber} | ${h.sender} | ${h.receiver} | ${h.date ? h.date.toLocaleString() : '-'} | ${delayStr} |\n`;
+      });
+    }
+
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reporte_correo_${Date.now()}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 </script>

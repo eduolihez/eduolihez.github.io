@@ -117,7 +117,10 @@ import Footer from '../../components/Footer.astro';
         <!-- Progress Bar -->
         <div class="space-y-1.5">
           <div class="flex justify-between text-[10px] text-neutral-500 font-mono">
-            <span>Diagnóstico en Progreso</span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Análisis en Curso: <span id="wizardTimer" class="font-bold text-neutral-300">00:00</span></span>
+            </span>
             <span id="wizardStepText">Paso 1</span>
           </div>
           <div class="w-full h-1.5 bg-neutral-950/60 rounded-full overflow-hidden">
@@ -166,15 +169,26 @@ import Footer from '../../components/Footer.astro';
             <p class="text-xs text-neutral-400 font-light mt-1" id="resultPlaybookInfo">Playbook: Phishing</p>
           </div>
           
-          <button 
-            id="btnReset" 
-            class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-            Reiniciar Playbook
-          </button>
+          <div class="flex gap-3">
+            <button 
+              id="btnDownloadReport" 
+              class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Exportar Reporte
+            </button>
+            <button 
+              id="btnReset" 
+              class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+              Reiniciar Playbook
+            </button>
+          </div>
         </div>
 
         <!-- Bento Grid split layout -->
@@ -718,6 +732,31 @@ import Footer from '../../components/Footer.astro';
   const siemQueryOutput = document.getElementById('siemQueryOutput') as HTMLPreElement;
   const powershellOutput = document.getElementById('powershellOutput') as HTMLPreElement;
 
+  // Incident Investigation Timer
+  let timerInterval: any = null;
+  let secondsElapsed = 0;
+  const wizardTimer = document.getElementById('wizardTimer') as HTMLElement;
+  const btnDownloadReport = document.getElementById('btnDownloadReport') as HTMLButtonElement;
+
+  function startTimer() {
+    stopTimer();
+    secondsElapsed = 0;
+    wizardTimer.textContent = "00:00";
+    timerInterval = setInterval(() => {
+      secondsElapsed++;
+      const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+      const s = String(secondsElapsed % 60).padStart(2, '0');
+      wizardTimer.textContent = `${m}:${s}`;
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
   // Set card selectors clicks
   document.querySelectorAll('.playbook-card').forEach((card) => {
     card.addEventListener('click', () => {
@@ -755,6 +794,7 @@ import Footer from '../../components/Footer.astro';
     resultsState.classList.add('hidden');
     wizardState.classList.remove('hidden');
 
+    startTimer();
     renderStep();
   }
 
@@ -836,6 +876,7 @@ import Footer from '../../components/Footer.astro';
 
   // Show Results State
   function showResults(res: PlaybookResult) {
+    stopTimer();
     wizardState.classList.add('hidden');
     resultsState.classList.remove('hidden');
 
@@ -909,17 +950,66 @@ import Footer from '../../components/Footer.astro';
 
   // Cancel Wizard
   btnCancelWizard.addEventListener('click', () => {
-    if (confirm('¿Estás seguro de que deseas cancelar el playbook? Se perderán las respuestas seleccionadas.')) {
-      resetToSelector();
-    }
+    resetPlaybook();
   });
 
   // Reset to initial state
-  btnReset.addEventListener('click', resetToSelector);
+  btnReset.addEventListener('click', () => {
+    resetPlaybook();
+  });
 
-  function resetToSelector() {
+  function resetPlaybook() {
+    stopTimer();
     wizardState.classList.add('hidden');
     resultsState.classList.add('hidden');
     selectorState.classList.remove('hidden');
+    historySteps = [];
+    currentStepId = '';
   }
+
+  // Report Download Listener
+  btnDownloadReport.addEventListener('click', () => {
+    const res = currentTree[currentStepId] as PlaybookResult;
+    if (!res) return;
+
+    let md = `# Informe de Incidente SOC - Blue Team Hub\n\n`;
+    md += `**Fecha del Informe:** ${new Date().toLocaleString()}\n`;
+    md += `**Playbook Utilizado:** ${currentPlaybookName.toUpperCase()}\n`;
+    md += `**Prioridad Asignada:** ${res.priority.toUpperCase()}\n`;
+    md += `**Tiempo de Investigación:** ${wizardTimer.textContent}\n\n`;
+
+    md += `## 1. Acciones de Contención\n`;
+    res.containment.forEach(item => {
+      md += `- ${item}\n`;
+    });
+    md += `\n`;
+
+    md += `## 2. Acciones de Erradicación\n`;
+    res.eradication.forEach(item => {
+      md += `- ${item}\n`;
+    });
+    md += `\n`;
+
+    md += `## 3. Acciones de Recuperación\n`;
+    res.recovery.forEach(item => {
+      md += `- ${item}\n`;
+    });
+    md += `\n`;
+
+    md += `## 4. Comando de Remediación (PowerShell)\n`;
+    md += `\`\`\`powershell\n${powershellOutput.textContent}\n\`\`\`\n\n`;
+
+    md += `## 5. Consulta de Búsqueda SIEM (${activeSiem.toUpperCase()})\n`;
+    md += `\`\`\`\n${siemQueryOutput.textContent}\n\`\`\`\n`;
+
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `informe_incidente_${currentPlaybookName}_${Date.now()}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 </script>

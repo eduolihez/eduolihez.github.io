@@ -101,16 +101,29 @@ import Footer from '../../components/Footer.astro';
               <span id="outputTitle">Resultado</span>
             </h2>
             
-            <button 
-              id="btnCopy" 
-              class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
-              </svg>
-              Copiar
-            </button>
+            <div class="flex gap-2">
+              <button 
+                id="btnDownloadJson" 
+                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Exportar JSON
+              </button>
+              
+              <button 
+                id="btnCopy" 
+                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
+                </svg>
+                Copiar
+              </button>
+            </div>
           </div>
 
           <!-- Output Box -->
@@ -129,6 +142,59 @@ import Footer from '../../components/Footer.astro';
         </div>
       </div>
       
+    </div>
+
+    <!-- SaaS Stats & Quota Info -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <!-- Card: Account/API Info -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
+        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between">
+          <span>Suscripción</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold">ACTIVA</span>
+        </h3>
+        <div class="space-y-1.5 text-[11px] text-neutral-400">
+          <div class="flex justify-between"><span>Plan:</span><span class="text-neutral-200">Self-Hosted Enterprise</span></div>
+          <div class="flex justify-between"><span>Cuota API:</span><span class="text-neutral-200">Ilimitada / Local</span></div>
+          <div class="flex justify-between"><span>Velocidad:</span><span class="text-neutral-200">Instantánea (&lt;1ms)</span></div>
+          <div class="flex justify-between"><span>Privacidad:</span><span class="text-neutral-200">100% On-Device</span></div>
+        </div>
+      </div>
+
+      <!-- Card: IOC Distribution Chart/Metrics -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
+        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2">Distribución de Datos</h3>
+        <div class="grid grid-cols-2 gap-2 text-[10px]">
+          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
+            <span class="text-neutral-500 block">IPs</span>
+            <span id="statIps" class="text-base font-bold text-blue-400">0</span>
+          </div>
+          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
+            <span class="text-neutral-500 block">Dominios</span>
+            <span id="statDomains" class="text-base font-bold text-purple-400">0</span>
+          </div>
+          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
+            <span class="text-neutral-500 block">Hashes</span>
+            <span id="statHashes" class="text-base font-bold text-amber-400">0</span>
+          </div>
+          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
+            <span class="text-neutral-500 block">Correos</span>
+            <span id="statEmails" class="text-base font-bold text-emerald-400">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Local History -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 flex flex-col justify-between">
+        <div>
+          <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between font-mono">
+            <span>Historial Local</span>
+            <button id="btnClearHistory" class="text-[9px] text-red-400 hover:underline">Limpiar</button>
+          </h3>
+          <div id="historyList" class="space-y-1.5 max-h-[100px] overflow-y-auto mt-2 pr-1 text-[11px] font-mono">
+            <div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -150,11 +216,14 @@ import Footer from '../../components/Footer.astro';
   const btnExtract = document.getElementById('btnExtract') as HTMLButtonElement;
   const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
   const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+  const btnDownloadJson = document.getElementById('btnDownloadJson') as HTMLButtonElement;
 
-  // Track keypress to update character count
-  inputElement.addEventListener('input', () => {
-    charCount.textContent = `${inputElement.value.length} caracteres`;
-  });
+  const statIps = document.getElementById('statIps') as HTMLElement;
+  const statDomains = document.getElementById('statDomains') as HTMLElement;
+  const statHashes = document.getElementById('statHashes') as HTMLElement;
+  const statEmails = document.getElementById('statEmails') as HTMLElement;
+  const historyList = document.getElementById('historyList') as HTMLElement;
+  const btnClearHistory = document.getElementById('btnClearHistory') as HTMLButtonElement;
 
   // Helper functions for Defang/Refang
   function defang(text: string): string {
@@ -225,6 +294,72 @@ import Footer from '../../components/Footer.astro';
     return { output: output.trim(), count };
   }
 
+  function calculateMetrics(text: string) {
+    const normalizedText = refang(text);
+    const ips = (normalizedText.match(ipv4Regex) || []).length;
+    const emails = (normalizedText.match(emailRegex) || []).length;
+    const urls = (normalizedText.match(urlRegex) || []).length;
+    const md5 = (normalizedText.match(md5Regex) || []).length;
+    const sha1 = (normalizedText.match(sha1Regex) || []).length;
+    const sha256 = (normalizedText.match(sha256Regex) || []).length;
+    const hashes = md5 + sha1 + sha256;
+
+    statIps.textContent = String(ips);
+    statDomains.textContent = String(urls);
+    statHashes.textContent = String(hashes);
+    statEmails.textContent = String(emails);
+  }
+
+  // Local history interface
+  interface HistoryItem {
+    id: number;
+    timestamp: string;
+    action: string;
+    input: string;
+    output: string;
+  }
+
+  function getHistory(): HistoryItem[] {
+    const raw = localStorage.getItem('defanger_history');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveHistory(item: Omit<HistoryItem, 'id' | 'timestamp'>) {
+    const history = getHistory();
+    const newItem: HistoryItem = {
+      ...item,
+      id: Date.now(),
+      timestamp: new Date().toLocaleTimeString()
+    };
+    const updated = [newItem, ...history].slice(0, 5);
+    localStorage.setItem('defanger_history', JSON.stringify(updated));
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    historyList.innerHTML = '';
+    if (history.length === 0) {
+      historyList.innerHTML = '<div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>';
+      return;
+    }
+    history.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'flex justify-between items-center bg-white/[0.02] border border-white/[0.04] p-1.5 rounded hover:bg-white/[0.05] cursor-pointer transition-all duration-200 mb-1';
+      row.innerHTML = `
+        <span class="text-neutral-450 font-bold uppercase text-[9px]">${item.action}</span>
+        <span class="text-neutral-500 text-[9px]">${item.timestamp}</span>
+      `;
+      row.addEventListener('click', () => {
+        inputElement.value = item.input;
+        charCount.textContent = `${item.input.length} caracteres`;
+        calculateMetrics(item.input);
+        updateOutput(item.output, `Resultado: ${item.action}`, "Cargado desde historial");
+      });
+      historyList.appendChild(row);
+    });
+  }
+
   // Set active state styling
   function updateOutput(text: string, title: string, statLabel: string, success = true) {
     outputElement.textContent = text;
@@ -233,14 +368,21 @@ import Footer from '../../components/Footer.astro';
     outputTitle.textContent = title;
     outputStat.textContent = statLabel;
     btnCopy.disabled = !text || text.startsWith('Esperando');
+    btnDownloadJson.disabled = !text || text.startsWith('Esperando');
 
     // Update status dot color
     if (success && text) {
-      statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse';
     } else {
-      statusDot.className = 'w-2 h-2 rounded-full bg-blue-500';
+      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-blue-500';
     }
   }
+
+  // Track keypress to update character count
+  inputElement.addEventListener('input', () => {
+    charCount.textContent = `${inputElement.value.length} caracteres`;
+    calculateMetrics(inputElement.value);
+  });
 
   // Events
   btnDefang.addEventListener('click', () => {
@@ -248,7 +390,9 @@ import Footer from '../../components/Footer.astro';
     if (!val) return;
     
     const result = defang(val);
+    calculateMetrics(val);
     updateOutput(result, "Resultado: Defang", "Texto modificado");
+    saveHistory({ action: 'Defang', input: val, output: result });
   });
 
   btnRefang.addEventListener('click', () => {
@@ -256,7 +400,9 @@ import Footer from '../../components/Footer.astro';
     if (!val) return;
     
     const result = refang(val);
+    calculateMetrics(val);
     updateOutput(result, "Resultado: Refang", "Texto modificado");
+    saveHistory({ action: 'Refang', input: val, output: result });
   });
 
   btnExtract.addEventListener('click', () => {
@@ -265,7 +411,11 @@ import Footer from '../../components/Footer.astro';
 
     const { output, count } = extractIOCs(val);
     const content = output || 'No se encontraron IOCs válidos (IPs, URLs, Hashes, Emails).';
+    calculateMetrics(val);
     updateOutput(content, "Resultado: Extracción", `${count} IOCs extraídos`, count > 0);
+    if (count > 0) {
+      saveHistory({ action: 'Extract', input: val, output: content });
+    }
   });
 
   btnClear.addEventListener('click', () => {
@@ -277,7 +427,45 @@ import Footer from '../../components/Footer.astro';
     outputTitle.textContent = "Resultado";
     outputStat.textContent = '0 elementos';
     btnCopy.disabled = true;
-    statusDot.className = 'w-2 h-2 rounded-full bg-blue-500';
+    btnDownloadJson.disabled = true;
+    statusDot.className = 'w-1.5 h-1.5 rounded-full bg-blue-500';
+    
+    statIps.textContent = '0';
+    statDomains.textContent = '0';
+    statHashes.textContent = '0';
+    statEmails.textContent = '0';
+  });
+
+  btnClearHistory.addEventListener('click', () => {
+    localStorage.removeItem('defanger_history');
+    renderHistory();
+  });
+
+  btnDownloadJson.addEventListener('click', () => {
+    const content = outputElement.textContent;
+    if (!content || content.startsWith('Esperando')) return;
+
+    const data = {
+      timestamp: new Date().toISOString(),
+      tool: "IOC Defanger & Extractor",
+      metrics: {
+        ips: statIps.textContent,
+        domains: statDomains.textContent,
+        hashes: statHashes.textContent,
+        emails: statEmails.textContent
+      },
+      output: content
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ioc_report_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 
   btnCopy.addEventListener('click', () => {
@@ -302,4 +490,7 @@ import Footer from '../../components/Footer.astro';
       console.error('Error al copiar: ', err);
     });
   });
+
+  // Init history
+  renderHistory();
 </script>

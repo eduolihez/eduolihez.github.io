@@ -90,6 +90,16 @@ import Footer from '../../components/Footer.astro';
             </svg>
             Deobfuscate PS
           </button>
+
+          <button 
+            id="btnAutoDetect" 
+            class="px-3.5 py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l8.982-11.861H13.62l1.066-5.748L5.703 15.25h4.11Z" />
+            </svg>
+            Auto-Detectar
+          </button>
           
           <button 
             id="btnClear" 
@@ -111,16 +121,38 @@ import Footer from '../../components/Footer.astro';
               <span id="outputTitle">Resultado</span>
             </h2>
             
-            <button 
-              id="btnCopy" 
-              class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
-              </svg>
-              Copiar
-            </button>
+            <div class="flex gap-2">
+              <button 
+                id="btnDownloadFile" 
+                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Descargar TXT
+              </button>
+              
+              <button 
+                id="btnCopy" 
+                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v.375m-12 10.5V7.375m12 10.5V11.25M18 10.5h.008v.008H18V10.5Zm-3-3h.008v.008H15V7.5Z" />
+                </svg>
+                Copiar
+              </button>
+            </div>
+          </div>
+
+          <!-- Pipeline Chain Bar -->
+          <div class="mb-3 px-3 py-2 bg-black/40 border border-white/[0.04] rounded-lg flex items-center justify-between text-[10px] font-mono">
+            <div class="flex items-center gap-1.5 overflow-x-auto" id="pipelineChain">
+              <span class="text-neutral-500">Pipeline:</span>
+              <span class="px-1.5 py-0.5 rounded bg-white/5 text-neutral-300">Entrada</span>
+            </div>
+            <button id="btnUndoStep" class="text-blue-400 hover:text-blue-300 disabled:opacity-40 disabled:hover:text-blue-450 cursor-pointer font-bold" disabled>Deshacer</button>
           </div>
 
           <!-- Output Box -->
@@ -129,7 +161,7 @@ import Footer from '../../components/Footer.astro';
               id="payloadOutput" 
               rows="12" 
               readonly
-              class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-400 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+              class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-450 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
               placeholder="El resultado procesado se mostrará aquí..."
             ></textarea>
           </div>
@@ -142,6 +174,46 @@ import Footer from '../../components/Footer.astro';
         </div>
       </div>
       
+    </div>
+
+    <!-- SaaS Info & Decoded History -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <!-- Card: Sandbox stats -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
+        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between">
+          <span>Decodificador Local</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold">100% OFFLINE</span>
+        </h3>
+        <div class="space-y-1.5 text-[11px] text-neutral-400">
+          <div class="flex justify-between"><span>Motor:</span><span class="text-neutral-200">V8 Sandbox (Local)</span></div>
+          <div class="flex justify-between"><span>Capacidad:</span><span class="text-neutral-200">Hasta 50MB Payload</span></div>
+          <div class="flex justify-between"><span>Límites de Uso:</span><span class="text-neutral-200">Ninguno / Gratis</span></div>
+          <div class="flex justify-between"><span>Seguridad OpSec:</span><span class="text-neutral-200">Sin tráfico saliente</span></div>
+        </div>
+      </div>
+
+      <!-- Card: Autodetect stats -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
+        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2">Diagnóstico de Codificación</h3>
+        <div class="space-y-2 text-[11px] text-neutral-400">
+          <div class="flex justify-between"><span>Codificación Sugerida:</span><span id="suggestedType" class="text-blue-400 font-bold">Ninguna (Input vacío)</span></div>
+          <div class="flex justify-between"><span>Entropía de Entrada:</span><span id="entropyValue" class="text-neutral-200">0.00</span></div>
+          <div class="flex justify-between"><span>Nivel de Sospecha:</span><span id="suspicionLevel" class="text-neutral-200">Bajo</span></div>
+        </div>
+      </div>
+
+      <!-- Card: History -->
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 flex flex-col justify-between">
+        <div>
+          <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between font-mono">
+            <span>Operaciones de Pipeline</span>
+            <button id="btnClearHistory" class="text-[9px] text-red-400 hover:underline">Limpiar</button>
+          </h3>
+          <div id="historyList" class="space-y-1.5 max-h-[100px] overflow-y-auto mt-2 pr-1 text-[11px] font-mono">
+            <div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -162,28 +234,91 @@ import Footer from '../../components/Footer.astro';
   const btnUrl = document.getElementById('btnUrl') as HTMLButtonElement;
   const btnHex = document.getElementById('btnHex') as HTMLButtonElement;
   const btnPs = document.getElementById('btnPs') as HTMLButtonElement;
+  const btnAutoDetect = document.getElementById('btnAutoDetect') as HTMLButtonElement;
   const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
   const btnCopy = document.getElementById('btnCopy') as HTMLButtonElement;
+  const btnDownloadFile = document.getElementById('btnDownloadFile') as HTMLButtonElement;
 
-  inputElement.addEventListener('input', () => {
-    charCountInput.textContent = `${inputElement.value.length} caracteres`;
-  });
+  const pipelineChain = document.getElementById('pipelineChain') as HTMLElement;
+  const btnUndoStep = document.getElementById('btnUndoStep') as HTMLButtonElement;
+  const suggestedType = document.getElementById('suggestedType') as HTMLElement;
+  const entropyValue = document.getElementById('entropyValue') as HTMLElement;
+  const suspicionLevel = document.getElementById('suspicionLevel') as HTMLElement;
+  const historyList = document.getElementById('historyList') as HTMLElement;
+  const btnClearHistory = document.getElementById('btnClearHistory') as HTMLButtonElement;
 
-  function updateOutput(text: string, operationTitle: string) {
-    outputElement.value = text;
-    outputTitle.textContent = `Resultado: ${operationTitle}`;
-    charCountOutput.textContent = `${text.length} caracteres`;
-    btnCopy.disabled = !text;
-    statusDot.className = text ? 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse' : 'w-2 h-2 rounded-full bg-blue-500';
+  // Pipeline state
+  let pipelineSteps: { name: string; content: string }[] = [];
+
+  function calculateEntropy(str: string): number {
+    if (!str) return 0;
+    const len = str.length;
+    const freq: { [key: string]: number } = {};
+    for (let i = 0; i < len; i++) {
+      freq[str[i]] = (freq[str[i]] || 0) + 1;
+    }
+    let entropy = 0;
+    for (const val of Object.values(freq)) {
+      const p = val / len;
+      entropy -= p * Math.log2(p);
+    }
+    return Math.round(entropy * 100) / 100;
   }
+
+  function detectType(str: string) {
+    const val = str.trim();
+    if (!val) {
+      suggestedType.textContent = "Ninguna (Input vacío)";
+      entropyValue.textContent = "0.00";
+      suspicionLevel.textContent = "Bajo";
+      suspicionLevel.className = "text-neutral-200";
+      return;
+    }
+
+    const entropy = calculateEntropy(val);
+    entropyValue.textContent = String(entropy);
+
+    // suspicion level based on entropy
+    if (entropy > 5.5) {
+      suspicionLevel.textContent = "Muy Alto (Cifrado/Comprimido)";
+      suspicionLevel.className = "text-red-400 font-bold";
+    } else if (entropy > 4.5) {
+      suspicionLevel.textContent = "Medio (Posible Ofuscación)";
+      suspicionLevel.className = "text-amber-400 font-bold";
+    } else {
+      suspicionLevel.textContent = "Bajo";
+      suspicionLevel.className = "text-emerald-400 font-bold";
+    }
+
+    // Auto detection heuristics
+    if (/^[a-fA-F0-9\s,:]+$/.test(val) && val.length > 4 && val.length % 2 === 0) {
+      suggestedType.textContent = "Hexadecimal";
+    } else if (/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(val.replace(/\s/g, ''))) {
+      suggestedType.textContent = "Base64";
+    } else if (/%[0-9a-fA-F]{2}/.test(val)) {
+      suggestedType.textContent = "URL Encoded";
+    } else if (val.includes('`') || val.includes('+') && (val.includes("'") || val.includes('"'))) {
+      suggestedType.textContent = "PowerShell Backticks/Concats";
+    } else {
+      suggestedType.textContent = "Texto Plano / Desconocido";
+    }
+  }
+
+  // Live updates
+  inputElement.addEventListener('input', () => {
+    const val = inputElement.value;
+    charCountInput.textContent = `${val.length} caracteres`;
+    detectType(val);
+    if (pipelineSteps.length <= 1) {
+      pipelineSteps = [{ name: 'Entrada', content: val }];
+      updatePipelineUI();
+    }
+  });
 
   // Base64 Decode with UTF-16LE / UTF-8 auto-detection
   function decodeBase64(str: string): string {
     try {
-      // Clean string from whitespace/newlines
       const cleaned = str.replace(/\s/g, '');
-      
-      // Decode into raw binary string
       const binaryString = atob(cleaned);
       const len = binaryString.length;
       const bytes = new Uint8Array(len);
@@ -191,14 +326,12 @@ import Footer from '../../components/Footer.astro';
         bytes[i] = binaryString.charCodeAt(i);
       }
 
-      // Detect if UTF-16LE (typically PowerShell EncodedCommand has 0x00 at every other byte)
       let isUtf16Le = false;
       if (len >= 2) {
         let nulls = 0;
         for (let i = 1; i < len; i += 2) {
           if (bytes[i] === 0) nulls++;
         }
-        // If more than 35% of alternate bytes are nulls, it's highly likely UTF-16LE
         const ratio = nulls / (len / 2);
         if (ratio > 0.35) {
           isUtf16Le = true;
@@ -220,24 +353,15 @@ import Footer from '../../components/Footer.astro';
   // PowerShell Deobfuscator
   function deobfuscatePowerShell(code: string): string {
     let result = code;
-
-    // 1. Remove PowerShell Backticks escape characters
-    // e.g. d`o`w`n`l`o`a`d -> download
     result = result.replace(/`/g, '');
-
-    // 2. Resolve string concatenations: 'a'+'b' or "c"+"d"
-    // Run in a loop to handle multiple consecutive joins (like 'a' + 'b' + 'c')
     let previousResult;
     let iterations = 0;
     do {
       previousResult = result;
-      // Single quotes concatenation
       result = result.replace(/'([^']*)'\s*\+\s*'([^']*)'/g, "'$1$2'");
-      // Double quotes concatenation
       result = result.replace(/"([^"]*)"\s*\+\s*"([^"]*)"/g, '"$1$2"');
       iterations++;
     } while (result !== previousResult && iterations < 20);
-
     return result;
   }
 
@@ -253,7 +377,6 @@ import Footer from '../../components/Footer.astro';
   // Hex to string
   function decodeHex(str: string): string {
     try {
-      // Remove prefixes like 0x or spaces
       const clean = str.replace(/0x/g, '').replace(/[\s,:]/g, '');
       if (clean.length % 2 !== 0) {
         return '[Error: La longitud de la cadena hexadecimal debe ser par]';
@@ -271,33 +394,86 @@ import Footer from '../../components/Footer.astro';
     }
   }
 
+  function updateOutput(text: string, operationTitle: string) {
+    outputElement.value = text;
+    outputTitle.textContent = `Resultado: ${operationTitle}`;
+    charCountOutput.textContent = `${text.length} caracteres`;
+    btnCopy.disabled = !text;
+    btnDownloadFile.disabled = !text;
+    statusDot.className = text ? 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse' : 'w-1.5 h-1.5 rounded-full bg-blue-500';
+  }
+
+  function pushPipelineStep(name: string, content: string) {
+    if (pipelineSteps.length === 0) {
+      pipelineSteps.push({ name: 'Entrada', content: inputElement.value });
+    }
+    pipelineSteps.push({ name, content });
+    updatePipelineUI();
+    updateOutput(content, name);
+    saveHistory({ action: name, input: inputElement.value.substring(0, 100), output: content.substring(0, 100) });
+  }
+
+  function updatePipelineUI() {
+    pipelineChain.innerHTML = '<span class="text-neutral-500">Pipeline:</span>';
+    pipelineSteps.forEach((step, idx) => {
+      if (idx > 0) {
+        const arrow = document.createElement('span');
+        arrow.className = 'text-neutral-600';
+        arrow.textContent = '→';
+        pipelineChain.appendChild(arrow);
+      }
+      const badge = document.createElement('span');
+      badge.className = 'px-1.5 py-0.5 rounded bg-white/5 text-neutral-300';
+      badge.textContent = step.name;
+      pipelineChain.appendChild(badge);
+    });
+
+    btnUndoStep.disabled = pipelineSteps.length <= 1;
+  }
+
+  btnUndoStep.addEventListener('click', () => {
+    if (pipelineSteps.length > 1) {
+      pipelineSteps.pop();
+      updatePipelineUI();
+      const current = pipelineSteps[pipelineSteps.length - 1];
+      updateOutput(current.content, current.name);
+    }
+  });
+
   // Buttons triggers
   btnB64.addEventListener('click', () => {
-    const val = inputElement.value.trim();
-    if (!val) return;
+    const val = pipelineSteps.length > 0 ? pipelineSteps[pipelineSteps.length - 1].content : inputElement.value;
+    if (!val.trim()) return;
     const decoded = decodeBase64(val);
-    updateOutput(decoded, "Base64 Decoded");
+    pushPipelineStep("Base64", decoded);
   });
 
   btnUrl.addEventListener('click', () => {
-    const val = inputElement.value.trim();
-    if (!val) return;
+    const val = pipelineSteps.length > 0 ? pipelineSteps[pipelineSteps.length - 1].content : inputElement.value;
+    if (!val.trim()) return;
     const decoded = decodeUrl(val);
-    updateOutput(decoded, "URL Decoded");
+    pushPipelineStep("URL Decode", decoded);
   });
 
   btnHex.addEventListener('click', () => {
-    const val = inputElement.value.trim();
-    if (!val) return;
+    const val = pipelineSteps.length > 0 ? pipelineSteps[pipelineSteps.length - 1].content : inputElement.value;
+    if (!val.trim()) return;
     const decoded = decodeHex(val);
-    updateOutput(decoded, "Hex decoded to String");
+    pushPipelineStep("Hex to Str", decoded);
   });
 
   btnPs.addEventListener('click', () => {
-    const val = inputElement.value; // Keep original spacing
+    const val = pipelineSteps.length > 0 ? pipelineSteps[pipelineSteps.length - 1].content : inputElement.value;
     if (!val.trim()) return;
     const deobfuscated = deobfuscatePowerShell(val);
-    updateOutput(deobfuscated, "PowerShell Deobfuscated");
+    pushPipelineStep("Deobfuscate PS", deobfuscated);
+  });
+
+  btnAutoDetect.addEventListener('click', () => {
+    const val = inputElement.value.trim();
+    if (!val) return;
+    const type = suggestedType.textContent;
+    alert(`Tipo detectado: ${type}\nEntropía: ${entropyValue.textContent}`);
   });
 
   btnClear.addEventListener('click', () => {
@@ -305,7 +481,85 @@ import Footer from '../../components/Footer.astro';
     outputElement.value = '';
     charCountInput.textContent = '0 caracteres';
     charCountOutput.textContent = '0 caracteres';
+    pipelineSteps = [];
+    updatePipelineUI();
     updateOutput('', 'Resultado');
+    detectType('');
+  });
+
+  // History Management
+  interface LocalHistoryItem {
+    id: number;
+    timestamp: string;
+    action: string;
+    input: string;
+    output: string;
+  }
+
+  function getHistory(): LocalHistoryItem[] {
+    const raw = localStorage.getItem('decoder_history');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveHistory(item: Omit<LocalHistoryItem, 'id' | 'timestamp'>) {
+    const history = getHistory();
+    const newItem: LocalHistoryItem = {
+      ...item,
+      id: Date.now(),
+      timestamp: new Date().toLocaleTimeString()
+    };
+    const updated = [newItem, ...history].slice(0, 5);
+    localStorage.setItem('decoder_history', JSON.stringify(updated));
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    historyList.innerHTML = '';
+    if (history.length === 0) {
+      historyList.innerHTML = '<div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>';
+      return;
+    }
+    history.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'flex justify-between items-center bg-white/[0.02] border border-white/[0.04] p-1.5 rounded hover:bg-white/[0.05] cursor-pointer transition-all duration-200 mb-1';
+      row.innerHTML = `
+        <span class="text-neutral-450 font-bold uppercase text-[9px]">${item.action}</span>
+        <span class="text-neutral-500 text-[9px]">${item.timestamp}</span>
+      `;
+      row.addEventListener('click', () => {
+        inputElement.value = item.input;
+        charCountInput.textContent = `${item.input.length} caracteres`;
+        detectType(item.input);
+        pipelineSteps = [
+          { name: 'Entrada', content: item.input },
+          { name: item.action, content: item.output }
+        ];
+        updatePipelineUI();
+        updateOutput(item.output, item.action);
+      });
+      historyList.appendChild(row);
+    });
+  }
+
+  btnClearHistory.addEventListener('click', () => {
+    localStorage.removeItem('decoder_history');
+    renderHistory();
+  });
+
+  btnDownloadFile.addEventListener('click', () => {
+    const content = outputElement.value;
+    if (!content) return;
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `decoded_payload_${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 
   btnCopy.addEventListener('click', () => {
@@ -328,4 +582,7 @@ import Footer from '../../components/Footer.astro';
       }, 2000);
     });
   });
+
+  // Init
+  renderHistory();
 </script>
