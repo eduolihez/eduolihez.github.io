@@ -1,8 +1,8 @@
 {
   "lastUpdated": "2026-08-24",
   "totalTracked": 1674,
-  "newToday": 37,
-  "firstRun": true,
+  "newToday": 0,
+  "firstRun": false,
   "recentAdditions": [
     {
       "cveID": "CVE-2026-73570",
@@ -12,16 +12,6 @@
       "dateAdded": "2026-08-21",
       "dueDate": "2026-08-24",
       "shortDescription": "Zimbra Collaboration Suite (ZCS) contains an OS command injection vulnerability which could allow an unauthenticated attacker to send specially crafted SMTP requests that may result in execution of arbitrary operating system commands as the Zimbra user.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-72529",
-      "vendorProject": "TrueConf",
-      "product": "Server",
-      "vulnerabilityName": "TrueConf Server Missing Authentication for Critical Function Vulnerability",
-      "dateAdded": "2026-08-20",
-      "dueDate": "2026-08-23",
-      "shortDescription": "TrueConf Server contains a missing authentication for critical function vulnerability which could allow a remote unauthorized attacker with network access via port 4307/TCP to execute an arbitrary script.",
       "knownRansomware": false
     },
     {
@@ -35,6 +25,16 @@
       "knownRansomware": false
     },
     {
+      "cveID": "CVE-2026-72529",
+      "vendorProject": "TrueConf",
+      "product": "Server",
+      "vulnerabilityName": "TrueConf Server Missing Authentication for Critical Function Vulnerability",
+      "dateAdded": "2026-08-20",
+      "dueDate": "2026-08-23",
+      "shortDescription": "TrueConf Server contains a missing authentication for critical function vulnerability which could allow a remote unauthorized attacker with network access via port 4307/TCP to execute an arbitrary script.",
+      "knownRansomware": false
+    },
+    {
       "cveID": "CVE-2026-64849",
       "vendorProject": "MLflow",
       "product": "MLflow",
@@ -42,36 +42,6 @@
       "dateAdded": "2026-08-19",
       "dueDate": "2026-09-02",
       "shortDescription": "MLflow contains a server-side request forgery vulnerability that can allow attackers to reach internal or cloud metadata services and receive response_status and response_body.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-65400",
-      "vendorProject": "Apple",
-      "product": "macOS",
-      "vulnerabilityName": "Apple macOS Improper Authentication Vulnerability",
-      "dateAdded": "2026-08-18",
-      "dueDate": "2026-08-21",
-      "shortDescription": "Apple macOS contains an improper authentication vulnerability that could allow an attacker on the network to authenticate to Screen Sharing without valid credentials.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-55040",
-      "vendorProject": "Microsoft",
-      "product": "SharePoint",
-      "vulnerabilityName": "Microsoft SharePoint Weak Authentication Vulnerability",
-      "dateAdded": "2026-08-18",
-      "dueDate": "2026-08-21",
-      "shortDescription": "Microsoft SharePoint contains a weak authentication vulnerability which allows an unauthorized attacker to bypass a security feature over a network.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-59310",
-      "vendorProject": "Broadcom",
-      "product": "VMware vCenter",
-      "vulnerabilityName": "Broadcom VMware vCenter Path Traversal Vulnerability",
-      "dateAdded": "2026-08-18",
-      "dueDate": "2026-08-21",
-      "shortDescription": "Broadcom VMware vCenter contains a path traversal vulnerability which could allow a threat actor with network access to vCenter to execute arbitrary code.",
       "knownRansomware": false
     },
     {
@@ -85,6 +55,36 @@
       "knownRansomware": false
     },
     {
+      "cveID": "CVE-2026-59310",
+      "vendorProject": "Broadcom",
+      "product": "VMware vCenter",
+      "vulnerabilityName": "Broadcom VMware vCenter Path Traversal Vulnerability",
+      "dateAdded": "2026-08-18",
+      "dueDate": "2026-08-21",
+      "shortDescription": "Broadcom VMware vCenter contains a path traversal vulnerability which could allow a threat actor with network access to vCenter to execute arbitrary code.",
+      "knownRansomware": false
+    },
+    {
+      "cveID": "CVE-2026-55040",
+      "vendorProject": "Microsoft",
+      "product": "SharePoint",
+      "vulnerabilityName": "Microsoft SharePoint Weak Authentication Vulnerability",
+      "dateAdded": "2026-08-18",
+      "dueDate": "2026-08-21",
+      "shortDescription": "Microsoft SharePoint contains a weak authentication vulnerability which allows an unauthorized attacker to bypass a security feature over a network.",
+      "knownRansomware": false
+    },
+    {
+      "cveID": "CVE-2026-65400",
+      "vendorProject": "Apple",
+      "product": "macOS",
+      "vulnerabilityName": "Apple macOS Improper Authentication Vulnerability",
+      "dateAdded": "2026-08-18",
+      "dueDate": "2026-08-21",
+      "shortDescription": "Apple macOS contains an improper authentication vulnerability that could allow an attacker on the network to authenticate to Screen Sharing without valid credentials.",
+      "knownRansomware": false
+    },
+    {
       "cveID": "CVE-2025-62593",
       "vendorProject": "Ray-Project",
       "product": "Ray",
@@ -95,13 +95,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-72898",
-      "vendorProject": "Metabase",
-      "product": "Metabase",
-      "vulnerabilityName": "Metabase SQL Injection Vulnerability",
+      "cveID": "CVE-2026-20349",
+      "vendorProject": "Cisco",
+      "product": "Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) ",
+      "vulnerabilityName": "Cisco Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) Heap Inspection Vulnerability",
       "dateAdded": "2026-08-11",
       "dueDate": "2026-08-14",
-      "shortDescription": "Metabase contains a SQL Injection vulnerability that allows an unauthenticated remote attacker to inject arbitrary SQL into the Metabase application database, which can give them administrator access to the instance. From there, the attacker could change the application configuration, steal stored credentials for the connected databases, read any data accessible through those connections, and export data.",
+      "shortDescription": "Cisco Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) contain a heap inspection vulnerability that could allow an unauthenticated, remote attacker to cause the device to reload unexpectedly, resulting in a denial of service (DoS) condition.",
       "knownRansomware": false
     },
     {
@@ -115,13 +115,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-20349",
-      "vendorProject": "Cisco",
-      "product": "Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) ",
-      "vulnerabilityName": "Cisco Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) Heap Inspection Vulnerability",
+      "cveID": "CVE-2026-72898",
+      "vendorProject": "Metabase",
+      "product": "Metabase",
+      "vulnerabilityName": "Metabase SQL Injection Vulnerability",
       "dateAdded": "2026-08-11",
       "dueDate": "2026-08-14",
-      "shortDescription": "Cisco Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) contain a heap inspection vulnerability that could allow an unauthenticated, remote attacker to cause the device to reload unexpectedly, resulting in a denial of service (DoS) condition.",
+      "shortDescription": "Metabase contains a SQL Injection vulnerability that allows an unauthenticated remote attacker to inject arbitrary SQL into the Metabase application database, which can give them administrator access to the instance. From there, the attacker could change the application configuration, steal stored credentials for the connected databases, read any data accessible through those connections, and export data.",
       "knownRansomware": false
     },
     {
@@ -145,13 +145,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-9198",
-      "vendorProject": "IBM",
-      "product": "Langflow",
-      "vulnerabilityName": "IBM Langflow Code Injection Vulnerability",
+      "cveID": "CVE-2026-18556",
+      "vendorProject": "N-able",
+      "product": "N-central",
+      "vulnerabilityName": "N-able N-central Authentication Bypass Using an Alternate Path or Channel Vulnerability",
       "dateAdded": "2026-08-04",
       "dueDate": "2026-08-07",
-      "shortDescription": "Langflow contains a code injection vulnerability that allows unauthenticated attackers to achieve full remote code execution on default Langflow deployments.",
+      "shortDescription": "N-able N-central contains an authentication bypass using an alternate path or channel that allows for authentication bypass.",
       "knownRansomware": false
     },
     {
@@ -165,13 +165,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-18556",
-      "vendorProject": "N-able",
-      "product": "N-central",
-      "vulnerabilityName": "N-able N-central Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "cveID": "CVE-2026-9198",
+      "vendorProject": "IBM",
+      "product": "Langflow",
+      "vulnerabilityName": "IBM Langflow Code Injection Vulnerability",
       "dateAdded": "2026-08-04",
       "dueDate": "2026-08-07",
-      "shortDescription": "N-able N-central contains an authentication bypass using an alternate path or channel that allows for authentication bypass.",
+      "shortDescription": "Langflow contains a code injection vulnerability that allows unauthenticated attackers to achieve full remote code execution on default Langflow deployments.",
       "knownRansomware": false
     },
     {
@@ -195,16 +195,6 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-16812",
-      "vendorProject": "Arista",
-      "product": "VeloCloud Orchestrator",
-      "vulnerabilityName": "Arista VeloCloud Orchestrator On-Prem OS Command Injection Vulnerability",
-      "dateAdded": "2026-07-27",
-      "dueDate": "2026-07-30",
-      "shortDescription": "Arista VeloCloud Orchestrator On-Prem contains an OS command injection vulnerability that may allow a remote attacker to access privileged internal functionality and impact the VCO host. Successful exploitation may compromise the confidentiality, integrity, and availability of the orchestrator and data managed by the orchestrator.",
-      "knownRansomware": false
-    },
-    {
       "cveID": "CVE-2025-68686",
       "vendorProject": "Fortinet",
       "product": "FortiOS",
@@ -215,13 +205,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-50522",
-      "vendorProject": "Microsoft",
-      "product": "SharePoint",
-      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability ",
-      "dateAdded": "2026-07-22",
-      "dueDate": "2026-07-25",
-      "shortDescription": "Microsoft SharePoint contains a deserialization of untrusted data vulnerability which could allow an unauthorized attacker to execute code over a network.",
+      "cveID": "CVE-2026-16812",
+      "vendorProject": "Arista",
+      "product": "VeloCloud Orchestrator",
+      "vulnerabilityName": "Arista VeloCloud Orchestrator On-Prem OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-27",
+      "dueDate": "2026-07-30",
+      "shortDescription": "Arista VeloCloud Orchestrator On-Prem contains an OS command injection vulnerability that may allow a remote attacker to access privileged internal functionality and impact the VCO host. Successful exploitation may compromise the confidentiality, integrity, and availability of the orchestrator and data managed by the orchestrator.",
       "knownRansomware": false
     },
     {
@@ -235,33 +225,13 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2021-27137",
-      "vendorProject": "DD-WRT",
-      "product": "DD-WRT",
-      "vulnerabilityName": "DD-WRT Stack-Based Buffer Overflow Vulnerability",
-      "dateAdded": "2026-07-21",
-      "dueDate": "2026-07-24",
-      "shortDescription": "DD-WRT contains a stack-based buffer overflow vulnerability that could allow an unauthenticated attacker to overflow an internal buffer used by UPnP and trigger a code execution vulnerability.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-0770",
-      "vendorProject": "Langflow",
-      "product": "Langflow",
-      "vulnerabilityName": "Langflow Inclusion of Functionality from Untrusted Control Sphere Vulnerability",
-      "dateAdded": "2026-07-21",
-      "dueDate": "2026-07-24",
-      "shortDescription": "Langflow contains an inclusion of functionality from untrusted control sphere vulnerability that allows remote attackers to execute arbitrary code on affected installations.",
-      "knownRansomware": false
-    },
-    {
-      "cveID": "CVE-2026-63030",
-      "vendorProject": "WordPress",
-      "product": "Core",
-      "vulnerabilityName": "WordPress Core Interpretation Conflict Vulnerability",
-      "dateAdded": "2026-07-21",
-      "dueDate": "2026-07-24",
-      "shortDescription": "WordPress Core contains an interpretation conflict vulnerability that could allow an attacker to perform SQL Injection and achieve Remote Code Execution. This vulnerability can be chained with CVE-2026-60137.",
+      "cveID": "CVE-2026-50522",
+      "vendorProject": "Microsoft",
+      "product": "SharePoint",
+      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability ",
+      "dateAdded": "2026-07-22",
+      "dueDate": "2026-07-25",
+      "shortDescription": "Microsoft SharePoint contains a deserialization of untrusted data vulnerability which could allow an unauthorized attacker to execute code over a network.",
       "knownRansomware": false
     },
     {
@@ -275,23 +245,33 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-39808",
-      "vendorProject": "Fortinet",
-      "product": "FortiSandbox",
-      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
-      "dateAdded": "2026-07-16",
-      "dueDate": "2026-07-19",
-      "shortDescription": "Fortinet FortiSandbox contains an OS command injection vulnerability that could allow an unauthenticated attacker to execute unauthorized code or commands via crafted HTTP requests.",
+      "cveID": "CVE-2026-63030",
+      "vendorProject": "WordPress",
+      "product": "Core",
+      "vulnerabilityName": "WordPress Core Interpretation Conflict Vulnerability",
+      "dateAdded": "2026-07-21",
+      "dueDate": "2026-07-24",
+      "shortDescription": "WordPress Core contains an interpretation conflict vulnerability that could allow an attacker to perform SQL Injection and achieve Remote Code Execution. This vulnerability can be chained with CVE-2026-60137.",
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-25089",
-      "vendorProject": "Fortinet",
-      "product": "FortiSandbox",
-      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
-      "dateAdded": "2026-07-16",
-      "dueDate": "2026-07-19",
-      "shortDescription": "Fortinet FortiSandbox, FortiSandbox Cloud, and FortiSandbox PaaS contain an OS command injection vulnerability that allows an unauthenticated attacker to execute unauthorized commands via specifically crafted HTTP requests.",
+      "cveID": "CVE-2026-0770",
+      "vendorProject": "Langflow",
+      "product": "Langflow",
+      "vulnerabilityName": "Langflow Inclusion of Functionality from Untrusted Control Sphere Vulnerability",
+      "dateAdded": "2026-07-21",
+      "dueDate": "2026-07-24",
+      "shortDescription": "Langflow contains an inclusion of functionality from untrusted control sphere vulnerability that allows remote attackers to execute arbitrary code on affected installations.",
+      "knownRansomware": false
+    },
+    {
+      "cveID": "CVE-2021-27137",
+      "vendorProject": "DD-WRT",
+      "product": "DD-WRT",
+      "vulnerabilityName": "DD-WRT Stack-Based Buffer Overflow Vulnerability",
+      "dateAdded": "2026-07-21",
+      "dueDate": "2026-07-24",
+      "shortDescription": "DD-WRT contains a stack-based buffer overflow vulnerability that could allow an unauthenticated attacker to overflow an internal buffer used by UPnP and trigger a code execution vulnerability.",
       "knownRansomware": false
     },
     {
@@ -305,13 +285,23 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2023-4346",
-      "vendorProject": "KNX Association",
-      "product": "KNX Protocol Connection Authorization Option 1",
-      "vulnerabilityName": "KNX Association KNX Protocol Connection Authorization Option 1 Overly Restrictive Account Lockout Mechanism Vulnerability",
-      "dateAdded": "2026-07-15",
-      "dueDate": "2026-07-29",
-      "shortDescription": "KNX Association KNX Protocol Connection Authorization Option 1 contains an overly restrictive account lockout mechanism vulnerability that could allow an attacker to purge all devices without additional security options enabled and set a BCU key to lock the device.",
+      "cveID": "CVE-2026-25089",
+      "vendorProject": "Fortinet",
+      "product": "FortiSandbox",
+      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-16",
+      "dueDate": "2026-07-19",
+      "shortDescription": "Fortinet FortiSandbox, FortiSandbox Cloud, and FortiSandbox PaaS contain an OS command injection vulnerability that allows an unauthenticated attacker to execute unauthorized commands via specifically crafted HTTP requests.",
+      "knownRansomware": false
+    },
+    {
+      "cveID": "CVE-2026-39808",
+      "vendorProject": "Fortinet",
+      "product": "FortiSandbox",
+      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-16",
+      "dueDate": "2026-07-19",
+      "shortDescription": "Fortinet FortiSandbox contains an OS command injection vulnerability that could allow an unauthenticated attacker to execute unauthorized code or commands via crafted HTTP requests.",
       "knownRansomware": false
     },
     {
@@ -325,24 +315,24 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-15410",
-      "vendorProject": "SonicWall",
-      "product": "SMA1000 Appliances",
-      "vulnerabilityName": "SonicWall SMA1000 Appliances Code Injection Vulnerability",
-      "dateAdded": "2026-07-14",
-      "dueDate": "2026-07-17",
-      "shortDescription": "SonicWall SMA1000 Appliances contain a code injection vulnerability which in specific conditions could potentially enable a remote authenticated attacker as administrator to execute arbitrary OS commands.",
-      "knownRansomware": true
+      "cveID": "CVE-2023-4346",
+      "vendorProject": "KNX Association",
+      "product": "KNX Protocol Connection Authorization Option 1",
+      "vulnerabilityName": "KNX Association KNX Protocol Connection Authorization Option 1 Overly Restrictive Account Lockout Mechanism Vulnerability",
+      "dateAdded": "2026-07-15",
+      "dueDate": "2026-07-29",
+      "shortDescription": "KNX Association KNX Protocol Connection Authorization Option 1 contains an overly restrictive account lockout mechanism vulnerability that could allow an attacker to purge all devices without additional security options enabled and set a BCU key to lock the device.",
+      "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-15409",
-      "vendorProject": "SonicWall",
-      "product": "SMA1000 Appliances",
-      "vulnerabilityName": "SonicWall SMA1000 Appliances Server-Side Request Forgery Vulnerability",
+      "cveID": "CVE-2026-56155",
+      "vendorProject": "Microsoft",
+      "product": "Active Directory Federation Services",
+      "vulnerabilityName": "Microsoft Active Directory Federation Services Insufficient Granularity of Access Control Vulnerability ",
       "dateAdded": "2026-07-14",
-      "dueDate": "2026-07-17",
-      "shortDescription": "SonicWall SMA1000 Appliances contain a server-side request forgery vulnerability that could allow a remote unauthenticated attacker to potentially cause the appliance to make requests to unintended location.",
-      "knownRansomware": true
+      "dueDate": "2026-07-28",
+      "shortDescription": "Microsoft Active Directory Federation Services contains an insufficient granularity of access control vulnerability that allows an authorized attacker to elevate privileges locally.",
+      "knownRansomware": false
     },
     {
       "cveID": "CVE-2026-56164",
@@ -355,14 +345,24 @@
       "knownRansomware": false
     },
     {
-      "cveID": "CVE-2026-56155",
-      "vendorProject": "Microsoft",
-      "product": "Active Directory Federation Services",
-      "vulnerabilityName": "Microsoft Active Directory Federation Services Insufficient Granularity of Access Control Vulnerability ",
+      "cveID": "CVE-2026-15409",
+      "vendorProject": "SonicWall",
+      "product": "SMA1000 Appliances",
+      "vulnerabilityName": "SonicWall SMA1000 Appliances Server-Side Request Forgery Vulnerability",
       "dateAdded": "2026-07-14",
-      "dueDate": "2026-07-28",
-      "shortDescription": "Microsoft Active Directory Federation Services contains an insufficient granularity of access control vulnerability that allows an authorized attacker to elevate privileges locally.",
-      "knownRansomware": false
+      "dueDate": "2026-07-17",
+      "shortDescription": "SonicWall SMA1000 Appliances contain a server-side request forgery vulnerability that could allow a remote unauthenticated attacker to potentially cause the appliance to make requests to unintended location.",
+      "knownRansomware": true
+    },
+    {
+      "cveID": "CVE-2026-15410",
+      "vendorProject": "SonicWall",
+      "product": "SMA1000 Appliances",
+      "vulnerabilityName": "SonicWall SMA1000 Appliances Code Injection Vulnerability",
+      "dateAdded": "2026-07-14",
+      "dueDate": "2026-07-17",
+      "shortDescription": "SonicWall SMA1000 Appliances contain a code injection vulnerability which in specific conditions could potentially enable a remote authenticated attacker as administrator to execute arbitrary OS commands.",
+      "knownRansomware": true
     },
     {
       "cveID": "CVE-2008-4128",
