@@ -1,7 +1,10 @@
 {
-  "name": "tmp-astro",
+  "name": "blue-team-hub",
   "type": "module",
   "version": "0.0.1",
+  "description": "Blue Team Hub: herramientas de ciberseguridad, playbooks interactivos y utilidades tacticas 100% client-side para analistas SOC.",
+  "author": "Eduardo Olivares Hernandez",
+  "license": "MIT",
   "engines": {
     "node": ">=22.12.0"
   },
