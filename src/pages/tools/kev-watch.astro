@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import kevData from '../../data/kev.json';
+
+const { lastUpdated, totalTracked, newToday, recentAdditions } = kevData;
+
+const formatDate = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
+const isOverdue = (dueDate: string | null) =>
+  !!dueDate && new Date(dueDate + 'T00:00:00Z').getTime() < Date.now();
+---
+
+<Layout title="KEV Watch | Blue Team Hub" description="Vigilancia diaria y automatizada del catálogo CISA KEV (Known Exploited Vulnerabilities) — vulnerabilidades explotadas activamente en el mundo real.">
+  <Header activeTab="herramientas" />
+
+  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
+
+    <!-- Breadcrumb & Header -->
+    <div class="mb-8">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver a la caja de herramientas
+      </a>
+      <div class="flex items-center gap-3 mb-2">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          KEV Watch
+        </h1>
+        <span class="inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-md border font-mono font-medium tracking-wider bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          AUTOMATIZADO
+        </span>
+      </div>
+      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+        Vigilancia diaria del catálogo <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">CISA KEV</a>
+        (Known Exploited Vulnerabilities): vulnerabilidades con explotación activa confirmada en el mundo real,
+        no CVEs teóricos. Un <a href="https://github.com/eduolihez/eduolihez.github.io/blob/main/.github/workflows/kev-watch.yml" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">GitHub Action</a>
+        descarga el catálogo cada día, calcula qué ha cambiado y redespliega esta página — sin intervención manual.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl">
+        <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-mono">CVEs trackeados</span>
+        <div class="text-2xl font-bold text-white mt-1">{totalTracked}</div>
+      </div>
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl">
+        <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-mono">Últimos 45 días</span>
+        <div class="text-2xl font-bold text-white mt-1">{recentAdditions.length}</div>
+      </div>
+      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl">
+        <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-mono">Última comprobación</span>
+        <div class="text-2xl font-bold text-white mt-1">{formatDate(lastUpdated)}</div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-4">
+      <input
+        id="kevFilter"
+        type="text"
+        placeholder="Filtrar por CVE, vendor o producto..."
+        class="w-full bg-black/40 border border-white/[0.08] focus:border-neutral-700/80 rounded-xl px-4 py-2.5 text-xs md:text-sm text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200"
+      />
+    </div>
+
+    <!-- Entries -->
+    <div id="kevList" class="space-y-3 mb-12">
+      {recentAdditions.length === 0 && (
+        <div class="bg-black/30 border border-white/[0.06] rounded-2xl p-8 text-center text-sm text-neutral-500">
+          Sin novedades en los últimos 45 días.
+        </div>
+      )}
+      {recentAdditions.map((v: any) => (
+        <div class="kev-entry bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl hover:border-white/12 transition-colors duration-200" data-search={`${v.cveID} ${v.vendorProject} ${v.product}`.toLowerCase()}>
+          <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <a href={`https://nvd.nist.gov/vuln/detail/${v.cveID}`} target="_blank" rel="noopener noreferrer" class="font-mono text-sm font-bold text-blue-400 hover:underline">
+                {v.cveID}
+              </a>
+              <span class="text-[10px] px-2 py-0.5 rounded-md border font-mono font-medium tracking-wider bg-white/[0.03] text-neutral-400 border-white/[0.08]">
+                {v.vendorProject} · {v.product}
+              </span>
+              {v.knownRansomware && (
+                <span class="text-[10px] px-2 py-0.5 rounded-md border font-mono font-medium tracking-wider bg-red-500/10 text-red-400 border-red-500/20">
+                  RANSOMWARE
+                </span>
+              )}
+            </div>
+            <div class="flex items-center gap-3 text-[10px] font-mono text-neutral-500 whitespace-nowrap">
+              <span>Añadida: {formatDate(v.dateAdded)}</span>
+              {v.dueDate && (
+                <span class={isOverdue(v.dueDate) ? 'text-neutral-500' : 'text-amber-400'}>
+                  Plazo: {formatDate(v.dueDate)}
+                </span>
+              )}
+            </div>
+          </div>
+          <h3 class="text-sm font-semibold text-neutral-200 mb-1">{v.vulnerabilityName}</h3>
+          <p class="text-xs text-neutral-400 leading-relaxed font-light">{v.shortDescription}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Source note -->
+    <div class="bg-black/20 border border-white/[0.04] rounded-2xl p-5 mb-12 text-[11px] text-neutral-500 font-mono flex flex-wrap items-center justify-between gap-2">
+      <span>Fuente: CISA Known Exploited Vulnerabilities Catalog</span>
+      <a href="https://github.com/eduolihez/eduolihez.github.io/blob/main/scripts/update-kev.mjs" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+        Ver el script de actualización →
+      </a>
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const filterInput = document.getElementById('kevFilter') as HTMLInputElement;
+  const entries = document.querySelectorAll<HTMLElement>('.kev-entry');
+
+  filterInput?.addEventListener('input', () => {
+    const q = filterInput.value.trim().toLowerCase();
+    entries.forEach((el) => {
+      const match = !q || (el.dataset.search || '').includes(q);
+      el.classList.toggle('hidden', !match);
+    });
+  });
+</script>

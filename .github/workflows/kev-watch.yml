@@ -1,0 +1,45 @@
+name: KEV Watch daily update
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # 06:00 UTC daily
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write # needed to trigger the deploy workflow below
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Update KEV data
+        run: node scripts/update-kev.mjs
+
+      - name: Commit and push if changed
+        id: commit
+        run: |
+          git config user.name "kev-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/data/kev.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          NEW=$(node -pe "require('./src/data/kev.json').newToday")
+          TOTAL=$(node -pe "require('./src/data/kev.json').totalTracked")
+          git commit -m "kev-watch: ${NEW} new entr$( [ "$NEW" = "1" ] && echo y || echo ies ) (${TOTAL} tracked)"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger site rebuild
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --repo ${{ github.repository }}

@@ -46,6 +46,10 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 * **Ubicación**: [/tools/osint-hub](https://eduolihez.github.io/tools/osint-hub)
 * **Descripción**: Genera consultas rápidas OSINT extrayendo y vinculando IPs, dominios y hashes a motores externos (VirusTotal, AbuseIPDB) con directorio de recursos.
 
+### 🚨 KEV Watch
+* **Ubicación**: [/tools/kev-watch](https://eduolihez.github.io/tools/kev-watch)
+* **Descripción**: Vigilancia diaria y automatizada del catálogo [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) (vulnerabilidades con explotación activa confirmada). A diferencia del resto de herramientas, esta tiene una parte server-side: `.github/workflows/kev-watch.yml` corre cada día a las 06:00 UTC, ejecuta [`scripts/update-kev.mjs`](scripts/update-kev.mjs) para descargar el catálogo y calcular qué ha cambiado, comitea `src/data/kev.json` si hay novedades, y dispara un redespliegue automático.
+
 ---
 
 ## 📁 Estructura del Repositorio
@@ -62,11 +66,16 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 │   │       ├── playbooks.astro      # Playbooks Interactivos
 │   │       ├── decoder.astro        # Payload Decoder & Deobfuscator
 │   │       ├── osint-hub.astro      # OSINT Hub & Enlaces Externos
-│   │       └── yara-generator.astro # Generador de Reglas YARA
+│   │       ├── yara-generator.astro # Generador de Reglas YARA
+│   │       └── kev-watch.astro      # KEV Watch (vigilancia CISA KEV)
+│   ├── data/
+│   │   └── kev.json      # Estado del catálogo KEV, actualizado por scripts/update-kev.mjs
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
+├── scripts/
+│   └── update-kev.mjs    # Fetch + diff diario del catálogo CISA KEV
 ├── public/               # Recursos estáticos públicos (imágenes, favicon, .nojekyll)
-├── .github/              # Configuraciones de GitHub (workflows, templates)
+├── .github/              # Configuraciones de GitHub (workflows: deploy.yml, kev-watch.yml)
 ├── astro.config.mjs      # Configuración de Astro e integraciones
 └── package.json          # Archivo de dependencias y scripts de Node.js
 ```

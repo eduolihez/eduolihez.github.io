@@ -66,6 +66,16 @@ const tools = [
     disabled: false,
   },
   {
+    id: "kev-watch",
+    title: "KEV Watch",
+    description: "Vigilancia diaria y automatizada (GitHub Actions) del catálogo CISA KEV: vulnerabilidades con explotación activa confirmada en el mundo real.",
+    badge: "AUTOMATIZADO",
+    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    href: "/tools/kev-watch",
+    actionText: "Abrir Herramienta",
+    disabled: false,
+  },
+  {
     id: "passwdcentinel",
     title: "Password Sentinel",
     description: "Visita el proyecto oficial de tu extensión de Chrome para auditar contraseñas y verificar filtraciones vía API de Have I Been Pwned.",
@@ -185,6 +195,11 @@ const tools = [
                     {tool.id === "osint-hub" && (
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6.5 h-6.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918" />
+                      </svg>
+                    )}
+                    {tool.id === "kev-watch" && (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6.5 h-6.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-8.25 3h.008v.008h-.008V15Z" />
                       </svg>
                     )}
                     {tool.id === "passwdcentinel" && (
