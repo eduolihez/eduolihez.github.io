@@ -19,29 +19,40 @@ interface Props {
 
 const { tool, index, routeLabel } = Astro.props;
 const n = String(index).padStart(2, "0");
-const label = routeLabel ?? (tool.external ? `${tool.href.replace(/^https?:\/\//, "")} ↗` : tool.href);
+const label = routeLabel ?? tool.actionText;
 ---
 
-<li class={`grid grid-cols-[2.6em_minmax(0,1fr)_auto] items-baseline gap-5 py-4.5 border-b border-rule-faint ${tool.disabled ? "opacity-50" : ""}`}>
-  <span class="font-mono text-sm text-muted pt-0.5">{n}</span>
+<li class={`grid grid-cols-1 sm:grid-cols-[2.6em_minmax(0,1fr)_auto] items-start sm:items-center gap-3 sm:gap-5 py-4.5 border-b border-rule-faint ${tool.disabled ? "opacity-50" : ""}`}>
+  <span class="hidden sm:block font-mono text-sm text-muted pt-0.5">{n}</span>
   <div class="min-w-0">
     <h3 class="font-semibold text-[1.05rem] text-ink mb-1">
-      {tool.title}
+      <span class="sm:hidden font-mono text-sm text-muted mr-1.5">{n}</span>{tool.title}
     </h3>
     <p class="text-sm text-muted max-w-[56ch]">
       {tool.description}
     </p>
   </div>
   {tool.disabled ? (
-    <span class="font-mono text-xs text-muted whitespace-nowrap pt-0.5">{tool.badge}</span>
+    <span class="inline-flex items-center gap-1.5 border border-rule-faint px-3 py-1.5 font-mono text-xs text-muted-dim whitespace-nowrap">
+      {tool.badge}
+    </span>
   ) : (
     <a
       href={tool.href}
       target={tool.external ? "_blank" : undefined}
       rel={tool.external ? "noopener noreferrer" : undefined}
-      class="font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 whitespace-nowrap pt-0.5"
+      class="group/btn inline-flex items-center gap-1.5 border border-rule-faint px-3 py-1.5 font-mono text-xs text-ink-soft hover:border-ink hover:text-ink hover:bg-paper-dim transition-colors duration-150 whitespace-nowrap"
     >
       {label}
+      {tool.external ? (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 opacity-70 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-150">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 opacity-70 group-hover/btn:translate-x-0.5 transition-transform duration-150">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+        </svg>
+      )}
     </a>
   )}
 </li>

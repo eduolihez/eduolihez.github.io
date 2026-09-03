@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-09-03T18:47:57.036Z",
+        "reason": "user confirmed: approved this exact Geist+Geist Mono single-family system in the design-consultation artifact preview (\"Esta me gusta, hazlo asi\"); using one family everywhere with zero font-pairing is the documented minimalist thesis in DESIGN.md, not a lazy default"
+      }
+    ]
+  }
+}
