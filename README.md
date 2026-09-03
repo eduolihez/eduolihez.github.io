@@ -1,58 +1,92 @@
-# 🛡️ Blue Team Hub - Eduardo Olivares
+# Blue Team Hub
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deploy](https://github.com/eduolihez/eduolihez.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/eduolihez/eduolihez.github.io/actions/workflows/deploy.yml)
 [![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build)
 
-Un portal de herramientas de ciberseguridad, playbooks interactivos y utilidades tácticas **100% estáticas y en el lado del cliente (Client-side)** diseñado para analistas de centros de operaciones de seguridad (SOC), cazadores de amenazas (Threat Hunters) y profesionales del Blue Team.
+### **[Versión en Español](README.md)** · [English version](README.en.md)
 
-Este sitio web se aloja en [eduolihez.github.io](https://eduolihez.github.io) como complemento interactivo a mi wiki y portafolio principal [eduolihez.com](https://eduolihez.com).
+Portal de herramientas de ciberseguridad, playbooks interactivos y utilidades
+para analistas de SOC, threat hunters y gente de Blue Team. Todo es estático y
+corre en el lado del cliente: nada de lo que pegues en estas herramientas sale
+de tu navegador.
 
----
+El sitio está en [eduolihez.github.io](https://eduolihez.github.io) y funciona
+como complemento interactivo de mi wiki y portfolio principal,
+[eduolihez.com](https://eduolihez.com).
 
-## 🎨 Diseño y Stack Tecnológico
+## Diseño y stack
 
-El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS Glassmorphism de estilo Apple** utilizando:
+El proyecto usa una estética glassmorphism, con fondos esmerilados y gradientes.
+Por debajo:
 
-* **Astro**: Para compilación de páginas estáticas ultrarrápidas y componentes reutilizables.
-* **Tailwind CSS (v4)**: Para un diseño fluido, moderno y responsivo con efectos esmerilados y fondos con destellos (gradients glow).
-* **TypeScript / JavaScript**: Para el procesamiento interactivo de datos locales (sin backend).
+* **Astro** para generar páginas estáticas y componentes reutilizables.
+* **Tailwind CSS 4** para el diseño responsivo y los efectos de fondo.
+* **TypeScript / JavaScript** para el procesamiento de datos en local, sin backend.
 
----
+## Herramientas
 
-## 🛠️ Herramientas Disponibles
+### IOC Defanger & Extractor
 
-### 🧪 IOC Defanger & Extractor
-* **Ubicación**: [/tools/defanger](https://eduolihez.github.io/tools/defanger)
-* **Descripción**: Permite desarmar (defang) e higienizar direcciones IP, URLs y correos electrónicos, o extraer IOCs (hashes, correos, IPs, URLs) de texto sucio.
+[/tools/defanger](https://eduolihez.github.io/tools/defanger)
 
-### ✉️ Email Header Analyzer
-* **Ubicación**: [/tools/email-analyzer](https://eduolihez.github.io/tools/email-analyzer)
-* **Descripción**: Permite analizar cabeceras de correo en crudo o cargar archivos `.eml` para verificar el estado de SPF, DKIM, DMARC y representar gráficamente la línea de tiempo de saltos de red entre servidores con sus retardos correspondientes.
+Desarma (defang) e higieniza direcciones IP, URLs y correos, o extrae IOCs
+(hashes, correos, IPs, URLs) de un texto sucio.
 
-### 🛡️ Generador de Reglas YARA
-* **Ubicación**: [/tools/yara-generator](https://eduolihez.github.io/tools/yara-generator)
-* **Descripción**: Asistente interactivo paso a paso para construir reglas de detección YARA con modificadores de cadena y condición expresa, acompañado de un analizador sintáctico (linter) integrado en tiempo real.
+### Email Header Analyzer
 
-### 🌿 Playbooks Interactivos de Incidentes
-* **Ubicación**: [/tools/playbooks](https://eduolihez.github.io/tools/playbooks)
-* **Descripción**: Árboles de decisión interactivos para guiar a los analistas en la resolución de alertas de Phishing, Malware y Fuerza Bruta, proveyendo acciones de mitigación estructuradas y consultas de búsqueda SIEM (Splunk/Sentinel) generadas dinámicamente.
+[/tools/email-analyzer](https://eduolihez.github.io/tools/email-analyzer)
 
-### ⚡ Payload Decoder & Deobfuscator
-* **Ubicación**: [/tools/decoder](https://eduolihez.github.io/tools/decoder)
-* **Descripción**: Decodifica Base64 (UTF-8/UTF-16LE), URL, Hex y desofusca scripts de PowerShell limpiando concatenaciones y backticks de forma local.
+Analiza cabeceras de correo en crudo o archivos `.eml` para verificar SPF, DKIM
+y DMARC, y dibuja la línea de tiempo de saltos entre servidores con sus
+retardos.
 
-### 🌐 OSINT Hub & Enlaces Externos
-* **Ubicación**: [/tools/osint-hub](https://eduolihez.github.io/tools/osint-hub)
-* **Descripción**: Genera consultas rápidas OSINT extrayendo y vinculando IPs, dominios y hashes a motores externos (VirusTotal, AbuseIPDB) con directorio de recursos.
+### Generador de reglas YARA
 
-### 🚨 KEV Watch
-* **Ubicación**: [/tools/kev-watch](https://eduolihez.github.io/tools/kev-watch)
-* **Descripción**: Vigilancia diaria y automatizada del catálogo [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) (vulnerabilidades con explotación activa confirmada). A diferencia del resto de herramientas, esta tiene una parte server-side: `.github/workflows/kev-watch.yml` corre cada día a las 06:00 UTC, ejecuta [`scripts/update-kev.mjs`](scripts/update-kev.mjs) para descargar el catálogo y calcular qué ha cambiado, comitea `src/data/kev.json` si hay novedades, y dispara un redespliegue automático.
+[/tools/yara-generator](https://eduolihez.github.io/tools/yara-generator)
 
----
+Asistente paso a paso para construir reglas de detección YARA con modificadores
+de cadena y condición expresa. Lleva un linter integrado que valida la sintaxis
+mientras escribes.
 
-## 📁 Estructura del Repositorio
+### Playbooks interactivos de incidentes
+
+[/tools/playbooks](https://eduolihez.github.io/tools/playbooks)
+
+Árboles de decisión para guiar al analista en alertas de phishing, malware y
+fuerza bruta. Devuelven acciones de mitigación estructuradas y consultas SIEM
+(Splunk/Sentinel) generadas sobre la marcha.
+
+### Payload Decoder & Deobfuscator
+
+[/tools/decoder](https://eduolihez.github.io/tools/decoder)
+
+Decodifica Base64 (UTF-8 y UTF-16LE), URL y Hex, y desofusca scripts de
+PowerShell limpiando concatenaciones y backticks. Todo en local.
+
+### OSINT Hub
+
+[/tools/osint-hub](https://eduolihez.github.io/tools/osint-hub)
+
+Extrae IPs, dominios y hashes de un texto y los enlaza contra motores externos
+(VirusTotal, AbuseIPDB). Incluye un directorio de recursos.
+
+### KEV Watch
+
+[/tools/kev-watch](https://eduolihez.github.io/tools/kev-watch)
+
+Vigilancia del catálogo
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog), el de
+vulnerabilidades con explotación activa confirmada. Esta es la única
+herramienta con parte en servidor, y los datos no se calculan aquí: los genera
+[kev-digest](https://github.com/eduolihez/kev-digest), que comprueba el
+catálogo cada 3 horas y publica el resultado ya procesado. El workflow
+`.github/workflows/kev-watch.yml` se limita a descargar ese JSON, validarlo,
+comitear `src/data/kev.json` si ha cambiado y disparar un redespliegue. El cálculo vive en un solo sitio a
+propósito: dos implementaciones del mismo diff, en dos lenguajes, acabarían
+discrepando.
+
+## Estructura del repositorio
 
 ```text
 ├── src/
@@ -69,45 +103,41 @@ El proyecto ha sido completamente rediseñado bajo una estética premium **SaaS 
 │   │       ├── yara-generator.astro # Generador de Reglas YARA
 │   │       └── kev-watch.astro      # KEV Watch (vigilancia CISA KEV)
 │   ├── data/
-│   │   └── kev.json      # Estado del catálogo KEV, actualizado por scripts/update-kev.mjs
+│   │   └── kev.json      # Copia del latest.json que publica kev-digest
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
-├── scripts/
-│   └── update-kev.mjs    # Fetch + diff diario del catálogo CISA KEV
 ├── public/               # Recursos estáticos públicos (imágenes, favicon, .nojekyll)
 ├── .github/              # Configuraciones de GitHub (workflows: deploy.yml, kev-watch.yml)
 ├── astro.config.mjs      # Configuración de Astro e integraciones
 └── package.json          # Archivo de dependencias y scripts de Node.js
 ```
 
----
+## Desarrollo local
 
-## 🚀 Desarrollo Local
+Instala las dependencias:
 
-Para correr el proyecto localmente y realizar cambios:
+```bash
+npm install
+```
 
-1. **Instalar Dependencias**:
-   ```bash
-   npm install
-   ```
+Levanta el servidor de desarrollo y abre
+[http://localhost:4321](http://localhost:4321):
 
-2. **Iniciar Servidor de Desarrollo**:
-   ```bash
-   npm run dev
-   ```
-   Abre [http://localhost:4321](http://localhost:4321) en tu navegador.
+```bash
+npm run dev
+```
 
-3. **Compilar para Producción**:
-   ```bash
-   npm run build
-   ```
-   Genera la carpeta `dist/` con el HTML/CSS/JS estático listo para servir.
+Compila para producción. Genera la carpeta `dist/` con el HTML, CSS y JS
+estático listo para servir:
 
----
+```bash
+npm run build
+```
 
-## 🚀 Despliegue Automatizado
+## Despliegue
 
-El repositorio cuenta con un pipeline de CI/CD configurado con **GitHub Actions** en `.github/workflows/deploy.yml`:
-
-- Cada vez que haces `git push` a la rama `main`, el workflow instala dependencias, compila el sitio de Astro (`npm run build`) y empuja los archivos generados a la rama `gh-pages`.
-- Asegúrate de tener configurado tu repositorio en GitHub para servir Pages desde la rama `gh-pages`.
+El pipeline vive en `.github/workflows/deploy.yml`. Cada `git push` a `main`
+instala dependencias, compila el sitio con `npm run build` y empuja los
+archivos generados a la rama `gh-pages`. Para que esto sirva de algo, el
+repositorio tiene que estar configurado en GitHub para publicar Pages desde
+`gh-pages`.
