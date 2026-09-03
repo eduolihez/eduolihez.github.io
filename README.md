@@ -4,6 +4,8 @@
 [![Deploy](https://github.com/eduolihez/eduolihez.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/eduolihez/eduolihez.github.io/actions/workflows/deploy.yml)
 [![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build)
 
+### **[Versión en Español](README.md)** · [English version](README.en.md)
+
 Portal de herramientas de ciberseguridad, playbooks interactivos y utilidades
 para analistas de SOC, threat hunters y gente de Blue Team. Todo es estático y
 corre en el lado del cliente: nada de lo que pegues en estas herramientas sale
