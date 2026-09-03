@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+@theme {
+  --color-paper: #FDFDFB;
+  --color-paper-dim: #F3F2EE;
+  --color-ink: #0B0B0A;
+  --color-ink-soft: #3A3936;
+  --color-muted: #807E77;
+  --color-muted-dim: #AFACA3;
+  --color-rule: #0B0B0A;
+  --color-rule-faint: #DEDCD4;
+  --color-stamp: #C1291B;
+  --color-stamp-tint: #FBEAE7;
+  --color-online: #3E6B4F;
+
+  --font-sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Geist Mono', 'SFMono-Regular', Consolas, monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper-dim);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule-faint);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-dim);
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .trace {
+    position: relative;
+  }
+  .trace::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.16em;
+    height: 3px;
+    background: var(--color-ink);
+    transform-origin: left;
+    animation: draw 0.9s 0.2s cubic-bezier(0.65, 0, 0.15, 1) both;
+  }
+  @keyframes draw {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}

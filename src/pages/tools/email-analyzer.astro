@@ -7,80 +7,80 @@ import Footer from '../../components/Footer.astro';
 <Layout title="Email Header Analyzer | Blue Team Hub" description="Analiza cabeceras de correo electrónico raw o archivos .eml de forma local. Comprueba SPF, DKIM, DMARC y visualiza los saltos de red con retardos de tiempo.">
   <Header activeTab="herramientas" />
 
-  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
-    
+  <main class="w-full max-w-[1040px] mx-auto px-6 sm:px-7 pt-12 flex-grow">
+
     <!-- Breadcrumb & Header -->
-    <div class="mb-8">
-      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+    <div class="mb-10 pb-8 border-b border-rule-faint">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 mb-5 group">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         Volver a la caja de herramientas
       </a>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
         Email Header Analyzer
       </h1>
-      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+      <p class="text-sm text-muted max-w-2xl">
         Arrastra un archivo de correo `.eml` o pega las cabeceras en bruto para desglosar la información de autenticación, extraer los metadatos más importantes y mapear la ruta de red hop-by-hop calculando los retrasos de tiempo entre servidores.
       </p>
     </div>
 
-    <!-- Bento Workspace Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
-      
+    <!-- Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+
       <!-- Left Column: Input (5 cols on desktop) -->
-      <div class="lg:col-span-5 bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+      <div class="lg:col-span-5 border border-rule-faint p-6 flex flex-col justify-between">
         <div class="space-y-6">
-          <div class="flex items-center justify-between mb-2 border-b border-white/[0.04] pb-3">
-            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          <div class="flex items-center justify-between mb-2 border-b border-rule-faint pb-3">
+            <h2 class="text-xs font-bold tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
               Cabecera Cruda
             </h2>
-            <span class="text-[10px] text-neutral-500 font-mono">EML / TXT</span>
+            <span class="text-[11px] text-muted font-mono">EML / TXT</span>
           </div>
 
           <!-- Drag and Drop EML Zone -->
-          <div 
-            id="dropzone" 
-            class="border border-dashed border-neutral-800 hover:border-blue-500/50 bg-black/20 hover:bg-neutral-950/40 rounded-xl p-6 text-center cursor-pointer transition-all duration-300 group flex flex-col items-center justify-center min-h-[120px]"
+          <div
+            id="dropzone"
+            class="border border-dashed border-rule-faint hover:border-ink p-6 text-center cursor-pointer transition-colors duration-200 group flex flex-col items-center justify-center min-h-[120px]"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-8 h-8 text-neutral-500 mb-2 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-8 h-8 text-muted mb-2 transition-colors duration-200">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
             </svg>
-            <p class="text-xs text-neutral-400 group-hover:text-neutral-200 transition-colors duration-200">
-              Arrastra un archivo <span class="text-blue-400 font-medium">.eml</span> aquí o haz clic para seleccionar
+            <p class="text-xs text-muted group-hover:text-ink-soft transition-colors duration-200">
+              Arrastra un archivo <span class="text-stamp font-medium">.eml</span> aquí o haz clic para seleccionar
             </p>
             <input type="file" id="fileInput" accept=".eml" class="hidden" />
           </div>
 
           <div class="relative">
-            <div class="absolute right-3 top-3 text-[10px] text-neutral-600 font-mono pointer-events-none select-none">
+            <div class="absolute right-3 top-3 text-[10px] text-muted-dim font-mono pointer-events-none select-none">
               RAW HEADERS
             </div>
-            <textarea 
-              id="headerInput" 
-              rows="12" 
-              class="w-full bg-black/40 border border-white/[0.08] focus:border-neutral-700/80 rounded-xl p-4 text-xs font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
+            <textarea
+              id="headerInput"
+              rows="12"
+              class="w-full bg-paper-dim border border-rule-faint focus:border-ink p-4 pr-28 text-xs font-mono text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 resize-y min-h-[220px]"
               placeholder="O pega aquí las cabeceras completas de tu correo en bruto (comenzando con 'Received:', 'Delivered-To:', etc.)..."
             ></textarea>
           </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="mt-6 flex items-center justify-between pt-4 border-t border-white/[0.04]">
-          <button 
-            id="btnAnalyze" 
-            class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md active:scale-95 flex items-center gap-1.5"
+        <div class="mt-6 flex items-center justify-between pt-4 border-t border-rule-faint">
+          <button
+            id="btnAnalyze"
+            class="px-5 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             Analizar Cabeceras
           </button>
-          
-          <button 
-            id="btnClear" 
-            class="px-4 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+
+          <button
+            id="btnClear"
+            class="px-4 py-2.5 border border-transparent hover:border-stamp hover:bg-stamp-tint text-muted hover:text-stamp font-semibold text-xs transition-colors duration-150 cursor-pointer"
           >
             Limpiar
           </button>
@@ -89,46 +89,46 @@ import Footer from '../../components/Footer.astro';
 
       <!-- Right Column: Results (7 cols on desktop) -->
       <div class="lg:col-span-7 space-y-6">
-        
+
         <!-- Welcome/Placeholder Card -->
-        <div id="resultsPlaceholder" class="bg-black/10 border border-white/[0.06] backdrop-blur-md rounded-2xl p-12 text-center flex flex-col items-center justify-center min-h-[460px]">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-neutral-600 mb-4 opacity-70">
+        <div id="resultsPlaceholder" class="border border-rule-faint p-12 text-center flex flex-col items-center justify-center min-h-[460px]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-muted-dim mb-4">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
           </svg>
-          <h3 class="text-sm font-bold text-neutral-400 mb-2">Esperando Cabeceras</h3>
-          <p class="text-xs text-neutral-500 max-w-sm leading-relaxed font-light">
+          <h3 class="text-sm font-bold text-muted mb-2">Esperando Cabeceras</h3>
+          <p class="text-xs text-muted max-w-sm leading-relaxed">
             Carga un correo `.eml` o pega sus cabeceras a la izquierda y presiona "Analizar" para desglosar la información de red y seguridad.
           </p>
         </div>
 
         <!-- Actual Results Panel (hidden by default) -->
         <div id="resultsPanel" class="space-y-6 hidden">
-          
-          <!-- Box 0: Premium Security Score & Export -->
-          <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+
+          <!-- Box 0: Score & Export -->
+          <div class="border border-rule-faint p-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-5">
               <!-- Score Ring -->
-              <div class="relative w-20 h-20 flex items-center justify-center rounded-full bg-black/40 border border-white/[0.04]">
+              <div class="relative w-20 h-20 flex items-center justify-center">
                 <svg class="w-full h-full transform -rotate-90">
-                  <circle cx="40" cy="40" r="34" stroke-width="4" stroke="rgba(255,255,255,0.03)" fill="transparent"/>
-                  <circle id="scoreRing" cx="40" cy="40" r="34" stroke-width="4.5" stroke="currentColor" fill="transparent" class="text-blue-500 transition-all duration-1000" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+                  <circle cx="40" cy="40" r="34" stroke-width="4" stroke="#DEDCD4" fill="transparent"/>
+                  <circle id="scoreRing" cx="40" cy="40" r="34" stroke-width="4.5" stroke="currentColor" fill="transparent" class="text-ink transition-all duration-1000" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
                 </svg>
-                <span id="scoreText" class="absolute text-lg font-bold font-mono text-white">0%</span>
+                <span id="scoreText" class="absolute text-lg font-bold font-mono text-ink">0%</span>
               </div>
               <div class="space-y-1.5">
                 <div class="flex items-center gap-2">
-                  <h4 class="text-sm font-bold text-white">Nivel de Confianza del Remitente</h4>
-                  <span id="scoreStatusBadge" class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-neutral-900 text-neutral-450 uppercase tracking-wider font-mono">No verificado</span>
+                  <h4 class="text-sm font-bold text-ink">Nivel de Confianza del Remitente</h4>
+                  <span id="scoreStatusBadge" class="text-[10px] px-1.5 py-0.5 font-bold border border-rule-faint text-muted uppercase tracking-wider font-mono">No verificado</span>
                 </div>
-                <p id="scoreVerdict" class="text-xs text-neutral-400 font-light leading-relaxed">
+                <p id="scoreVerdict" class="text-xs text-muted leading-relaxed">
                   Carga y analiza cabeceras de correo para comprobar la autenticidad e identificar spoofing de remitente.
                 </p>
               </div>
             </div>
-            
-            <button 
-              id="btnDownloadReport" 
-              class="w-full md:w-auto px-4 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md flex items-center justify-center gap-1.5 active:scale-95 shrink-0"
+
+            <button
+              id="btnDownloadReport"
+              class="w-full md:w-auto px-4 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -138,93 +138,82 @@ import Footer from '../../components/Footer.astro';
           </div>
 
           <!-- Box 1: Auth Status (SPF, DKIM, DMARC) -->
-          <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl">
-            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-white/[0.04] pb-2.5">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4.5 h-4.5 text-blue-400">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-              </svg>
+          <div class="border border-rule-faint p-6">
+            <h3 class="text-xs font-bold tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-rule-faint pb-2.5">
               Autenticación de Seguridad
             </h3>
-            
+
             <div class="grid grid-cols-3 gap-4">
               <!-- SPF Card -->
-              <div class="bg-black/40 border border-white/[0.06] rounded-xl p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">SPF</span>
-                <span id="spfBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900/60 text-neutral-400 border-neutral-850">
+              <div class="border border-rule-faint p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-muted font-mono uppercase font-bold tracking-wider mb-2">SPF</span>
+                <span id="spfBadge" class="px-2.5 py-1 text-xs font-mono font-extrabold border border-rule-faint text-muted">
                   NONE
                 </span>
-                <span id="spfDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+                <span id="spfDetails" class="text-[10px] text-muted mt-2 font-mono truncate max-w-full">No verificado</span>
               </div>
 
               <!-- DKIM Card -->
-              <div class="bg-black/40 border border-white/[0.06] rounded-xl p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">DKIM</span>
-                <span id="dkimBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900/60 text-neutral-400 border-neutral-850">
+              <div class="border border-rule-faint p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-muted font-mono uppercase font-bold tracking-wider mb-2">DKIM</span>
+                <span id="dkimBadge" class="px-2.5 py-1 text-xs font-mono font-extrabold border border-rule-faint text-muted">
                   NONE
                 </span>
-                <span id="dkimDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+                <span id="dkimDetails" class="text-[10px] text-muted mt-2 font-mono truncate max-w-full">No verificado</span>
               </div>
 
               <!-- DMARC Card -->
-              <div class="bg-black/40 border border-white/[0.06] rounded-xl p-4 flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] text-neutral-500 font-mono uppercase font-bold tracking-wider mb-2">DMARC</span>
-                <span id="dmarcBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border bg-neutral-900/60 text-neutral-400 border-neutral-850">
+              <div class="border border-rule-faint p-4 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] text-muted font-mono uppercase font-bold tracking-wider mb-2">DMARC</span>
+                <span id="dmarcBadge" class="px-2.5 py-1 text-xs font-mono font-extrabold border border-rule-faint text-muted">
                   NONE
                 </span>
-                <span id="dmarcDetails" class="text-[10px] text-neutral-500 mt-2 font-mono truncate max-w-full">No verificado</span>
+                <span id="dmarcDetails" class="text-[10px] text-muted mt-2 font-mono truncate max-w-full">No verificado</span>
               </div>
             </div>
           </div>
 
           <!-- Box 2: Metadata -->
-          <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl">
-            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-white/[0.04] pb-2.5">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4.5 h-4.5 text-blue-400">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-              </svg>
+          <div class="border border-rule-faint p-6">
+            <h3 class="text-xs font-bold tracking-wider uppercase font-mono mb-4 flex items-center gap-2.5 border-b border-rule-faint pb-2.5">
               Datos Generales del Correo
             </h3>
-            
-            <div class="space-y-3.5 text-xs md:text-sm">
+
+            <div class="space-y-3.5 text-sm">
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
-                <span class="sm:col-span-3 text-neutral-500 font-medium">Asunto:</span>
-                <span id="metaSubject" class="sm:col-span-9 text-neutral-200 font-semibold break-all">-</span>
+                <span class="sm:col-span-3 text-muted font-medium">Asunto:</span>
+                <span id="metaSubject" class="sm:col-span-9 text-ink font-semibold break-all">-</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
-                <span class="sm:col-span-3 text-neutral-500 font-medium">De:</span>
-                <span id="metaFrom" class="sm:col-span-9 text-neutral-200 break-all font-mono">-</span>
+                <span class="sm:col-span-3 text-muted font-medium">De:</span>
+                <span id="metaFrom" class="sm:col-span-9 text-ink break-all font-mono">-</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
-                <span class="sm:col-span-3 text-neutral-500 font-medium">Para:</span>
-                <span id="metaTo" class="sm:col-span-9 text-neutral-200 break-all font-mono">-</span>
+                <span class="sm:col-span-3 text-muted font-medium">Para:</span>
+                <span id="metaTo" class="sm:col-span-9 text-ink break-all font-mono">-</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
-                <span class="sm:col-span-3 text-neutral-500 font-medium">Fecha:</span>
-                <span id="metaDate" class="sm:col-span-9 text-neutral-200 break-all">-</span>
+                <span class="sm:col-span-3 text-muted font-medium">Fecha:</span>
+                <span id="metaDate" class="sm:col-span-9 text-ink break-all">-</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4">
-                <span class="sm:col-span-3 text-neutral-500 font-medium">Message-ID:</span>
-                <span id="metaMessageId" class="sm:col-span-9 text-neutral-400 break-all font-mono">-</span>
+                <span class="sm:col-span-3 text-muted font-medium">Message-ID:</span>
+                <span id="metaMessageId" class="sm:col-span-9 text-muted break-all font-mono">-</span>
               </div>
             </div>
           </div>
 
           <!-- Box 3: Hops Timeline -->
-          <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl">
-            <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono mb-6 flex items-center justify-between border-b border-white/[0.04] pb-2.5">
-              <span class="flex items-center gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4.5 h-4.5 text-blue-400">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582" />
-                </svg>
-                Análisis de Saltos de Red (Hop-by-Hop)
-              </span>
-              <span id="hopsCount" class="text-[10px] text-neutral-500 font-normal">0 saltos</span>
+          <div class="border border-rule-faint p-6">
+            <h3 class="text-xs font-bold tracking-wider uppercase font-mono mb-6 flex items-center justify-between border-b border-rule-faint pb-2.5">
+              <span>Análisis de Saltos de Red (Hop-by-Hop)</span>
+              <span id="hopsCount" class="text-[10px] text-muted font-normal">0 saltos</span>
             </h3>
 
             <!-- Timeline wrapper -->
             <div class="relative pl-6 space-y-8" id="timelineContainer">
               <!-- Timeline vertical line (dynamic height via relative layout) -->
-              <div class="absolute left-2.5 top-2.5 bottom-2.5 w-[2px] bg-neutral-800"></div>
+              <div class="absolute left-2.5 top-2.5 bottom-2.5 w-[1px] bg-rule-faint"></div>
 
               <!-- Hops will be rendered dynamically here -->
             </div>
@@ -248,10 +237,10 @@ import Footer from '../../components/Footer.astro';
   const headerInput = document.getElementById('headerInput') as HTMLTextAreaElement;
   const btnAnalyze = document.getElementById('btnAnalyze') as HTMLButtonElement;
   const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
-  
+
   const resultsPlaceholder = document.getElementById('resultsPlaceholder') as HTMLDivElement;
   const resultsPanel = document.getElementById('resultsPanel') as HTMLDivElement;
-  
+
   // Auth Elements
   const spfBadge = document.getElementById('spfBadge') as HTMLSpanElement;
   const spfDetails = document.getElementById('spfDetails') as HTMLSpanElement;
@@ -280,20 +269,20 @@ import Footer from '../../components/Footer.astro';
 
   // Drag and drop events
   dropzone.addEventListener('click', () => fileInput.click());
-  
+
   dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropzone.classList.add('border-blue-500', 'bg-neutral-950/40');
+    dropzone.classList.add('border-ink');
   });
 
   dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove('border-blue-500', 'bg-neutral-950/40');
+    dropzone.classList.remove('border-ink');
   });
 
   dropzone.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropzone.classList.remove('border-blue-500', 'bg-neutral-950/40');
-    
+    dropzone.classList.remove('border-ink');
+
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       handleFile(e.dataTransfer.files[0]);
     }
@@ -310,7 +299,7 @@ import Footer from '../../components/Footer.astro';
       alert('Por favor, selecciona un archivo de correo electrónico válido (.eml)');
       return;
     }
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
@@ -341,7 +330,7 @@ import Footer from '../../components/Footer.astro';
     scoreRing.style.strokeDashoffset = '213.6';
     scoreText.textContent = '0%';
     scoreStatusBadge.textContent = 'No verificado';
-    scoreStatusBadge.className = 'text-[9px] px-1.5 py-0.5 rounded font-bold bg-neutral-900 text-neutral-450 uppercase tracking-wider font-mono';
+    scoreStatusBadge.className = 'text-[10px] px-1.5 py-0.5 font-bold border border-rule-faint text-muted uppercase tracking-wider font-mono';
     scoreVerdict.textContent = 'Carga y analiza cabeceras de correo para comprobar la autenticidad.';
   });
 
@@ -387,7 +376,7 @@ import Footer from '../../components/Footer.astro';
     // 2. Parse Authentication-Results header (which has comprehensive details)
     if (authResultsHeader !== '-') {
       const auth = authResultsHeader.toLowerCase();
-      
+
       // Extract spf result if not already parsed
       if (result.spf.status === 'NONE') {
         const spfMatch = auth.match(/\bspf=([a-z]+)/);
@@ -460,7 +449,7 @@ import Footer from '../../components/Footer.astro';
       // Standard format: from <sender> by <receiver>
       let sender = 'Desconocido';
       let receiver = 'Desconocido';
-      
+
       const fromMatch = line.match(/from\s+([^\s\(\)]+)/i);
       const byMatch = line.match(/by\s+([^\s\(\)]+)/i);
 
@@ -493,14 +482,14 @@ import Footer from '../../components/Footer.astro';
   function getBadgeClasses(status: string): string {
     switch (status) {
       case 'PASS':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        return 'border-online text-online';
       case 'FAIL':
-        return 'bg-red-500/10 text-red-400 border-red-500/20';
+        return 'border-stamp text-stamp bg-stamp-tint';
       case 'SOFTFAIL':
       case 'NEUTRAL':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        return 'border-ink text-ink';
       default:
-        return 'bg-neutral-900 text-neutral-400 border-neutral-800';
+        return 'border-rule-faint text-muted';
     }
   }
 
@@ -508,13 +497,13 @@ import Footer from '../../components/Footer.astro';
     if (ms === 0) return '0s';
     const seconds = Math.floor(ms / 1000);
     if (seconds < 60) return `+${seconds}s`;
-    
+
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     if (minutes < 60) {
       return `+${minutes}m ${remainingSeconds}s`;
     }
-    
+
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `+${hours}h ${remainingMinutes}m`;
@@ -524,16 +513,16 @@ import Footer from '../../components/Footer.astro';
   function analyzeHeaders(headersText: string) {
     // 1. Auth statuses
     const auth = parseSecurityAuth(headersText);
-    
-    spfBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.spf.status)}`;
+
+    spfBadge.className = `px-2.5 py-1 text-xs font-mono font-extrabold border ${getBadgeClasses(auth.spf.status)}`;
     spfBadge.textContent = auth.spf.status;
     spfDetails.textContent = auth.spf.details;
 
-    dkimBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dkim.status)}`;
+    dkimBadge.className = `px-2.5 py-1 text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dkim.status)}`;
     dkimBadge.textContent = auth.dkim.status;
     dkimDetails.textContent = auth.dkim.details;
 
-    dmarcBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dmarc.status)}`;
+    dmarcBadge.className = `px-2.5 py-1 text-xs font-mono font-extrabold border ${getBadgeClasses(auth.dmarc.status)}`;
     dmarcBadge.textContent = auth.dmarc.status;
     dmarcDetails.textContent = auth.dmarc.details;
 
@@ -565,15 +554,15 @@ import Footer from '../../components/Footer.astro';
     // Status Badge and Verdict
     if (score >= 85) {
       scoreStatusBadge.textContent = "CONFIABLE";
-      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider font-mono";
+      scoreStatusBadge.className = "text-[10px] px-1.5 py-0.5 font-bold border border-online text-online uppercase tracking-wider font-mono";
       scoreVerdict.textContent = "El remitente está completamente verificado. Todas las validaciones SPF, DKIM y DMARC pasaron correctamente.";
     } else if (score >= 50) {
       scoreStatusBadge.textContent = "SOSPECHOSO";
-      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider font-mono";
+      scoreStatusBadge.className = "text-[10px] px-1.5 py-0.5 font-bold border border-ink text-ink uppercase tracking-wider font-mono";
       scoreVerdict.textContent = "El correo presenta validaciones incompletas o fallos parciales. Podría tratarse de un remitente falsificado (spoofing).";
     } else {
       scoreStatusBadge.textContent = "PELIGROSO";
-      scoreStatusBadge.className = "text-[9px] px-1.5 py-0.5 rounded font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase tracking-wider font-mono";
+      scoreStatusBadge.className = "text-[10px] px-1.5 py-0.5 font-bold border border-stamp text-stamp bg-stamp-tint uppercase tracking-wider font-mono";
       scoreVerdict.textContent = "Fallo severo de validación de identidad (SPF/DMARC fallidos). Extremar precauciones con enlaces y archivos adjuntos.";
     }
 
@@ -586,53 +575,53 @@ import Footer from '../../components/Footer.astro';
 
     // 3. Network Hops
     const hops = parseReceivedHops(headersText);
-    
+
     hopsCount.textContent = `${hops.length} saltos`;
-    
+
     // Clear old hops
     timelineContainer.innerHTML = '';
     // Append the vertical line again
     const line = document.createElement('div');
-    line.className = 'absolute left-2.5 top-2.5 bottom-2.5 w-[2px] bg-neutral-800';
+    line.className = 'absolute left-2.5 top-2.5 bottom-2.5 w-[1px] bg-rule-faint';
     timelineContainer.appendChild(line);
 
     if (hops.length === 0) {
       const empty = document.createElement('p');
-      empty.className = 'text-xs text-neutral-500 font-mono';
+      empty.className = 'text-xs text-muted font-mono';
       empty.textContent = 'No se encontraron cabeceras "Received" válidas.';
       timelineContainer.appendChild(empty);
     } else {
       hops.forEach((hop) => {
         const hopDiv = document.createElement('div');
         hopDiv.className = 'relative pl-8 group';
-        
+
         // Node Dot
         const dot = document.createElement('div');
-        dot.className = 'absolute left-0 top-1 w-6 h-6 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-[10px] font-mono font-bold text-neutral-400 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-colors duration-200';
+        dot.className = 'absolute left-0 top-1 w-6 h-6 rounded-full bg-paper border border-rule-faint flex items-center justify-center text-[10px] font-mono font-bold text-muted group-hover:border-ink group-hover:text-ink transition-colors duration-200';
         dot.textContent = hop.hopNumber.toString();
         hopDiv.appendChild(dot);
 
         // Content
         const contentDiv = document.createElement('div');
-        contentDiv.className = 'bg-neutral-950/40 border border-white/5 rounded-xl p-4 transition-all duration-200 hover:border-white/10 hover:bg-neutral-950/60';
-        
+        contentDiv.className = 'border border-rule-faint p-4 transition-colors duration-200 hover:border-ink';
+
         // Hop Title (Sender -> Receiver)
         const title = document.createElement('div');
         title.className = 'flex flex-wrap items-center justify-between gap-2 mb-2';
-        
+
         const path = document.createElement('span');
-        path.className = 'font-bold text-xs md:text-sm text-neutral-300';
-        path.innerHTML = `De <span class="text-neutral-100 font-mono">${hop.sender}</span> → <span class="text-neutral-100 font-mono">${hop.receiver}</span>`;
+        path.className = 'font-bold text-sm text-ink-soft';
+        path.innerHTML = `De <span class="text-ink font-mono">${hop.sender}</span> → <span class="text-ink font-mono">${hop.receiver}</span>`;
         title.appendChild(path);
 
         if (hop.hopNumber > 1) {
           const delayBadge = document.createElement('span');
-          delayBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20';
+          delayBadge.className = 'px-1.5 py-0.5 text-[10px] font-mono font-bold border border-rule-faint text-ink-soft';
           delayBadge.textContent = formatDelay(hop.delay);
           title.appendChild(delayBadge);
         } else {
           const originBadge = document.createElement('span');
-          originBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20';
+          originBadge.className = 'px-1.5 py-0.5 text-[10px] font-mono font-bold border border-stamp text-stamp';
           originBadge.textContent = 'ORIGEN';
           title.appendChild(originBadge);
         }
@@ -640,7 +629,7 @@ import Footer from '../../components/Footer.astro';
 
         // Hop Date
         const dateSpan = document.createElement('div');
-        dateSpan.className = 'text-[10px] text-neutral-500 font-mono';
+        dateSpan.className = 'text-[10px] text-muted font-mono';
         dateSpan.textContent = hop.date ? hop.date.toLocaleString() : 'Fecha no especificada o inválida';
         contentDiv.appendChild(dateSpan);
 
@@ -670,7 +659,7 @@ import Footer from '../../components/Footer.astro';
     let md = `# Informe de Análisis de Cabeceras de Correo\n\n`;
     md += `**Fecha del Análisis:** ${new Date().toLocaleString()}\n`;
     md += `**Nivel de Confianza:** ${scoreText.textContent} (${scoreStatusBadge.textContent})\n\n`;
-    
+
     md += `## Datos Generales\n`;
     md += `- **Asunto:** ${subject}\n`;
     md += `- **De:** ${fromVal}\n`;

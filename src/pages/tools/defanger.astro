@@ -7,83 +7,81 @@ import Footer from '../../components/Footer.astro';
 <Layout title="IOC Defanger & Extractor | Blue Team Hub" description="Desarma, re-arma y extrae direcciones IP, dominios, correos y hashes de forma 100% local en tu navegador.">
   <Header activeTab="herramientas" />
 
-  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
-    
+  <main class="w-full max-w-[1040px] mx-auto px-6 sm:px-7 pt-12 flex-grow">
+
     <!-- Breadcrumb & Header -->
-    <div class="mb-8">
-      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+    <div class="mb-10 pb-8 border-b border-rule-faint">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 mb-5 group">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         Volver a la caja de herramientas
       </a>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
         IOC Defanger & Extractor
       </h1>
-      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+      <p class="text-sm text-muted max-w-2xl">
         Desarma (defang) URLs, IPs y correos electrónicos para compartirlos de forma segura en informes de incidentes, re-arma (refang) o extrae indicadores de compromiso (IOCs) desde logs o texto crudo. Todo de forma 100% local y segura.
       </p>
     </div>
 
-    <!-- Bento Workspace Layout (Side-by-side on desktop) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-      
+    <!-- Workspace: input / output -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
       <!-- Panel 1: Input -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+      <div class="border border-rule-faint p-6 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between mb-4 border-b border-white/[0.04] pb-3">
-            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          <div class="flex items-center justify-between mb-4 border-b border-rule-faint pb-3">
+            <h2 class="text-xs font-bold tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
               Entrada de Datos
             </h2>
-            <span class="text-[10px] text-neutral-500 font-mono" id="charCount">0 caracteres</span>
+            <span class="text-[11px] text-muted font-mono" id="charCount">0 caracteres</span>
           </div>
 
-          <div class="relative">
-            <textarea 
-              id="iocInput" 
-              rows="12" 
-              class="w-full bg-black/40 border border-white/[0.08] focus:border-neutral-700/80 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
-              placeholder="Pega aquí el texto que contenga las URLs, IPs (ej: 192.168.1.1 o http://malicious.domain), correos o hashes (MD5, SHA-256)..."
-            ></textarea>
-          </div>
+          <textarea
+            id="iocInput"
+            rows="12"
+            class="w-full bg-paper-dim border border-rule-faint focus:border-ink p-4 text-sm font-mono text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 resize-y min-h-[220px]"
+            placeholder="Pega aquí el texto que contenga las URLs, IPs (ej: 192.168.1.1 o http://malicious.domain), correos o hashes (MD5, SHA-256)..."
+          ></textarea>
         </div>
 
         <!-- Action Buttons -->
-        <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-white/[0.04]">
-          <button 
-            id="btnDefang" 
-            class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md flex items-center gap-1.5 active:scale-95"
+        <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-rule-faint">
+          <button
+            id="btnDefang"
+            class="px-5 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
             </svg>
             Desarmar (Defang)
           </button>
-          
-          <button 
-            id="btnRefang" 
-            class="px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+
+          <button
+            id="btnRefang"
+            class="px-4 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21m0 0l-.813-5.096m.813 5.096h4.5M16.5 13.5V8.25A6 6 0 0012 2.25v0A6 6 0 006 8.25v5.25m10.5 0H6.002" />
             </svg>
             Re-armar (Refang)
           </button>
-          
-          <button 
-            id="btnExtract" 
-            class="px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+
+          <button
+            id="btnExtract"
+            class="px-4 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             Extraer IOCs
           </button>
-          
-          <button 
-            id="btnClear" 
-            class="px-4 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer ml-auto active:scale-95"
+
+          <button
+            id="btnClear"
+            class="px-4 py-2.5 border border-transparent hover:border-stamp hover:bg-stamp-tint text-muted hover:text-stamp font-semibold text-xs transition-colors duration-150 cursor-pointer ml-auto"
           >
             Limpiar
           </button>
@@ -91,20 +89,19 @@ import Footer from '../../components/Footer.astro';
       </div>
 
       <!-- Panel 2: Output -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden">
-        
+      <div class="border border-rule-faint p-6 flex flex-col justify-between">
+
         <div>
-          <!-- Header with copy action -->
-          <div class="flex items-center justify-between mb-4 border-b border-white/[0.04] pb-3">
-            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" id="statusDot"></span>
+          <div class="flex items-center justify-between mb-4 border-b border-rule-faint pb-3">
+            <h2 class="text-xs font-bold tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-online" id="statusDot"></span>
               <span id="outputTitle">Resultado</span>
             </h2>
-            
+
             <div class="flex gap-2">
-              <button 
-                id="btnDownloadJson" 
-                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              <button
+                id="btnDownloadJson"
+                class="px-3 py-1.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink text-[11px] font-semibold transition-colors duration-150 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
@@ -112,10 +109,10 @@ import Footer from '../../components/Footer.astro';
                 </svg>
                 Exportar JSON
               </button>
-              
-              <button 
-                id="btnCopy" 
-                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+
+              <button
+                id="btnCopy"
+                class="px-3 py-1.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink text-[11px] font-semibold transition-colors duration-150 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
@@ -126,72 +123,65 @@ import Footer from '../../components/Footer.astro';
             </div>
           </div>
 
-          <!-- Output Box -->
-          <div class="relative group">
-            <div 
-              id="iocOutput" 
-              class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-400 overflow-y-auto min-h-[220px] max-h-[360px] whitespace-pre-wrap selection:bg-emerald-500/20 selection:text-emerald-300"
-            >Esperando que proceses o extraigas datos de la entrada...</div>
-          </div>
+          <div
+            id="iocOutput"
+            class="w-full bg-paper-dim border border-rule-faint p-4 text-sm font-mono text-muted overflow-y-auto min-h-[220px] max-h-[360px] whitespace-pre-wrap selection:bg-ink selection:text-paper"
+          >Esperando que proceses o extraigas datos de la entrada...</div>
         </div>
 
-        <!-- Extra details/stats -->
-        <div class="mt-6 pt-4 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+        <div class="mt-6 pt-4 border-t border-rule-faint flex items-center justify-between text-[11px] text-muted font-mono">
           <span>Modo OpSec local: Activo</span>
           <span id="outputStat">0 elementos</span>
         </div>
       </div>
-      
+
     </div>
 
-    <!-- SaaS Stats & Quota Info -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-      <!-- Card: Account/API Info -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
-        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between">
+    <!-- Secondary panels -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 mb-16">
+      <div class="border border-rule-faint p-5 space-y-3 font-mono">
+        <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2 flex items-center justify-between">
           <span>Suscripción</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold">ACTIVA</span>
+          <span class="text-[10px] text-online font-semibold">ACTIVA</span>
         </h3>
-        <div class="space-y-1.5 text-[11px] text-neutral-400">
-          <div class="flex justify-between"><span>Plan:</span><span class="text-neutral-200">Self-Hosted Enterprise</span></div>
-          <div class="flex justify-between"><span>Cuota API:</span><span class="text-neutral-200">Ilimitada / Local</span></div>
-          <div class="flex justify-between"><span>Velocidad:</span><span class="text-neutral-200">Instantánea (&lt;1ms)</span></div>
-          <div class="flex justify-between"><span>Privacidad:</span><span class="text-neutral-200">100% On-Device</span></div>
+        <div class="space-y-1.5 text-[11px] text-muted">
+          <div class="flex justify-between"><span>Plan:</span><span class="text-ink-soft">Self-Hosted Enterprise</span></div>
+          <div class="flex justify-between"><span>Cuota API:</span><span class="text-ink-soft">Ilimitada / Local</span></div>
+          <div class="flex justify-between"><span>Velocidad:</span><span class="text-ink-soft">Instantánea (&lt;1ms)</span></div>
+          <div class="flex justify-between"><span>Privacidad:</span><span class="text-ink-soft">100% On-Device</span></div>
         </div>
       </div>
 
-      <!-- Card: IOC Distribution Chart/Metrics -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
-        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2">Distribución de Datos</h3>
+      <div class="border border-rule-faint p-5 space-y-3 font-mono">
+        <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2">Distribución de Datos</h3>
         <div class="grid grid-cols-2 gap-2 text-[10px]">
-          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
-            <span class="text-neutral-500 block">IPs</span>
-            <span id="statIps" class="text-base font-bold text-blue-400">0</span>
+          <div class="border border-rule-faint p-2 text-center">
+            <span class="text-muted block">IPs</span>
+            <span id="statIps" class="text-base font-bold text-ink">0</span>
           </div>
-          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
-            <span class="text-neutral-500 block">Dominios</span>
-            <span id="statDomains" class="text-base font-bold text-purple-400">0</span>
+          <div class="border border-rule-faint p-2 text-center">
+            <span class="text-muted block">Dominios</span>
+            <span id="statDomains" class="text-base font-bold text-ink">0</span>
           </div>
-          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
-            <span class="text-neutral-500 block">Hashes</span>
-            <span id="statHashes" class="text-base font-bold text-amber-400">0</span>
+          <div class="border border-rule-faint p-2 text-center">
+            <span class="text-muted block">Hashes</span>
+            <span id="statHashes" class="text-base font-bold text-ink">0</span>
           </div>
-          <div class="bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg text-center">
-            <span class="text-neutral-500 block">Correos</span>
-            <span id="statEmails" class="text-base font-bold text-emerald-400">0</span>
+          <div class="border border-rule-faint p-2 text-center">
+            <span class="text-muted block">Correos</span>
+            <span id="statEmails" class="text-base font-bold text-ink">0</span>
           </div>
         </div>
       </div>
 
-      <!-- Card: Local History -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 flex flex-col justify-between">
+      <div class="border border-rule-faint p-5 space-y-3 flex flex-col justify-between">
         <div>
-          <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between font-mono">
+          <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2 flex items-center justify-between font-mono">
             <span>Historial Local</span>
-            <button id="btnClearHistory" class="text-[9px] text-red-400 hover:underline">Limpiar</button>
+            <button id="btnClearHistory" class="text-[10px] text-stamp hover:underline">Limpiar</button>
           </h3>
           <div id="historyList" class="space-y-1.5 max-h-[100px] overflow-y-auto mt-2 pr-1 text-[11px] font-mono">
-            <div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>
+            <div class="text-muted text-center py-4">Sin operaciones recientes</div>
           </div>
         </div>
       </div>
@@ -210,7 +200,7 @@ import Footer from '../../components/Footer.astro';
   const charCount = document.getElementById('charCount') as HTMLSpanElement;
   const outputStat = document.getElementById('outputStat') as HTMLSpanElement;
   const statusDot = document.getElementById('statusDot') as HTMLSpanElement;
-  
+
   const btnDefang = document.getElementById('btnDefang') as HTMLButtonElement;
   const btnRefang = document.getElementById('btnRefang') as HTMLButtonElement;
   const btnExtract = document.getElementById('btnExtract') as HTMLButtonElement;
@@ -340,15 +330,15 @@ import Footer from '../../components/Footer.astro';
     const history = getHistory();
     historyList.innerHTML = '';
     if (history.length === 0) {
-      historyList.innerHTML = '<div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>';
+      historyList.innerHTML = '<div class="text-muted text-center py-4">Sin operaciones recientes</div>';
       return;
     }
     history.forEach(item => {
       const row = document.createElement('div');
-      row.className = 'flex justify-between items-center bg-white/[0.02] border border-white/[0.04] p-1.5 rounded hover:bg-white/[0.05] cursor-pointer transition-all duration-200 mb-1';
+      row.className = 'flex justify-between items-center border border-rule-faint p-1.5 hover:bg-paper-dim cursor-pointer transition-colors duration-150 mb-1';
       row.innerHTML = `
-        <span class="text-neutral-450 font-bold uppercase text-[9px]">${item.action}</span>
-        <span class="text-neutral-500 text-[9px]">${item.timestamp}</span>
+        <span class="text-ink-soft font-bold uppercase text-[10px]">${item.action}</span>
+        <span class="text-muted text-[10px]">${item.timestamp}</span>
       `;
       row.addEventListener('click', () => {
         inputElement.value = item.input;
@@ -363,8 +353,8 @@ import Footer from '../../components/Footer.astro';
   // Set active state styling
   function updateOutput(text: string, title: string, statLabel: string, success = true) {
     outputElement.textContent = text;
-    outputElement.classList.remove('text-neutral-600', 'text-neutral-400');
-    outputElement.classList.add('text-neutral-200');
+    outputElement.classList.remove('text-muted-dim', 'text-muted');
+    outputElement.classList.add('text-ink');
     outputTitle.textContent = title;
     outputStat.textContent = statLabel;
     btnCopy.disabled = !text || text.startsWith('Esperando');
@@ -372,9 +362,9 @@ import Footer from '../../components/Footer.astro';
 
     // Update status dot color
     if (success && text) {
-      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse';
+      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-online';
     } else {
-      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-blue-500';
+      statusDot.className = 'w-1.5 h-1.5 rounded-full bg-ink';
     }
   }
 
@@ -388,7 +378,7 @@ import Footer from '../../components/Footer.astro';
   btnDefang.addEventListener('click', () => {
     const val = inputElement.value.trim();
     if (!val) return;
-    
+
     const result = defang(val);
     calculateMetrics(val);
     updateOutput(result, "Resultado: Defang", "Texto modificado");
@@ -398,7 +388,7 @@ import Footer from '../../components/Footer.astro';
   btnRefang.addEventListener('click', () => {
     const val = inputElement.value.trim();
     if (!val) return;
-    
+
     const result = refang(val);
     calculateMetrics(val);
     updateOutput(result, "Resultado: Refang", "Texto modificado");
@@ -422,14 +412,14 @@ import Footer from '../../components/Footer.astro';
     inputElement.value = '';
     charCount.textContent = '0 caracteres';
     outputElement.textContent = 'Esperando que proceses o extraigas datos de la entrada...';
-    outputElement.classList.remove('text-neutral-200');
-    outputElement.classList.add('text-neutral-400');
+    outputElement.classList.remove('text-ink');
+    outputElement.classList.add('text-muted');
     outputTitle.textContent = "Resultado";
     outputStat.textContent = '0 elementos';
     btnCopy.disabled = true;
     btnDownloadJson.disabled = true;
-    statusDot.className = 'w-1.5 h-1.5 rounded-full bg-blue-500';
-    
+    statusDot.className = 'w-1.5 h-1.5 rounded-full bg-ink';
+
     statIps.textContent = '0';
     statDomains.textContent = '0';
     statHashes.textContent = '0';
@@ -475,16 +465,16 @@ import Footer from '../../components/Footer.astro';
     navigator.clipboard.writeText(content).then(() => {
       const originalHtml = btnCopy.innerHTML;
       btnCopy.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-emerald-400">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-online">
           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
         </svg>
-        <span class="text-emerald-400">Copiado!</span>
+        <span class="text-online">Copiado!</span>
       `;
-      btnCopy.classList.add('border-emerald-500/30', 'bg-emerald-500/5');
-      
+      btnCopy.classList.add('border-online');
+
       setTimeout(() => {
         btnCopy.innerHTML = originalHtml;
-        btnCopy.classList.remove('border-emerald-500/30', 'bg-emerald-500/5');
+        btnCopy.classList.remove('border-online');
       }, 2000);
     }).catch(err => {
       console.error('Error al copiar: ', err);

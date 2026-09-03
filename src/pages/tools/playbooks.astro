@@ -7,81 +7,81 @@ import Footer from '../../components/Footer.astro';
 <Layout title="Playbooks Interactivos de Respuesta a Incidentes | Blue Team Hub" description="Guías paso a paso e interactivas para gestionar incidentes de ciberseguridad: Phishing, Malware y Fuerza Bruta, con generación de queries SIEM automáticas.">
   <Header activeTab="herramientas" />
 
-  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
-    
+  <main class="w-full max-w-[1040px] mx-auto px-6 sm:px-7 pt-12 flex-grow">
+
     <!-- Breadcrumb & Header -->
-    <div class="mb-8">
-      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+    <div class="mb-10 pb-8 border-b border-rule-faint">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 mb-5 group">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         Volver a la caja de herramientas
       </a>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
         Playbooks Interactivos de Respuesta
       </h1>
-      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+      <p class="text-sm text-muted max-w-2xl">
         Selecciona un playbook y sigue el cuestionario interactivo para diagnosticar un incidente. Al finalizar el flujo, obtendrás recomendaciones detalladas de mitigación (Contención, Erradicación y Recuperación) junto con comandos y consultas SIEM (Splunk/Sentinel) personalizadas para tu investigación.
       </p>
     </div>
 
     <!-- MAIN PLAYBOOK WRAPPER -->
-    <div class="mt-8">
-      
+    <div class="mb-16">
+
       <!-- State 1: Playbook Selector -->
       <div id="selectorState" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Playbook Phishing -->
-        <div class="playbook-card bg-black/30 border border-white/[0.06] hover:border-white/12 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="phishing">
+        <div class="playbook-card border border-rule-faint hover:border-ink transition-colors duration-200 p-6 flex flex-col justify-between group cursor-pointer" data-playbook="phishing">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-blue-400">
+            <div class="w-12 h-12 border border-ink flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-ink">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
             </div>
-            <h3 class="text-base font-bold text-white mb-2">Análisis de Phishing</h3>
-            <p class="text-xs text-neutral-400 leading-relaxed font-light mb-6">
+            <h3 class="text-base font-bold text-ink mb-2">Análisis de Phishing</h3>
+            <p class="text-xs text-muted leading-relaxed mb-6">
               Para investigar correos electrónicos sospechosos, descargas de adjuntos maliciosos y posibles páginas de robo de credenciales corporativas.
             </p>
           </div>
-          <span class="text-xs font-semibold text-blue-400 group-hover:text-blue-300 flex items-center gap-1.5 transition-colors duration-200">
-            Iniciar Playbook 
+          <span class="text-xs font-semibold text-stamp flex items-center gap-1.5 transition-colors duration-150">
+            Iniciar Playbook
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </span>
         </div>
 
         <!-- Playbook Malware -->
-        <div class="playbook-card bg-black/30 border border-white/[0.06] hover:border-white/12 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="malware">
+        <div class="playbook-card border border-rule-faint hover:border-ink transition-colors duration-200 p-6 flex flex-col justify-between group cursor-pointer" data-playbook="malware">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-purple-400">
+            <div class="w-12 h-12 border border-ink flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-ink">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
               </svg>
             </div>
-            <h3 class="text-base font-bold text-white mb-2">Infección por Malware / EDR</h3>
-            <p class="text-xs text-neutral-400 leading-relaxed font-light mb-6">
+            <h3 class="text-base font-bold text-ink mb-2">Infección por Malware / EDR</h3>
+            <p class="text-xs text-muted leading-relaxed mb-6">
               Guía de contención ante alertas de malware en hosts, comportamiento anómalo detectado por EDR o conexiones sospechosas de C2.
             </p>
           </div>
-          <span class="text-xs font-semibold text-purple-400 group-hover:text-purple-300 flex items-center gap-1.5 transition-colors duration-200">
+          <span class="text-xs font-semibold text-stamp flex items-center gap-1.5 transition-colors duration-150">
             Iniciar Playbook
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </span>
         </div>
 
         <!-- Playbook Fuerza Bruta -->
-        <div class="playbook-card bg-black/30 border border-white/[0.06] hover:border-white/12 hover:-translate-y-1 transition-all duration-300 rounded-2xl p-6 shadow-xl flex flex-col justify-between group cursor-pointer" data-playbook="bruteforce">
+        <div class="playbook-card border border-rule-faint hover:border-ink transition-colors duration-200 p-6 flex flex-col justify-between group cursor-pointer" data-playbook="bruteforce">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-amber-400">
+            <div class="w-12 h-12 border border-ink flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-6 h-6 text-ink">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
               </svg>
             </div>
-            <h3 class="text-base font-bold text-white mb-2">Fuerza Bruta SSH / RDP</h3>
-            <p class="text-xs text-neutral-400 leading-relaxed font-light mb-6">
+            <h3 class="text-base font-bold text-ink mb-2">Fuerza Bruta SSH / RDP</h3>
+            <p class="text-xs text-muted leading-relaxed mb-6">
               Investigación de ataques de fuerza bruta en autenticación, inicios de sesión exitosos sospechosos y posibles movimientos laterales.
             </p>
           </div>
-          <span class="text-xs font-semibold text-amber-400 group-hover:text-amber-300 flex items-center gap-1.5 transition-colors duration-200">
+          <span class="text-xs font-semibold text-stamp flex items-center gap-1.5 transition-colors duration-150">
             Iniciar Playbook
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </span>
@@ -89,26 +89,26 @@ import Footer from '../../components/Footer.astro';
       </div>
 
       <!-- State 2: Active Wizard Questionnaire -->
-      <div id="wizardState" class="max-w-3xl mx-auto hidden bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-6">
+      <div id="wizardState" class="max-w-3xl mx-auto hidden border border-rule-faint p-6 space-y-6">
         <!-- Wizard Header -->
-        <div class="flex items-center justify-between border-b border-white/[0.04] pb-3">
+        <div class="flex items-center justify-between border-b border-rule-faint pb-3">
           <div class="flex items-center gap-2.5">
-            <div id="wizardIconContainer" class="w-6 h-6 text-neutral-400">
-              <svg id="wizardIconPhishing" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-blue-400 hidden">
+            <div id="wizardIconContainer" class="w-6 h-6 text-ink">
+              <svg id="wizardIconPhishing" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-ink hidden">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
-              <svg id="wizardIconMalware" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-purple-400 hidden">
+              <svg id="wizardIconMalware" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-ink hidden">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
               </svg>
-              <svg id="wizardIconBruteforce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-amber-400 hidden">
+              <svg id="wizardIconBruteforce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-full h-full text-ink hidden">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
               </svg>
             </div>
-            <span class="text-xs font-bold text-white font-mono uppercase tracking-wider" id="wizardTitle">PLAYBOOK</span>
+            <span class="text-xs font-bold text-ink font-mono uppercase tracking-wider" id="wizardTitle">PLAYBOOK</span>
           </div>
-          <button 
-            id="btnCancelWizard" 
-            class="text-[11px] text-neutral-500 hover:text-red-400 transition-colors duration-200 font-mono"
+          <button
+            id="btnCancelWizard"
+            class="text-[11px] text-muted hover:text-stamp transition-colors duration-150 font-mono"
           >
             CANCELAR
           </button>
@@ -116,23 +116,23 @@ import Footer from '../../components/Footer.astro';
 
         <!-- Progress Bar -->
         <div class="space-y-1.5">
-          <div class="flex justify-between text-[10px] text-neutral-500 font-mono">
+          <div class="flex justify-between text-[11px] text-muted font-mono">
             <span class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Análisis en Curso: <span id="wizardTimer" class="font-bold text-neutral-300">00:00</span></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-online"></span>
+              <span>Análisis en Curso: <span id="wizardTimer" class="font-bold text-ink-soft">00:00</span></span>
             </span>
             <span id="wizardStepText">Paso 1</span>
           </div>
-          <div class="w-full h-1.5 bg-neutral-950/60 rounded-full overflow-hidden">
-            <div id="wizardProgress" class="h-full bg-blue-500 transition-all duration-300" style="width: 25%;"></div>
+          <div class="w-full h-1 bg-rule-faint overflow-hidden">
+            <div id="wizardProgress" class="h-full bg-ink transition-all duration-300" style="width: 25%;"></div>
           </div>
         </div>
-        
+
         <!-- Wizard Card (Question & Inputs) -->
-        <div class="bg-black/35 rounded-xl border border-white/[0.04] p-6 space-y-6">
+        <div class="bg-paper-dim border border-rule-faint p-6 space-y-6">
           <div class="space-y-2">
-            <h3 class="text-lg md:text-xl font-bold text-white leading-snug" id="questionText">Cargando pregunta...</h3>
-            <p class="text-xs text-neutral-400 font-light" id="questionDesc">Cargando descripción...</p>
+            <h3 class="text-lg md:text-xl font-bold text-ink leading-snug" id="questionText">Cargando pregunta...</h3>
+            <p class="text-xs text-muted" id="questionDesc">Cargando descripción...</p>
           </div>
 
           <!-- Dynamic inputs container (text, checkbox, etc.) -->
@@ -146,9 +146,9 @@ import Footer from '../../components/Footer.astro';
 
         <!-- Navigation Buttons -->
         <div class="flex items-center justify-between pt-2">
-          <button 
-            id="btnWizardBack" 
-            class="px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-450 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
+          <button
+            id="btnWizardBack"
+            class="px-4 py-2.5 border border-rule-faint hover:border-ink text-muted hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
             disabled
           >
             Atrás
@@ -158,30 +158,30 @@ import Footer from '../../components/Footer.astro';
 
       <!-- State 3: Recommendation Results -->
       <div id="resultsState" class="space-y-6 hidden">
-        
+
         <!-- Header status card -->
-        <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="border border-rule-faint p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 font-mono" id="resultPriorityBadge">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold border mb-3 font-mono" id="resultPriorityBadge">
               PRIORIDAD CRÍTICA
             </div>
-            <h2 class="text-xl md:text-2xl font-bold text-white">Diagnóstico y Recomendaciones SOC</h2>
-            <p class="text-xs text-neutral-400 font-light mt-1" id="resultPlaybookInfo">Playbook: Phishing</p>
+            <h2 class="text-xl md:text-2xl font-bold text-ink">Diagnóstico y Recomendaciones SOC</h2>
+            <p class="text-xs text-muted mt-1" id="resultPlaybookInfo">Playbook: Phishing</p>
           </div>
-          
+
           <div class="flex gap-3">
-            <button 
-              id="btnDownloadReport" 
-              class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md"
+            <button
+              id="btnDownloadReport"
+              class="px-4 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
               Exportar Reporte
             </button>
-            <button 
-              id="btnReset" 
-              class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md"
+            <button
+              id="btnReset"
+              class="px-5 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -193,13 +193,10 @@ import Footer from '../../components/Footer.astro';
 
         <!-- Bento Grid split layout -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           <!-- Column 1: Remediations (7 cols) -->
-          <div class="lg:col-span-7 bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-6">
-            <h3 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-white/[0.04] pb-3 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4 text-blue-400">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 1 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766l.002-.001a3.005 3.005 0 0 0 1.883-1.882l.002-.006a2.89 2.89 0 0 0-.743-2.98l-.018-.018a2.89 2.89 0 0 0-2.98-.743l-.006.002a3.005 3.005 0 0 0-1.883 1.883l-.001.002a2.65 2.65 0 0 0-.766 1.209l-3.03 2.496M11.42 15.17l-1.52 1.52a2.652 2.652 0 1 1-3.75-3.75l1.52-1.52M9 9l.008-.008a3 3 0 0 1 4.243 4.243L13 13M9 9l-5.877-5.877a2.653 2.653 0 0 0-3.75 3.75L5.25 12.75M9 9l-3.03 2.496a2.65 2.65 0 0 0-.766 1.209l-1.52 1.52M13 13l2.496-3.03c.317-.384.74-.626 1.208-.766l.002-.001a3.005 3.005 0 0 0 1.883-1.882l.002-.006a2.89 2.89 0 0 0-.743-2.98l-.018-.018a2.89 2.89 0 0 0-2.98-.743l-.006.002a3.005 3.005 0 0 0-1.883 1.883l-.001.002a2.65 2.65 0 0 0-.766 1.209l-3.03 2.496" />
-              </svg>
+          <div class="lg:col-span-7 border border-rule-faint p-6 space-y-6">
+            <h3 class="text-xs font-bold tracking-wide uppercase font-mono border-b border-rule-faint pb-3 flex items-center gap-2">
               Acciones de Mitigación Recomendadas
             </h3>
 
@@ -207,24 +204,24 @@ import Footer from '../../components/Footer.astro';
             <div class="space-y-6">
               <!-- Containment -->
               <div class="space-y-2">
-                <h4 class="text-xs font-bold text-red-400 font-mono tracking-wider uppercase font-medium">1. Fase de Contención</h4>
-                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listContainment">
+                <h4 class="text-xs font-bold text-stamp font-mono tracking-wider uppercase">1. Fase de Contención</h4>
+                <ul class="text-sm text-ink-soft list-disc list-inside space-y-1.5" id="listContainment">
                   <!-- Dynamic items -->
                 </ul>
               </div>
 
               <!-- Erradication -->
               <div class="space-y-2">
-                <h4 class="text-xs font-bold text-amber-400 font-mono tracking-wider uppercase font-medium">2. Fase de Erradicación</h4>
-                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listEradication">
+                <h4 class="text-xs font-bold text-ink font-mono tracking-wider uppercase">2. Fase de Erradicación</h4>
+                <ul class="text-sm text-ink-soft list-disc list-inside space-y-1.5" id="listEradication">
                   <!-- Dynamic items -->
                 </ul>
               </div>
 
               <!-- Recovery -->
               <div class="space-y-2">
-                <h4 class="text-xs font-bold text-emerald-400 font-mono tracking-wider uppercase font-medium">3. Fase de Recuperación</h4>
-                <ul class="text-xs md:text-sm text-neutral-300 list-disc list-inside space-y-1.5 font-light" id="listRecovery">
+                <h4 class="text-xs font-bold text-online font-mono tracking-wider uppercase">3. Fase de Recuperación</h4>
+                <ul class="text-sm text-ink-soft list-disc list-inside space-y-1.5" id="listRecovery">
                   <!-- Dynamic items -->
                 </ul>
               </div>
@@ -233,27 +230,24 @@ import Footer from '../../components/Footer.astro';
 
           <!-- Column 2: SIEM Queries & Commands (5 cols) -->
           <div class="lg:col-span-5 space-y-6">
-            
+
             <!-- SIEM Block -->
-            <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4">
-              <div class="flex items-center justify-between border-b border-white/[0.04] pb-3">
-                <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4 text-blue-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>
+            <div class="border border-rule-faint p-6 space-y-4">
+              <div class="flex items-center justify-between border-b border-rule-faint pb-3">
+                <h3 class="text-xs font-bold tracking-wider uppercase font-mono flex items-center gap-2">
                   Consulta de Búsqueda SIEM
                 </h3>
-                
+
                 <div class="flex gap-1.5">
-                  <button 
-                    id="btnSiemspl" 
-                    class="px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30"
+                  <button
+                    id="btnSiemspl"
+                    class="px-2 py-1 bg-ink text-paper text-[10px] font-bold font-mono transition-colors border border-ink"
                   >
                     Splunk SPL
                   </button>
-                  <button 
-                    id="btnSiemkql" 
-                    class="px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white"
+                  <button
+                    id="btnSiemkql"
+                    class="px-2 py-1 border border-rule-faint text-muted text-[10px] font-bold font-mono transition-colors hover:text-ink"
                   >
                     Sentinel KQL
                   </button>
@@ -261,23 +255,16 @@ import Footer from '../../components/Footer.astro';
               </div>
 
               <!-- Query code pre -->
-              <div class="relative group">
-                <pre id="siemQueryOutput" class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-[10px] font-mono text-neutral-300 overflow-x-auto min-h-[140px] whitespace-pre-wrap select-all"></pre>
-              </div>
+              <pre id="siemQueryOutput" class="w-full bg-paper-dim border border-rule-faint p-4 text-[11px] font-mono text-ink-soft overflow-x-auto min-h-[140px] whitespace-pre-wrap select-all"></pre>
             </div>
 
             <!-- CLI Command Block -->
-            <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4">
-              <h3 class="text-xs font-bold text-white tracking-wider uppercase font-mono border-b border-white/[0.04] pb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4 text-blue-400">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
-                </svg>
+            <div class="border border-rule-faint p-6 space-y-4">
+              <h3 class="text-xs font-bold tracking-wider uppercase font-mono border-b border-rule-faint pb-3 flex items-center gap-2">
                 Comando de Remediación PowerShell
               </h3>
-              
-              <div class="relative group">
-                <pre id="powershellOutput" class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-[10px] font-mono text-neutral-300 overflow-x-auto min-h-[80px] whitespace-pre-wrap select-all"></pre>
-              </div>
+
+              <pre id="powershellOutput" class="w-full bg-paper-dim border border-rule-faint p-4 text-[11px] font-mono text-ink-soft overflow-x-auto min-h-[80px] whitespace-pre-wrap select-all"></pre>
             </div>
 
           </div>
@@ -771,11 +758,11 @@ import Footer from '../../components/Footer.astro';
     currentStepId = 'start';
     historySteps = [];
     userAnswers = {};
-    
+
     wizardIconPhishing.classList.add('hidden');
     wizardIconMalware.classList.add('hidden');
     wizardIconBruteforce.classList.add('hidden');
-    
+
     if (name === 'phishing') {
       currentTree = phishingTree;
       wizardIconPhishing.classList.remove('hidden');
@@ -827,17 +814,17 @@ import Footer from '../../components/Footer.astro';
     dynamicInputsWrapper.innerHTML = '';
     if (q.variableInput) {
       dynamicInputsWrapper.classList.remove('hidden');
-      
+
       const v = q.variableInput;
       const wrap = document.createElement('div');
       wrap.className = 'flex flex-col gap-1.5';
       wrap.innerHTML = `
-        <label for="${v.name}" class="text-xs text-neutral-400 font-medium">${v.label}</label>
-        <input 
-          type="text" 
-          id="${v.name}" 
-          value="${v.defaultValue}" 
-          class="bg-neutral-950/60 border border-white/5 focus:border-blue-500/50 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+        <label for="${v.name}" class="text-xs text-muted font-medium">${v.label}</label>
+        <input
+          type="text"
+          id="${v.name}"
+          value="${v.defaultValue}"
+          class="bg-paper border border-rule-faint focus:border-ink px-3 py-2 text-xs font-mono text-ink focus:outline-none"
           placeholder="${v.placeholder}"
         />
       `;
@@ -850,7 +837,7 @@ import Footer from '../../components/Footer.astro';
     optionsContainer.innerHTML = '';
     q.options.forEach((opt) => {
       const btn = document.createElement('button');
-      btn.className = 'px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-200 hover:text-white font-semibold text-xs md:text-sm text-left transition-all duration-200 cursor-pointer active:scale-98 flex items-center justify-between group';
+      btn.className = 'px-4 py-3 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-sm text-left transition-colors duration-150 cursor-pointer flex items-center justify-between group';
       btn.innerHTML = `
         <span>${opt.text}</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200">
@@ -881,15 +868,15 @@ import Footer from '../../components/Footer.astro';
     resultsState.classList.remove('hidden');
 
     // 1. Set Priority Badge
-    let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+    let badgeColor = 'border-rule-faint text-muted';
     if (res.priority === 'Crítica') {
-      badgeColor = 'bg-red-500/10 text-red-400 border-red-500/20';
+      badgeColor = 'border-stamp text-stamp bg-stamp-tint';
     } else if (res.priority === 'Alta') {
-      badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      badgeColor = 'border-stamp text-stamp';
     } else if (res.priority === 'Media') {
-      badgeColor = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+      badgeColor = 'border-ink text-ink';
     }
-    resultPriorityBadge.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border mb-3 font-mono ${badgeColor}`;
+    resultPriorityBadge.className = `inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold border mb-3 font-mono ${badgeColor}`;
     resultPriorityBadge.textContent = `PRIORIDAD ${res.priority.toUpperCase()}`;
 
     // 2. Set Playbook info header
@@ -910,19 +897,19 @@ import Footer from '../../components/Footer.astro';
     items.forEach((item) => {
       const li = document.createElement('li');
       // Simple parser to convert **bold** markdown to HTML <strong>
-      li.innerHTML = item.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
+      li.innerHTML = item.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-ink">$1</strong>');
       ulElement.appendChild(li);
     });
   }
 
   function updateSIEMOutput(res: PlaybookResult) {
     if (activeSiem === 'spl') {
-      btnSiemspl.className = 'px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30';
-      btnSiemkql.className = 'px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white';
+      btnSiemspl.className = 'px-2 py-1 bg-ink text-paper text-[10px] font-bold font-mono transition-colors border border-ink';
+      btnSiemkql.className = 'px-2 py-1 border border-rule-faint text-muted text-[10px] font-bold font-mono transition-colors hover:text-ink';
       siemQueryOutput.textContent = res.spl(userAnswers);
     } else {
-      btnSiemkql.className = 'px-2 py-1 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold font-mono transition-all border border-blue-500/30';
-      btnSiemspl.className = 'px-2 py-1 rounded bg-white/5 text-neutral-400 text-[10px] font-bold font-mono transition-all border border-transparent hover:text-white';
+      btnSiemkql.className = 'px-2 py-1 bg-ink text-paper text-[10px] font-bold font-mono transition-colors border border-ink';
+      btnSiemspl.className = 'px-2 py-1 border border-rule-faint text-muted text-[10px] font-bold font-mono transition-colors hover:text-ink';
       siemQueryOutput.textContent = res.kql(userAnswers);
     }
   }

@@ -3,17 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ToolCard from '../components/ToolCard.astro';
+import kevData from '../data/kev.json';
 
 // Tools catalog. `group` drives which homepage section a card renders in:
 // "site" = built into Blue Team Hub (client-side, this repo). "external" =
 // lives elsewhere (another repo, the portfolio site), just linked from here.
+// kev-watch has no href of its own anymore: it's rendered inline in section
+// 02 below instead of living behind a separate route.
 const tools = [
   {
     id: "defanger",
     title: "IOC Defanger & Extractor",
     description: "Desarma (defang) e higieniza de forma segura direcciones IP, URLs y correos electrónicos para tus informes, o extrae IOCs directamente desde texto crudo en segundos.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/defanger",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -24,7 +27,7 @@ const tools = [
     title: "Email Header Analyzer",
     description: "Analiza cabeceras crudas de correos sospechosos o ficheros .eml de forma visual. Comprueba la autenticación SPF, DKIM, DMARC y representa los saltos de red.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/email-analyzer",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -35,7 +38,7 @@ const tools = [
     title: "Generador de Reglas YARA",
     description: "Escribe y valida reglas de detección YARA sin errores de sintaxis a través de un asistente paso a paso con analizador (linter) integrado en tiempo real.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/yara-generator",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -46,7 +49,7 @@ const tools = [
     title: "Playbooks Interactivos",
     description: "Árboles de decisión interactivos para diagnosticar incidentes de seguridad (Phishing, Malware, Fuerza Bruta) con recomendaciones y consultas SIEM automáticas.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/playbooks",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -57,7 +60,7 @@ const tools = [
     title: "Payload Decoder & Deobfuscator",
     description: "Decodifica Base64 (UTF-8/UTF-16LE), URL, Hex y desofusca scripts de PowerShell limpiando concatenaciones y backticks de forma local.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/decoder",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -68,7 +71,7 @@ const tools = [
     title: "OSINT Hub & Enlaces Externos",
     description: "Genera consultas rápidas OSINT extrayendo y vinculando IPs, dominios y hashes a motores externos (VirusTotal, AbuseIPDB) con directorio de recursos.",
     badge: "DISPONIBLE",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    badgeColor: "",
     href: "/tools/osint-hub",
     actionText: "Abrir Herramienta",
     disabled: false,
@@ -77,11 +80,11 @@ const tools = [
   {
     id: "kev-watch",
     title: "KEV Watch",
-    description: "Vigilancia diaria y automatizada (GitHub Actions) del catálogo CISA KEV: vulnerabilidades con explotación activa confirmada en el mundo real.",
+    description: "Vigilancia automatizada (GitHub Actions) del catálogo CISA KEV: vulnerabilidades con explotación activa confirmada, integrada aquí mismo, sin salir de la página.",
     badge: "AUTOMATIZADO",
-    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    href: "/tools/kev-watch",
-    actionText: "Abrir Herramienta",
+    badgeColor: "",
+    href: "#kev-watch",
+    actionText: "Ver aquí abajo",
     disabled: false,
     group: "site",
   },
@@ -89,117 +92,198 @@ const tools = [
     id: "passwdcentinel",
     title: "Password Sentinel",
     description: "Visita el proyecto oficial de tu extensión de Chrome para auditar contraseñas y verificar filtraciones vía API de Have I Been Pwned.",
-    badge: "EXTENSION CHROME",
-    badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    badge: "EXTENSIÓN CHROME",
+    badgeColor: "",
     href: "https://eduolihez.com/projects/passwdcentinel/",
     actionText: "Ir a eduolihez.com",
     disabled: false,
     external: true,
-    group: "external",
+    group: "site",
   },
   {
     id: "followguard",
     title: "FollowGuard OSINT",
     description: "Visualiza el desarrollo de tu herramienta de ciberinteligencia en redes sociales para detectar perfiles falsos y bots.",
     badge: "EN DESARROLLO",
-    badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+    badgeColor: "",
     href: "https://eduolihez.com/projects/followguard/",
     actionText: "Ir a eduolihez.com",
     disabled: false,
     external: true,
-    group: "external",
+    group: "site",
   }
 ];
 
 const siteTools = tools.filter((t) => t.group === "site");
-const externalProjects = tools.filter((t) => t.group === "external");
+
+// KEV Watch data — same source and logic as the (now retired) standalone
+// /tools/kev-watch page, rendered inline instead of behind a route.
+const { lastUpdated, totalTracked, recentAdditions } = kevData;
+const ransomwareRecent = recentAdditions.filter((v: any) => v.knownRansomware).length;
+
+const formatDate = (d: string) =>
+  new Date(d + 'T00:00:00Z').toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
+const isOverdue = (dueDate: string | null) =>
+  !!dueDate && new Date(dueDate + 'T00:00:00Z').getTime() < Date.now();
 ---
 
 <Layout title="Blue Team Hub | Eduardo Olivares" description="Portal de herramientas estáticas de ciberseguridad para analistas SOC y respuesta a incidentes.">
   <Header activeTab="inicio" />
-  
-  <main class="w-full max-w-6xl mx-auto px-4 mt-16 flex-grow">
-    
-    <!-- Hero Section -->
-    <section class="text-center relative py-12 md:py-20 overflow-hidden">
-      <!-- Glow decoration -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-blue-500/5 blur-[90px] -z-10 pointer-events-none"></div>
-      
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[11px] font-medium text-neutral-400 mb-6 backdrop-blur-md">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        ESTADO: DESPLIEGUE ESTABLE (GITHUB PAGES)
+
+  <main class="w-full flex-grow">
+
+    <!-- Masthead -->
+    <section class="max-w-[1040px] mx-auto px-6 sm:px-7 pt-16 pb-12 border-b-2 border-ink">
+      <div class="flex items-center justify-between gap-4 font-mono text-[11px] sm:text-xs uppercase tracking-wide text-muted mb-7">
+        <span>Blue Team Hub <span class="text-stamp">·</span> Portal de herramientas SOC</span>
+        <span class="hidden sm:inline">eduolihez.github.io</span>
       </div>
-      
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight max-w-4xl mx-auto">
-        Herramientas y Recursos para <br class="hidden md:inline" />
-        <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-          Operaciones de Seguridad (SOC)
-        </span>
+
+      <h1 class="trace font-extrabold tracking-tight leading-[0.98] mb-5 max-w-[15ch]" style="font-size:clamp(2.5rem, 6.2vw, 4.6rem);">
+        Herramientas para operar, <span class="text-stamp">no para hojear.</span>
       </h1>
-      
-      <p class="text-sm md:text-base text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-        Un espacio de utilidades <strong class="font-normal text-neutral-200">100% estáticas y locales</strong> (sin envío de datos a servidores) diseñado para analistas SOC, investigadores de amenazas y operaciones del Blue Team.
+
+      <p class="text-lg text-ink-soft max-w-[54ch] mb-6">
+        Utilidades 100% del lado del cliente para analistas SOC y threat hunters. Nada de lo que pegues aquí sale de tu navegador.
       </p>
-      
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#herramientas" class="w-full sm:w-auto">
-          <button class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-lg shadow-white/5">
-            Ver Herramientas
-          </button>
-        </a>
-        <a href="https://github.com/eduolihez" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto">
-          <button class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-white font-semibold text-xs transition-all duration-200 cursor-pointer">
-            Ver GitHub
-          </button>
-        </a>
+
+      <p class="font-mono text-xs text-muted">
+        Por <strong class="text-ink font-semibold">Eduardo Olivares</strong> — complemento de <a href="https://eduolihez.com" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-stamp">eduolihez.com</a>
+      </p>
+    </section>
+
+    <!-- Stat strip -->
+    <section class="max-w-[1040px] mx-auto grid grid-cols-3 border-b-2 border-ink">
+      <div class="px-6 sm:px-7 py-6 border-r border-rule-faint">
+        <div class="font-mono font-semibold text-ink" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{totalTracked.toLocaleString('es-ES')}</div>
+        <div class="text-sm text-muted mt-2">CVEs en seguimiento</div>
+      </div>
+      <div class="px-6 sm:px-7 py-6 border-r border-rule-faint">
+        <div class="font-mono font-semibold text-stamp" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{recentAdditions.length}</div>
+        <div class="text-sm text-muted mt-2">nuevas en los últimos 45 días</div>
+      </div>
+      <div class="px-6 sm:px-7 py-6">
+        <div class="font-mono font-semibold text-ink" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{formatDate(lastUpdated)}</div>
+        <div class="text-sm text-muted mt-2">última comprobación del catálogo CISA</div>
       </div>
     </section>
 
-    <!-- Site Tools Section -->
-    <section id="herramientas" class="mt-20 scroll-mt-28">
-      <div class="flex items-center justify-between mb-8 border-b border-white/[0.06] pb-4">
-        <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2.5">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5 text-blue-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 1 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766l.002-.001a3.005 3.005 0 0 0 1.883-1.882l.002-.006a2.89 2.89 0 0 0-.743-2.98l-.018-.018a2.89 2.89 0 0 0-2.98-.743l-.006.002a3.005 3.005 0 0 0-1.883 1.883l-.001.002a2.65 2.65 0 0 0-.766 1.209l-3.03 2.496M11.42 15.17l-1.52 1.52a2.652 2.652 0 1 1-3.75-3.75l1.52-1.52M9 9l.008-.008a3 3 0 0 1 4.243 4.243L13 13M9 9l-5.877-5.877a2.653 2.653 0 0 0-3.75 3.75L5.25 12.75M9 9l-3.03 2.496a2.65 2.65 0 0 0-.766 1.209l-1.52 1.52M13 13l2.496-3.03c.317-.384.74-.626 1.208-.766l.002-.001a3.005 3.005 0 0 0 1.883-1.882l.002-.006a2.89 2.89 0 0 0-.743-2.98l-.018-.018a2.89 2.89 0 0 0-2.98-.743l-.006.002a3.005 3.005 0 0 0-1.883 1.883l-.001.002a2.65 2.65 0 0 0-.766 1.209l-3.03 2.496" />
-          </svg>
-          Caja de Herramientas
-        </h2>
-        <span class="text-xs text-neutral-500 font-mono">
-          {siteTools.length} herramientas
-        </span>
+    <!-- 01 — Herramientas -->
+    <section id="herramientas" class="max-w-[1040px] mx-auto px-6 sm:px-7 py-14 border-b border-rule-faint scroll-mt-20">
+      <div class="flex items-baseline gap-4 mb-2">
+        <span class="font-mono text-sm text-stamp">01</span>
+        <h2 class="text-2xl font-bold">Herramientas</h2>
       </div>
-      <p class="text-xs text-neutral-500 mb-6 -mt-4 font-light max-w-2xl">
-        Construidas en este sitio, 100% client-side. No sale ningún dato de tu navegador.
+      <p class="text-sm text-muted max-w-[62ch] mb-8">
+        Siete utilidades del lado del cliente, más dos proyectos hermanos alojados en eduolihez.com. KEV Watch vive aquí mismo, no detrás de un enlace.
       </p>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {siteTools.map((tool) => <ToolCard tool={tool} />)}
-      </div>
+      <ul class="border-t border-rule-faint list-none m-0 p-0">
+        {siteTools.map((tool, i) => <ToolCard tool={tool} index={i + 1} />)}
+      </ul>
     </section>
 
-    <!-- External Projects Section -->
-    <section id="proyectos-relacionados" class="mt-16 scroll-mt-28">
-      <div class="flex items-center justify-between mb-8 border-b border-white/[0.06] pb-4">
-        <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2.5">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5 text-blue-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-          </svg>
-          Proyectos Relacionados
-        </h2>
-        <span class="text-xs text-neutral-500 font-mono">
-          {externalProjects.length} enlaces
-        </span>
+    <!-- 02 — KEV Watch (embedded, not a separate app) -->
+    <section id="kev-watch" class="max-w-[1040px] mx-auto px-6 sm:px-7 py-14 border-b border-rule-faint scroll-mt-20">
+      <div class="flex items-baseline gap-4 mb-2">
+        <span class="font-mono text-sm text-stamp">02</span>
+        <h2 class="text-2xl font-bold">KEV Watch</h2>
       </div>
-      <p class="text-xs text-neutral-500 mb-6 -mt-4 font-light max-w-2xl">
-        Otros proyectos de ciberseguridad, alojados fuera de este repositorio.
+      <p class="text-sm text-muted max-w-[64ch] mb-8">
+        Vigilancia automatizada del catálogo <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-stamp">CISA KEV</a>: vulnerabilidades con explotación activa confirmada, no CVEs teóricos. Un <a href="https://github.com/eduolihez/eduolihez.github.io/blob/main/.github/workflows/kev-watch.yml" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-stamp">GitHub Action</a> descarga el catálogo, calcula qué ha cambiado y redespliega esta misma página — sin intervención manual.
       </p>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {externalProjects.map((tool) => <ToolCard tool={tool} />)}
+      <div class="grid grid-cols-2 sm:grid-cols-4 border-t border-b border-ink mb-6">
+        <div class="py-3.5 pr-3 border-r border-rule-faint">
+          <div class="font-mono font-semibold text-lg">{totalTracked.toLocaleString('es-ES')}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Tracked</div>
+        </div>
+        <div class="py-3.5 px-3 border-r border-rule-faint sm:border-r">
+          <div class="font-mono font-semibold text-lg text-stamp">{ransomwareRecent}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Ransomware (45d)</div>
+        </div>
+        <div class="py-3.5 px-3 border-r border-rule-faint">
+          <div class="font-mono font-semibold text-lg">{recentAdditions.length}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Nuevas (45d)</div>
+        </div>
+        <div class="py-3.5 pl-3">
+          <div class="font-mono font-semibold text-lg">{formatDate(lastUpdated)}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Última pasada</div>
+        </div>
       </div>
+
+      <input
+        id="kevFilter"
+        type="text"
+        placeholder="Filtrar por CVE, fabricante o producto…"
+        class="w-full border border-rule-faint focus:border-ink px-4 py-2.5 text-sm text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 mb-6 font-mono"
+      />
+
+      <div id="kevList">
+        {recentAdditions.length === 0 && (
+          <div class="border border-rule-faint py-10 text-center text-sm text-muted">
+            Sin novedades en los últimos 45 días.
+          </div>
+        )}
+        <div class="table-scroll overflow-x-auto">
+          <table class="w-full border-collapse font-mono text-sm min-w-[640px]">
+            <thead>
+              <tr class="border-b border-ink">
+                <th class="text-left font-semibold text-[11px] uppercase tracking-wide text-muted py-3 pr-4">CVE</th>
+                <th class="text-left font-semibold text-[11px] uppercase tracking-wide text-muted py-3 pr-4">Producto</th>
+                <th class="text-left font-semibold text-[11px] uppercase tracking-wide text-muted py-3 pr-4">Vulnerabilidad</th>
+                <th class="text-left font-semibold text-[11px] uppercase tracking-wide text-muted py-3">Plazo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentAdditions.map((v: any) => (
+                <tr class="kev-entry border-b border-rule-faint align-top" data-search={`${v.cveID} ${v.vendorProject} ${v.product}`.toLowerCase()}>
+                  <td class="py-4 pr-4">
+                    <a href={`https://nvd.nist.gov/vuln/detail/${v.cveID}`} target="_blank" rel="noopener noreferrer" class="font-semibold hover:text-stamp underline underline-offset-2">{v.cveID}</a>
+                    <span class="block text-muted text-xs mt-1">{v.vendorProject}</span>
+                  </td>
+                  <td class="py-4 pr-4 text-ink-soft">{v.product}</td>
+                  <td class="py-4 pr-4 text-ink-soft">
+                    {v.vulnerabilityName}
+                    {v.knownRansomware && (
+                      <span class="inline-block ml-2 border border-stamp bg-stamp-tint text-stamp text-[10px] uppercase tracking-wide px-1.5 py-0.5 align-middle">Ransomware</span>
+                    )}
+                  </td>
+                  <td class={`py-4 whitespace-nowrap ${v.dueDate && !isOverdue(v.dueDate) ? "text-stamp" : "text-muted"}`}>
+                    {v.dueDate ? formatDate(v.dueDate) : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="font-mono text-xs text-muted mt-6">
+        Fuente: CISA Known Exploited Vulnerabilities Catalog ·
+        <a href="https://github.com/eduolihez/eduolihez.github.io/blob/main/scripts/update-kev.mjs" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-stamp ml-1">Ver el script de actualización →</a>
+      </p>
     </section>
 
   </main>
-  
+
   <Footer />
 </Layout>
+
+<script>
+  const filterInput = document.getElementById('kevFilter') as HTMLInputElement;
+  const entries = document.querySelectorAll<HTMLElement>('.kev-entry');
+
+  filterInput?.addEventListener('input', () => {
+    const q = filterInput.value.trim().toLowerCase();
+    entries.forEach((el) => {
+      const match = !q || (el.dataset.search || '').includes(q);
+      el.classList.toggle('hidden', !match);
+    });
+  });
+</script>

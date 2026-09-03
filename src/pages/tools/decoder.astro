@@ -7,63 +7,61 @@ import Footer from '../../components/Footer.astro';
 <Layout title="Payload Decoder & Deobfuscator | Blue Team Hub" description="Decodifica Base64 (UTF-8/UTF-16LE), URL, Hexadecimal y desofusca comandos de PowerShell de forma local en tu navegador.">
   <Header activeTab="herramientas" />
 
-  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
-    
+  <main class="w-full max-w-[1040px] mx-auto px-6 sm:px-7 pt-12 flex-grow">
+
     <!-- Breadcrumb & Header -->
-    <div class="mb-8">
-      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+    <div class="mb-10 pb-8 border-b border-rule-faint">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 mb-5 group">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         Volver a la caja de herramientas
       </a>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
         Payload Decoder & Deobfuscator
       </h1>
-      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+      <p class="text-sm text-muted max-w-2xl">
         Una herramienta táctica para analizar comandos u ofuscaciones habituales que usan los atacantes en sus scripts. Descodifica Base64 (con detección inteligente de UTF-16LE de PowerShell), limpia URLs, convierte cadenas Hex e incorpora un desofuscador de PowerShell (limpieza de backticks y concatenaciones). Todo en local.
       </p>
     </div>
 
-    <!-- Bento Workspace Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-      
+    <!-- Workspace: input / output -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
       <!-- Panel 1: Input -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+      <div class="border border-rule-faint p-6 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between mb-4 border-b border-white/[0.04] pb-3">
-            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          <div class="flex items-center justify-between mb-4 border-b border-rule-faint pb-3">
+            <h2 class="text-xs font-bold tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
               Payload Obscurecido
             </h2>
-            <span class="text-[10px] text-neutral-500 font-mono" id="charCountInput">0 caracteres</span>
+            <span class="text-[11px] text-muted font-mono" id="charCountInput">0 caracteres</span>
           </div>
 
-          <div class="relative">
-            <textarea 
-              id="payloadInput" 
-              rows="12" 
-              class="w-full bg-black/40 border border-white/[0.08] focus:border-neutral-700/80 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
-              placeholder="Pega aquí el comando ofuscado o cadena (ej: aGVsbG8gd29ybGQ=, %20, 68656c6c6f, o un script de PowerShell con backticks)..."
-            ></textarea>
-          </div>
+          <textarea
+            id="payloadInput"
+            rows="12"
+            class="w-full bg-paper-dim border border-rule-faint focus:border-ink p-4 text-sm font-mono text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 resize-y min-h-[220px]"
+            placeholder="Pega aquí el comando ofuscado o cadena (ej: aGVsbG8gd29ybGQ=, %20, 68656c6c6f, o un script de PowerShell con backticks)..."
+          ></textarea>
         </div>
 
         <!-- Action Buttons -->
-        <div class="mt-6 flex flex-wrap items-center gap-2 pt-4 border-t border-white/[0.04]">
-          <button 
-            id="btnB64" 
-            class="px-4 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md flex items-center gap-1.5 active:scale-95"
+        <div class="mt-6 flex flex-wrap items-center gap-2 pt-4 border-t border-rule-faint">
+          <button
+            id="btnB64"
+            class="px-4 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
             </svg>
             Base64 Decode
           </button>
-          
-          <button 
-            id="btnUrl" 
-            class="px-3.5 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+
+          <button
+            id="btnUrl"
+            class="px-3.5 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
@@ -71,9 +69,9 @@ import Footer from '../../components/Footer.astro';
             URL Decode
           </button>
 
-          <button 
-            id="btnHex" 
-            class="px-3.5 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+          <button
+            id="btnHex"
+            class="px-3.5 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
@@ -81,9 +79,9 @@ import Footer from '../../components/Footer.astro';
             Hex to Str
           </button>
 
-          <button 
-            id="btnPs" 
-            class="px-3.5 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-300 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+          <button
+            id="btnPs"
+            class="px-3.5 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 9h7.5L9 20.25 10.5 15h-6.75z" />
@@ -91,19 +89,19 @@ import Footer from '../../components/Footer.astro';
             Deobfuscate PS
           </button>
 
-          <button 
-            id="btnAutoDetect" 
-            class="px-3.5 py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5 active:scale-95"
+          <button
+            id="btnAutoDetect"
+            class="px-3.5 py-2.5 border border-stamp text-stamp hover:bg-stamp-tint font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l8.982-11.861H13.62l1.066-5.748L5.703 15.25h4.11Z" />
             </svg>
             Auto-Detectar
           </button>
-          
-          <button 
-            id="btnClear" 
-            class="px-3 py-2.5 rounded-xl bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/20 text-neutral-500 hover:text-red-400 font-semibold text-xs transition-all duration-200 cursor-pointer ml-auto active:scale-95"
+
+          <button
+            id="btnClear"
+            class="px-3 py-2.5 border border-transparent hover:border-stamp hover:bg-stamp-tint text-muted hover:text-stamp font-semibold text-xs transition-colors duration-150 cursor-pointer ml-auto"
           >
             Limpiar
           </button>
@@ -111,20 +109,19 @@ import Footer from '../../components/Footer.astro';
       </div>
 
       <!-- Panel 2: Output -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl flex flex-col justify-between">
-        
+      <div class="border border-rule-faint p-6 flex flex-col justify-between">
+
         <div>
-          <!-- Header with copy action -->
-          <div class="flex items-center justify-between mb-4 border-b border-white/[0.04] pb-3">
-            <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" id="statusDot"></span>
+          <div class="flex items-center justify-between mb-4 border-b border-rule-faint pb-3">
+            <h2 class="text-xs font-bold tracking-wide uppercase font-mono flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-online" id="statusDot"></span>
               <span id="outputTitle">Resultado</span>
             </h2>
-            
+
             <div class="flex gap-2">
-              <button 
-                id="btnDownloadFile" 
-                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              <button
+                id="btnDownloadFile"
+                class="px-3 py-1.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink text-[11px] font-semibold transition-colors duration-150 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
@@ -132,10 +129,10 @@ import Footer from '../../components/Footer.astro';
                 </svg>
                 Descargar TXT
               </button>
-              
-              <button 
-                id="btnCopy" 
-                class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+
+              <button
+                id="btnCopy"
+                class="px-3 py-1.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink text-[11px] font-semibold transition-colors duration-150 flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
@@ -147,70 +144,64 @@ import Footer from '../../components/Footer.astro';
           </div>
 
           <!-- Pipeline Chain Bar -->
-          <div class="mb-3 px-3 py-2 bg-black/40 border border-white/[0.04] rounded-lg flex items-center justify-between text-[10px] font-mono">
+          <div class="mb-3 px-3 py-2 border border-rule-faint flex items-center justify-between text-[11px] font-mono">
             <div class="flex items-center gap-1.5 overflow-x-auto" id="pipelineChain">
-              <span class="text-neutral-500">Pipeline:</span>
-              <span class="px-1.5 py-0.5 rounded bg-white/5 text-neutral-300">Entrada</span>
+              <span class="text-muted">Pipeline:</span>
+              <span class="px-1.5 py-0.5 bg-paper-dim text-ink-soft">Entrada</span>
             </div>
-            <button id="btnUndoStep" class="text-blue-400 hover:text-blue-300 disabled:opacity-40 disabled:hover:text-blue-450 cursor-pointer font-bold" disabled>Deshacer</button>
+            <button id="btnUndoStep" class="text-stamp hover:text-stamp-deep disabled:opacity-40 cursor-pointer font-bold" disabled>Deshacer</button>
           </div>
 
           <!-- Output Box -->
-          <div class="relative">
-            <textarea 
-              id="payloadOutput" 
-              rows="12" 
-              readonly
-              class="w-full bg-black/60 border border-neutral-900 rounded-xl p-4 text-xs md:text-sm font-mono text-neutral-450 focus:outline-none transition-all duration-200 resize-y min-h-[220px]" 
-              placeholder="El resultado procesado se mostrará aquí..."
-            ></textarea>
-          </div>
+          <textarea
+            id="payloadOutput"
+            rows="12"
+            readonly
+            class="w-full bg-paper-dim border border-rule-faint p-4 text-sm font-mono text-ink-soft focus:outline-none transition-colors duration-150 resize-y min-h-[220px]"
+            placeholder="El resultado procesado se mostrará aquí..."
+          ></textarea>
         </div>
 
-        <!-- Extra details/stats -->
-        <div class="mt-6 pt-4 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-neutral-500 font-mono">
+        <div class="mt-6 pt-4 border-t border-rule-faint flex items-center justify-between text-[11px] text-muted font-mono">
           <span>Modo de procesado local seguro</span>
           <span id="charCountOutput">0 caracteres</span>
         </div>
       </div>
-      
+
     </div>
 
-    <!-- SaaS Info & Decoded History -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-      <!-- Card: Sandbox stats -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
-        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between">
+    <!-- Secondary panels -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 mb-16">
+      <div class="border border-rule-faint p-5 space-y-3 font-mono">
+        <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2 flex items-center justify-between">
           <span>Decodificador Local</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold">100% OFFLINE</span>
+          <span class="text-[10px] text-online font-semibold">100% OFFLINE</span>
         </h3>
-        <div class="space-y-1.5 text-[11px] text-neutral-400">
-          <div class="flex justify-between"><span>Motor:</span><span class="text-neutral-200">V8 Sandbox (Local)</span></div>
-          <div class="flex justify-between"><span>Capacidad:</span><span class="text-neutral-200">Hasta 50MB Payload</span></div>
-          <div class="flex justify-between"><span>Límites de Uso:</span><span class="text-neutral-200">Ninguno / Gratis</span></div>
-          <div class="flex justify-between"><span>Seguridad OpSec:</span><span class="text-neutral-200">Sin tráfico saliente</span></div>
+        <div class="space-y-1.5 text-[11px] text-muted">
+          <div class="flex justify-between"><span>Motor:</span><span class="text-ink-soft">V8 Sandbox (Local)</span></div>
+          <div class="flex justify-between"><span>Capacidad:</span><span class="text-ink-soft">Hasta 50MB Payload</span></div>
+          <div class="flex justify-between"><span>Límites de Uso:</span><span class="text-ink-soft">Ninguno / Gratis</span></div>
+          <div class="flex justify-between"><span>Seguridad OpSec:</span><span class="text-ink-soft">Sin tráfico saliente</span></div>
         </div>
       </div>
 
-      <!-- Card: Autodetect stats -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 font-mono">
-        <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2">Diagnóstico de Codificación</h3>
-        <div class="space-y-2 text-[11px] text-neutral-400">
-          <div class="flex justify-between"><span>Codificación Sugerida:</span><span id="suggestedType" class="text-blue-400 font-bold">Ninguna (Input vacío)</span></div>
-          <div class="flex justify-between"><span>Entropía de Entrada:</span><span id="entropyValue" class="text-neutral-200">0.00</span></div>
-          <div class="flex justify-between"><span>Nivel de Sospecha:</span><span id="suspicionLevel" class="text-neutral-200">Bajo</span></div>
+      <div class="border border-rule-faint p-5 space-y-3 font-mono">
+        <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2">Diagnóstico de Codificación</h3>
+        <div class="space-y-2 text-[11px] text-muted">
+          <div class="flex justify-between"><span>Codificación Sugerida:</span><span id="suggestedType" class="text-ink font-bold">Ninguna (Input vacío)</span></div>
+          <div class="flex justify-between"><span>Entropía de Entrada:</span><span id="entropyValue" class="text-ink-soft">0.00</span></div>
+          <div class="flex justify-between"><span>Nivel de Sospecha:</span><span id="suspicionLevel" class="text-ink-soft">Bajo</span></div>
         </div>
       </div>
 
-      <!-- Card: History -->
-      <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-5 shadow-xl space-y-3 flex flex-col justify-between">
+      <div class="border border-rule-faint p-5 space-y-3 flex flex-col justify-between">
         <div>
-          <h3 class="text-xs font-bold text-white tracking-wider uppercase border-b border-white/[0.04] pb-2 flex items-center justify-between font-mono">
+          <h3 class="text-xs font-bold tracking-wider uppercase border-b border-rule-faint pb-2 flex items-center justify-between font-mono">
             <span>Operaciones de Pipeline</span>
-            <button id="btnClearHistory" class="text-[9px] text-red-400 hover:underline">Limpiar</button>
+            <button id="btnClearHistory" class="text-[10px] text-stamp hover:underline">Limpiar</button>
           </h3>
           <div id="historyList" class="space-y-1.5 max-h-[100px] overflow-y-auto mt-2 pr-1 text-[11px] font-mono">
-            <div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>
+            <div class="text-muted text-center py-4">Sin operaciones recientes</div>
           </div>
         </div>
       </div>
@@ -229,7 +220,7 @@ import Footer from '../../components/Footer.astro';
   const charCountInput = document.getElementById('charCountInput') as HTMLSpanElement;
   const charCountOutput = document.getElementById('charCountOutput') as HTMLSpanElement;
   const statusDot = document.getElementById('statusDot') as HTMLSpanElement;
-  
+
   const btnB64 = document.getElementById('btnB64') as HTMLButtonElement;
   const btnUrl = document.getElementById('btnUrl') as HTMLButtonElement;
   const btnHex = document.getElementById('btnHex') as HTMLButtonElement;
@@ -271,7 +262,7 @@ import Footer from '../../components/Footer.astro';
       suggestedType.textContent = "Ninguna (Input vacío)";
       entropyValue.textContent = "0.00";
       suspicionLevel.textContent = "Bajo";
-      suspicionLevel.className = "text-neutral-200";
+      suspicionLevel.className = "text-ink-soft";
       return;
     }
 
@@ -281,13 +272,13 @@ import Footer from '../../components/Footer.astro';
     // suspicion level based on entropy
     if (entropy > 5.5) {
       suspicionLevel.textContent = "Muy Alto (Cifrado/Comprimido)";
-      suspicionLevel.className = "text-red-400 font-bold";
+      suspicionLevel.className = "text-stamp font-bold";
     } else if (entropy > 4.5) {
       suspicionLevel.textContent = "Medio (Posible Ofuscación)";
-      suspicionLevel.className = "text-amber-400 font-bold";
+      suspicionLevel.className = "text-ink font-bold";
     } else {
       suspicionLevel.textContent = "Bajo";
-      suspicionLevel.className = "text-emerald-400 font-bold";
+      suspicionLevel.className = "text-online font-bold";
     }
 
     // Auto detection heuristics
@@ -381,12 +372,12 @@ import Footer from '../../components/Footer.astro';
       if (clean.length % 2 !== 0) {
         return '[Error: La longitud de la cadena hexadecimal debe ser par]';
       }
-      
+
       const bytes = new Uint8Array(clean.length / 2);
       for (let i = 0; i < clean.length; i += 2) {
         bytes[i / 2] = parseInt(clean.substring(i, i + 2), 16);
       }
-      
+
       const decoder = new TextDecoder('utf-8');
       return decoder.decode(bytes);
     } catch (e: any) {
@@ -400,7 +391,7 @@ import Footer from '../../components/Footer.astro';
     charCountOutput.textContent = `${text.length} caracteres`;
     btnCopy.disabled = !text;
     btnDownloadFile.disabled = !text;
-    statusDot.className = text ? 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse' : 'w-1.5 h-1.5 rounded-full bg-blue-500';
+    statusDot.className = text ? 'w-1.5 h-1.5 rounded-full bg-online' : 'w-1.5 h-1.5 rounded-full bg-ink';
   }
 
   function pushPipelineStep(name: string, content: string) {
@@ -414,16 +405,16 @@ import Footer from '../../components/Footer.astro';
   }
 
   function updatePipelineUI() {
-    pipelineChain.innerHTML = '<span class="text-neutral-500">Pipeline:</span>';
+    pipelineChain.innerHTML = '<span class="text-muted">Pipeline:</span>';
     pipelineSteps.forEach((step, idx) => {
       if (idx > 0) {
         const arrow = document.createElement('span');
-        arrow.className = 'text-neutral-600';
+        arrow.className = 'text-muted-dim';
         arrow.textContent = '→';
         pipelineChain.appendChild(arrow);
       }
       const badge = document.createElement('span');
-      badge.className = 'px-1.5 py-0.5 rounded bg-white/5 text-neutral-300';
+      badge.className = 'px-1.5 py-0.5 bg-paper-dim text-ink-soft';
       badge.textContent = step.name;
       pipelineChain.appendChild(badge);
     });
@@ -517,15 +508,15 @@ import Footer from '../../components/Footer.astro';
     const history = getHistory();
     historyList.innerHTML = '';
     if (history.length === 0) {
-      historyList.innerHTML = '<div class="text-neutral-500 text-center py-4">Sin operaciones recientes</div>';
+      historyList.innerHTML = '<div class="text-muted text-center py-4">Sin operaciones recientes</div>';
       return;
     }
     history.forEach(item => {
       const row = document.createElement('div');
-      row.className = 'flex justify-between items-center bg-white/[0.02] border border-white/[0.04] p-1.5 rounded hover:bg-white/[0.05] cursor-pointer transition-all duration-200 mb-1';
+      row.className = 'flex justify-between items-center border border-rule-faint p-1.5 hover:bg-paper-dim cursor-pointer transition-colors duration-150 mb-1';
       row.innerHTML = `
-        <span class="text-neutral-450 font-bold uppercase text-[9px]">${item.action}</span>
-        <span class="text-neutral-500 text-[9px]">${item.timestamp}</span>
+        <span class="text-ink-soft font-bold uppercase text-[10px]">${item.action}</span>
+        <span class="text-muted text-[10px]">${item.timestamp}</span>
       `;
       row.addEventListener('click', () => {
         inputElement.value = item.input;
@@ -569,16 +560,16 @@ import Footer from '../../components/Footer.astro';
     navigator.clipboard.writeText(content).then(() => {
       const originalHtml = btnCopy.innerHTML;
       btnCopy.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-emerald-400">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-online">
           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
         </svg>
-        <span class="text-emerald-400">Copiado!</span>
+        <span class="text-online">Copiado!</span>
       `;
-      btnCopy.classList.add('border-emerald-500/30', 'bg-emerald-500/5');
-      
+      btnCopy.classList.add('border-online');
+
       setTimeout(() => {
         btnCopy.innerHTML = originalHtml;
-        btnCopy.classList.remove('border-emerald-500/30', 'bg-emerald-500/5');
+        btnCopy.classList.remove('border-online');
       }, 2000);
     });
   });

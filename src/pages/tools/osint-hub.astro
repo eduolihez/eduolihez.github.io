@@ -44,57 +44,56 @@ const externalTools = [
 <Layout title="OSINT Hub & Enlaces Externos | Blue Team Hub" description="Mapea IOCs (IPs, dominios, hashes) a motores de búsqueda externos como VirusTotal y AbuseIPDB, y accede a un directorio curado de herramientas SOC.">
   <Header activeTab="herramientas" />
 
-  <main class="w-full max-w-6xl mx-auto px-4 mt-12 flex-grow">
-    
+  <main class="w-full max-w-[1040px] mx-auto px-6 sm:px-7 pt-12 flex-grow">
+
     <!-- Breadcrumb & Header -->
-    <div class="mb-8">
-      <a href="/#herramientas" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-blue-400 font-medium transition-colors duration-200 mb-4 group">
+    <div class="mb-10 pb-8 border-b border-rule-faint">
+      <a href="/#herramientas" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-stamp transition-colors duration-150 mb-5 group">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-200">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
         Volver a la caja de herramientas
       </a>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
         OSINT Hub & Enlaces Externos
       </h1>
-      <p class="text-xs md:text-sm text-neutral-400 max-w-2xl font-light">
+      <p class="text-sm text-muted max-w-2xl">
         Extrae y clasifica indicadores de compromiso (IOCs) para investigarlos con un solo clic en plataformas líderes del sector (VirusTotal, AbuseIPDB, Shodan), y accede a un directorio de las herramientas externas indispensables para analistas SOC del Blue Team.
       </p>
     </div>
 
-    <!-- Layout: Section A (IOC Quick Linker) & Section B (External Resources) -->
-    <div class="space-y-12 mt-8">
-      
+    <div class="space-y-14 mb-16">
+
       <!-- Section A: OSINT Quick Linker -->
-      <section class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-6">
-        <h2 class="text-sm font-bold text-white tracking-wide uppercase font-mono border-b border-white/[0.04] pb-3 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+      <section class="border border-rule-faint p-6 space-y-6">
+        <h2 class="text-xs font-bold tracking-wide uppercase font-mono border-b border-rule-faint pb-3 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
           Generador de Consultas Rápidas OSINT (IOCs)
         </h2>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <!-- Textarea Input (5 cols) -->
           <div class="lg:col-span-5 space-y-4">
-            <label for="iocInput" class="text-xs text-neutral-400 font-medium">Introduce texto, logs, correos o lista de IOCs</label>
-            <textarea 
-              id="iocInput" 
-              rows="8" 
-              class="w-full bg-black/40 border border-white/[0.08] focus:border-neutral-700/80 rounded-xl p-4 text-xs font-mono text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200 resize-y" 
+            <label for="iocInput" class="text-xs text-muted font-medium">Introduce texto, logs, correos o lista de IOCs</label>
+            <textarea
+              id="iocInput"
+              rows="8"
+              class="w-full bg-paper-dim border border-rule-faint focus:border-ink p-4 text-xs font-mono text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 resize-y"
               placeholder="Pega texto que contenga IPs (ej: 8.8.8.8), hashes (ej: 8f4a13...), dominios (ej: abuse.org)..."
             ></textarea>
             <div class="flex gap-2">
-              <button 
-                id="btnParse" 
-                class="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-neutral-200 font-semibold text-xs transition-all duration-200 cursor-pointer shadow-md active:scale-95 flex items-center gap-1.5"
+              <button
+                id="btnParse"
+                class="px-5 py-2.5 bg-ink text-paper hover:bg-ink-soft font-semibold text-xs transition-colors duration-150 cursor-pointer flex items-center gap-1.5"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
                 Procesar IOCs
               </button>
-              <button 
-                id="btnClear" 
-                class="px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-neutral-400 hover:text-white font-semibold text-xs transition-all duration-200 cursor-pointer active:scale-95"
+              <button
+                id="btnClear"
+                class="px-4 py-2.5 border border-rule-faint hover:border-ink text-ink-soft hover:text-ink font-semibold text-xs transition-colors duration-150 cursor-pointer"
               >
                 Limpiar
               </button>
@@ -104,14 +103,12 @@ const externalTools = [
           <!-- Parsed Links Output (7 cols) -->
           <div class="lg:col-span-7 flex flex-col justify-between">
             <div class="space-y-3">
-              <span class="text-xs text-neutral-400 font-medium block">IOCs Extraídos y Enlaces de Consulta</span>
-              
-              <!-- Placeholder -->
-              <div id="linksPlaceholder" class="bg-black/30 border border-white/[0.04] rounded-xl p-8 text-center text-xs text-neutral-500 font-light flex flex-col items-center justify-center min-h-[160px]">
+              <span class="text-xs text-muted font-medium block">IOCs Extraídos y Enlaces de Consulta</span>
+
+              <div id="linksPlaceholder" class="border border-rule-faint p-8 text-center text-xs text-muted flex flex-col items-center justify-center min-h-[160px]">
                 <span>Pega los datos a la izquierda y presiona "Procesar IOCs" para generar tus enlaces directos de búsqueda de amenazas.</span>
               </div>
 
-              <!-- List Container -->
               <div id="iocsList" class="space-y-4 max-h-[300px] overflow-y-auto pr-2 hidden">
                 <!-- IOC list elements generated dynamically -->
               </div>
@@ -122,47 +119,43 @@ const externalTools = [
 
       <!-- Section B: Curated External Resources Catalog -->
       <section class="space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/[0.06] pb-3 gap-3">
-          <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5 text-blue-400">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582" />
-            </svg>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-ink pb-3 gap-3">
+          <h2 class="text-lg font-bold flex items-center gap-2.5">
             Directorio de Herramientas SOC Externas
           </h2>
           <div class="flex items-center gap-3">
-            <input 
-              id="directorySearch" 
-              type="text" 
-              placeholder="Buscar herramienta o categoría..." 
-              class="w-full sm:w-64 bg-black/45 border border-white/[0.08] focus:border-neutral-700/80 rounded-lg px-3 py-1.5 text-xs text-neutral-300 placeholder-neutral-600 focus:outline-none transition-all duration-200"
+            <input
+              id="directorySearch"
+              type="text"
+              placeholder="Buscar herramienta o categoría..."
+              class="w-full sm:w-64 bg-paper-dim border border-rule-faint focus:border-ink px-3 py-1.5 text-xs text-ink placeholder-muted-dim focus:outline-none transition-colors duration-150 font-mono"
             />
-            <span class="text-xs text-neutral-500 font-mono hidden md:inline">Herramientas Profesionales</span>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="directoryGrid">
           {externalTools.map((cat) => (
-            <div class="bg-black/30 border border-white/[0.06] backdrop-blur-md rounded-2xl p-6 shadow-xl space-y-4 category-card" data-category={cat.category.toLowerCase()}>
-              <h3 class="text-xs font-bold text-blue-400 font-mono tracking-wider uppercase border-b border-white/[0.04] pb-2">
+            <div class="border border-rule-faint p-6 space-y-4 category-card" data-category={cat.category.toLowerCase()}>
+              <h3 class="text-xs font-bold text-stamp font-mono tracking-wider uppercase border-b border-rule-faint pb-2">
                 {cat.category}
               </h3>
-              
+
               <div class="space-y-3.5">
                 {cat.items.map((item) => (
-                  <div class="group flex items-start justify-between gap-4 p-3 rounded-xl bg-black/40 border border-white/[0.04] hover:bg-white/[0.02] hover:border-white/10 transition-all duration-200 tool-item" data-name={item.name.toLowerCase()} data-desc={item.desc.toLowerCase()}>
+                  <div class="group flex items-start justify-between gap-4 py-2 tool-item" data-name={item.name.toLowerCase()} data-desc={item.desc.toLowerCase()}>
                     <div class="space-y-1">
-                      <a 
-                        href={item.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        class="text-xs md:text-sm font-bold text-neutral-200 group-hover:text-blue-400 transition-colors duration-200 flex items-center gap-1"
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-sm font-bold text-ink group-hover:text-stamp transition-colors duration-150 flex items-center gap-1"
                       >
                         {item.name}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 opacity-60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                         </svg>
                       </a>
-                      <p class="text-[11px] text-neutral-500 leading-relaxed font-light">
+                      <p class="text-[11px] text-muted leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
@@ -186,7 +179,7 @@ const externalTools = [
   const iocInput = document.getElementById('iocInput') as HTMLTextAreaElement;
   const btnParse = document.getElementById('btnParse') as HTMLButtonElement;
   const btnClear = document.getElementById('btnClear') as HTMLButtonElement;
-  
+
   const linksPlaceholder = document.getElementById('linksPlaceholder') as HTMLDivElement;
   const iocsList = document.getElementById('iocsList') as HTMLDivElement;
 
@@ -313,7 +306,7 @@ const externalTools = [
   // Render the list of IOC items and their lookup buttons
   function renderIOCList(list: IOCMatch[]) {
     iocsList.innerHTML = '';
-    
+
     if (list.length === 0) {
       linksPlaceholder.textContent = 'No se detectaron IOCs válidos (IPs, Dominios, Hashes, URLs) en el texto.';
       linksPlaceholder.classList.remove('hidden');
@@ -326,10 +319,10 @@ const externalTools = [
 
     // Add Bulk Search bar at the top of results list
     const controlBar = document.createElement('div');
-    controlBar.className = 'flex items-center justify-between pb-3 border-b border-white/[0.04] mb-3 text-[11px] font-mono';
+    controlBar.className = 'flex items-center justify-between pb-3 border-b border-rule-faint mb-3 text-[11px] font-mono';
     controlBar.innerHTML = `
-      <span class="text-neutral-500">${list.length} elementos detectados</span>
-      <button id="btnBulkSearch" class="px-2.5 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 font-bold transition-all duration-200 cursor-pointer">
+      <span class="text-muted">${list.length} elementos detectados</span>
+      <button id="btnBulkSearch" class="px-2.5 py-1 border border-stamp text-stamp hover:bg-stamp-tint font-bold transition-colors duration-150 cursor-pointer">
         Multi-Búsqueda VirusTotal (Lote)
       </button>
     `;
@@ -351,23 +344,18 @@ const externalTools = [
 
     list.forEach((ioc) => {
       const iocDiv = document.createElement('div');
-      iocDiv.className = 'bg-neutral-950/40 border border-white/5 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-white/10 transition-colors duration-200';
-      
+      iocDiv.className = 'border border-rule-faint p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-ink transition-colors duration-150';
+
       // Left info
       const info = document.createElement('div');
       info.className = 'space-y-1';
-      
+
       const badge = document.createElement('span');
-      let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      if (ioc.type === 'HASH') badgeColor = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-      if (ioc.type === 'IP') badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-      if (ioc.type === 'URL') badgeColor = 'bg-sky-500/10 text-sky-400 border-sky-500/20';
-      
-      badge.className = `px-2 py-0.5 rounded text-[9px] font-mono font-bold border ${badgeColor}`;
+      badge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold border border-ink text-ink';
       badge.textContent = ioc.type;
 
       const valSpan = document.createElement('span');
-      valSpan.className = 'text-xs md:text-sm font-mono text-neutral-200 ml-2 break-all font-semibold';
+      valSpan.className = 'text-sm font-mono text-ink ml-2 break-all font-semibold';
       valSpan.textContent = ioc.value;
 
       info.appendChild(badge);
@@ -408,7 +396,7 @@ const externalTools = [
     a.href = url;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
-    a.className = 'px-2 py-1 bg-white/5 hover:bg-blue-500/10 border border-white/10 hover:border-blue-500/30 text-neutral-300 hover:text-blue-400 text-[10px] rounded transition-all duration-200';
+    a.className = 'px-2 py-1 border border-rule-faint hover:border-stamp text-ink-soft hover:text-stamp text-[10px] transition-colors duration-150';
     a.textContent = name;
     parent.appendChild(a);
   }

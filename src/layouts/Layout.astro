@@ -6,10 +6,58 @@ interface Props {
   description?: string;
 }
 
-const { 
-  title = "Blue Team Hub | Eduardo Olivares", 
-  description = "Portal de herramientas de ciberseguridad y utilidades estáticas para analistas SOC y profesionales del Blue Team." 
+const {
+  title = "Blue Team Hub | Eduardo Olivares",
+  description = "Portal de herramientas de ciberseguridad y utilidades estáticas para analistas SOC y profesionales del Blue Team."
 } = Astro.props;
+
+// SEO centralizado: como este Layout lo comparten la portada y las 7
+// herramientas, un solo bloque cubre las 8 paginas (title/description ya
+// llegan unicos por pagina via props). Ver el mismo patron de @graph +
+// #person en eduolihez.com/src/components/Seo.astro -- este sitio referencia
+// ese MISMO @id de Person para que ambos dominios describan a una sola
+// entidad (Eduardo Olivares) en vez de dos perfiles sin relacion.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const isTool = Astro.url.pathname.startsWith('/tools/');
+const personId = 'https://eduolihez.com/#person';
+const siteId = 'https://eduolihez.github.io/#website';
+// Mismo og-cover.png que usan las 5 fichas de proyecto en eduolihez.com: no
+// hay imagen de marca propia para Blue Team Hub y reusar la del portfolio
+// mantiene una sola identidad visual entre los dos dominios.
+const ogImage = 'https://eduolihez.com/img/og-cover.png';
+
+const website = {
+  '@type': 'WebSite',
+  '@id': siteId,
+  url: 'https://eduolihez.github.io/',
+  name: 'Blue Team Hub',
+  description: 'Portal de herramientas de ciberseguridad y utilidades estáticas para analistas SOC y profesionales del Blue Team.',
+  inLanguage: 'es',
+  author: { '@id': personId },
+  publisher: { '@id': personId },
+};
+
+// Cada herramienta es una SoftwareApplication gratuita: es lo que le dice a
+// Google (rich results) y a los asistentes de IA que esto no es un articulo,
+// es una app funcional que se puede citar y enlazar directamente.
+const softwareApp = isTool && {
+  '@type': 'SoftwareApplication',
+  '@id': `${canonical}#software`,
+  name: title.split('|')[0].trim(),
+  description,
+  url: canonical,
+  applicationCategory: 'SecurityApplication',
+  operatingSystem: 'Any (navegador web)',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  isAccessibleForFree: true,
+  author: { '@id': personId },
+  isPartOf: { '@id': siteId },
+};
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [website, ...(softwareApp ? [softwareApp] : [])],
+};
 ---
 
 <!DOCTYPE html>
@@ -17,65 +65,42 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Blue Team Hub" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Datos estructurados: WebSite (+ SoftwareApplication en cada
+         herramienta), ambos enlazados al Person de eduolihez.com por @id. -->
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-neutral-950 text-neutral-100 font-sans selection:bg-blue-500/30 selection:text-blue-200 antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between">
-    
-    <!-- Apple-style Glow Blobs Behind Content -->
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none -z-10 animate-pulse duration-10000"></div>
-    <div class="absolute bottom-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-purple-500/10 blur-[150px] pointer-events-none -z-10"></div>
-    <div class="absolute top-[40%] left-[30%] w-[40%] h-[40%] rounded-full bg-indigo-500/5 blur-[100px] pointer-events-none -z-10"></div>
-
-    <!-- Main Container -->
+  <body class="bg-paper text-ink font-sans selection:bg-ink selection:text-paper antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between">
     <div class="relative z-10 w-full flex flex-col min-h-screen">
       <slot />
     </div>
-
-    <!-- Custom styling to ensure JetBrains Mono and Glass effects look incredible -->
-    <style is:global>
-      :root {
-        --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        --font-mono: 'JetBrains Mono', monospace;
-      }
-      
-      body {
-        font-family: var(--font-sans);
-      }
-
-      code, pre {
-        font-family: var(--font-mono);
-      }
-
-      /* Premium Glass Scrollbars */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: rgba(10, 10, 10, 0.3);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 9999px;
-        border: 2px solid transparent;
-        background-clip: padding-box;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.18);
-        border-radius: 9999px;
-        border: 2px solid transparent;
-        background-clip: padding-box;
-      }
-    </style>
   </body>
 </html>
