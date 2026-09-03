@@ -118,8 +118,13 @@ const siteTools = tools.filter((t) => t.group === "site");
 
 // KEV Watch data — same source and logic as the (now retired) standalone
 // /tools/kev-watch page, rendered inline instead of behind a route.
-const { lastUpdated, totalTracked, recentAdditions } = kevData;
-const ransomwareRecent = recentAdditions.filter((v: any) => v.knownRansomware).length;
+const { lastUpdated, totalTracked, recentAdditions, ransomwareTracked, dueSoon } = kevData as {
+  lastUpdated: string;
+  totalTracked: number;
+  recentAdditions: any[];
+  ransomwareTracked: number;
+  dueSoon: { cveID: string; dueDate: string; diasRestantes: number }[];
+};
 
 const formatDate = (d: string) =>
   new Date(d + 'T00:00:00Z').toLocaleDateString('es-ES', {
@@ -164,8 +169,8 @@ const isOverdue = (dueDate: string | null) =>
         <div class="text-sm text-muted mt-2">CVEs en seguimiento</div>
       </div>
       <div class="px-6 sm:px-7 py-6 border-r border-rule-faint">
-        <div class="font-mono font-semibold text-stamp" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{recentAdditions.length}</div>
-        <div class="text-sm text-muted mt-2">nuevas en los últimos 45 días</div>
+        <div class="font-mono font-semibold text-stamp" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{ransomwareTracked.toLocaleString('es-ES')}</div>
+        <div class="text-sm text-muted mt-2">con uso confirmado en ransomware</div>
       </div>
       <div class="px-6 sm:px-7 py-6">
         <div class="font-mono font-semibold text-ink" style="font-size:clamp(1.6rem, 3.4vw, 2.4rem);">{formatDate(lastUpdated)}</div>
@@ -204,12 +209,12 @@ const isOverdue = (dueDate: string | null) =>
           <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Tracked</div>
         </div>
         <div class="py-3.5 px-3 border-r border-rule-faint sm:border-r">
-          <div class="font-mono font-semibold text-lg text-stamp">{ransomwareRecent}</div>
-          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Ransomware (45d)</div>
+          <div class="font-mono font-semibold text-lg text-stamp">{ransomwareTracked.toLocaleString('es-ES')}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Ransomware</div>
         </div>
         <div class="py-3.5 px-3 border-r border-rule-faint">
-          <div class="font-mono font-semibold text-lg">{recentAdditions.length}</div>
-          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Nuevas (45d)</div>
+          <div class="font-mono font-semibold text-lg text-stamp">{dueSoon.length}</div>
+          <div class="text-[11px] uppercase tracking-wide text-muted mt-1">Plazos &lt; 7 días</div>
         </div>
         <div class="py-3.5 pl-3">
           <div class="font-mono font-semibold text-lg">{formatDate(lastUpdated)}</div>
