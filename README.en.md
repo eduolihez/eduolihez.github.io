@@ -73,14 +73,16 @@ external engines (VirusTotal, AbuseIPDB). It includes a resource directory.
 
 [/tools/kev-watch](https://eduolihez.github.io/tools/kev-watch)
 
-A daily watch over the
+A watch over the
 [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 catalog, the one for vulnerabilities with confirmed active exploitation. This
-is the only tool with a server-side part: the workflow
-`.github/workflows/kev-watch.yml` runs every day at 06:00 UTC, executes
-[`scripts/update-kev.mjs`](scripts/update-kev.mjs) to download the catalog and
-work out what changed, commits `src/data/kev.json` if there is anything new,
-and triggers a redeploy.
+is the only tool with a server-side part, and the data is not computed here:
+[kev-digest](https://github.com/eduolihez/kev-digest) generates it, checking
+the catalog every 3 hours and publishing the processed result. The
+`.github/workflows/kev-watch.yml` workflow just downloads that JSON, validates
+it, commits `src/data/kev.json` if it changed, and triggers a redeploy. The computation deliberately lives in
+one place: two implementations of the same diff, in two languages, would end up
+disagreeing.
 
 ## Repository structure
 
@@ -99,11 +101,9 @@ and triggers a redeploy.
 │   │       ├── yara-generator.astro # Generador de Reglas YARA
 │   │       └── kev-watch.astro      # KEV Watch (vigilancia CISA KEV)
 │   ├── data/
-│   │   └── kev.json      # Estado del catálogo KEV, actualizado por scripts/update-kev.mjs
+│   │   └── kev.json      # Copia del latest.json que publica kev-digest
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
-├── scripts/
-│   └── update-kev.mjs    # Fetch + diff diario del catálogo CISA KEV
 ├── public/               # Recursos estáticos públicos (imágenes, favicon, .nojekyll)
 ├── .github/              # Configuraciones de GitHub (workflows: deploy.yml, kev-watch.yml)
 ├── astro.config.mjs      # Configuración de Astro e integraciones

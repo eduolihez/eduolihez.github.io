@@ -1,28 +1,48 @@
-name: KEV Watch daily update
+name: KEV Watch update
 
 on:
   schedule:
-    - cron: "0 6 * * *" # 06:00 UTC daily
+    # 20 minutos después de cada pasada de kev-digest, que corre a en punto
+    # cada 3 h. Antes esto descargaba el catálogo de CISA por su cuenta una vez
+    # al día; ahora consume la salida ya procesada de kev-digest, que es la
+    # única fuente de verdad.
+    - cron: "20 */3 * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
-  actions: write # needed to trigger the deploy workflow below
+  actions: write # necesario para disparar el workflow de deploy
+
+concurrency:
+  group: kev-watch
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      # Fijadas por SHA: un tag se puede mover, y esto escribe en el repo.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
+      - name: Descargar los datos de kev-digest
+        env:
+          ORIGEN: https://raw.githubusercontent.com/eduolihez/kev-digest/main/data/latest.json
+        run: |
+          curl -fsSL --retry 3 --retry-delay 5 -o /tmp/kev.json "$ORIGEN"
 
-      - name: Update KEV data
-        run: node scripts/update-kev.mjs
+          # Nunca sobreescribir con basura: si la descarga viene a medias o el
+          # formato cambia al otro lado, es preferible fallar aquí y quedarnos
+          # con los datos de ayer que publicar una pagina rota.
+          jq -e '
+            (.recentAdditions | type == "array")
+            and (.totalTracked | type == "number") and (.totalTracked > 0)
+            and (.lastUpdated | type == "string")
+          ' /tmp/kev.json > /dev/null
 
-      - name: Commit and push if changed
+          mv /tmp/kev.json src/data/kev.json
+          echo "Descargado: $(jq -r '.totalTracked' src/data/kev.json) CVEs en seguimiento, $(jq -r '.recentAdditions | length' src/data/kev.json) recientes"
+
+      - name: Commit y push si ha cambiado
         id: commit
         run: |
           git config user.name "kev-watch-bot"
@@ -32,13 +52,13 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          NEW=$(node -pe "require('./src/data/kev.json').newToday")
-          TOTAL=$(node -pe "require('./src/data/kev.json').totalTracked")
-          git commit -m "kev-watch: ${NEW} new entr$( [ "$NEW" = "1" ] && echo y || echo ies ) (${TOTAL} tracked)"
+          TOTAL=$(jq -r '.totalTracked' src/data/kev.json)
+          NUEVAS=$(jq -r '.newToday' src/data/kev.json)
+          git commit -m "kev-watch: ${NUEVAS} nuevas hoy (${TOTAL} en seguimiento)"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Trigger site rebuild
+      - name: Disparar la reconstrucción del sitio
         if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}

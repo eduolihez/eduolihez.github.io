@@ -75,14 +75,16 @@ Extrae IPs, dominios y hashes de un texto y los enlaza contra motores externos
 
 [/tools/kev-watch](https://eduolihez.github.io/tools/kev-watch)
 
-Vigilancia diaria del catálogo
+Vigilancia del catálogo
 [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog), el de
 vulnerabilidades con explotación activa confirmada. Esta es la única
-herramienta con parte en servidor: el workflow
-`.github/workflows/kev-watch.yml` corre cada día a las 06:00 UTC, ejecuta
-[`scripts/update-kev.mjs`](scripts/update-kev.mjs) para descargar el catálogo y
-calcular qué ha cambiado, comitea `src/data/kev.json` si hay novedades y
-dispara un redespliegue.
+herramienta con parte en servidor, y los datos no se calculan aquí: los genera
+[kev-digest](https://github.com/eduolihez/kev-digest), que comprueba el
+catálogo cada 3 horas y publica el resultado ya procesado. El workflow
+`.github/workflows/kev-watch.yml` se limita a descargar ese JSON, validarlo,
+comitear `src/data/kev.json` si ha cambiado y disparar un redespliegue. El cálculo vive en un solo sitio a
+propósito: dos implementaciones del mismo diff, en dos lenguajes, acabarían
+discrepando.
 
 ## Estructura del repositorio
 
@@ -101,11 +103,9 @@ dispara un redespliegue.
 │   │       ├── yara-generator.astro # Generador de Reglas YARA
 │   │       └── kev-watch.astro      # KEV Watch (vigilancia CISA KEV)
 │   ├── data/
-│   │   └── kev.json      # Estado del catálogo KEV, actualizado por scripts/update-kev.mjs
+│   │   └── kev.json      # Copia del latest.json que publica kev-digest
 │   └── styles/
 │       └── global.css    # Hoja de estilos global e importación de Tailwind CSS
-├── scripts/
-│   └── update-kev.mjs    # Fetch + diff diario del catálogo CISA KEV
 ├── public/               # Recursos estáticos públicos (imágenes, favicon, .nojekyll)
 ├── .github/              # Configuraciones de GitHub (workflows: deploy.yml, kev-watch.yml)
 ├── astro.config.mjs      # Configuración de Astro e integraciones
